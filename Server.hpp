@@ -8,15 +8,17 @@
 /*                                              /  `-----' || ( ' )(__..--.   */
 /*   Created: 2022/09/12 20:22:43               `-------|||-'(_{;}_)      |   */
 /*                                                      '-'   (_,_)-------'   */
-/*   server.hpp                                                               */
+/*   Server.hpp                                                               */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+# include "Client.hpp"
 # include <sstream>
 # include <iostream>
 # include <vector>
+# include <map>
 # include <sys/types.h>
 # include <netinet/in.h>
 # include <sys/socket.h>
@@ -25,10 +27,11 @@
 # include <poll.h>
 
 class Server {
-    int                 _sock;
-    int                 _port;
-    std::string         _password;
-    std::vector<pollfd> _fds;
+    int                     _sock;
+    int                     _port;
+    std::string             _password;
+    std::vector<pollfd>     _fds;
+    std::map<int, Client*>  _clients;
 public:
     void    setPort(char* port) {
         std::stringstream   ss(port);
@@ -43,7 +46,7 @@ public:
     void    init() {
         int         opt = 1;
         sockaddr_in addr;
-        if ((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        if (!(this->_sock = socket(AF_INET, SOCK_STREAM, 0))) {
             std::cerr << "Socket failed" << std::endl;
             exit(1);
         }
@@ -70,11 +73,26 @@ public:
         this->_fds.back().fd = this->_sock;
         this->_fds.back().events = POLLIN;
     };
+    void    acceptClient() {
+        int         client;
+        sockaddr_in addr;
+        socklen_t   len = sizeof(addr);
+        if ((client = accept(this->_sock, (sockaddr*)&addr, &len)) < 0) {
+            std::cerr << "Accept failed" << std::endl;
+            exit(1);
+        }
+        this->_clients[client] = new Client(client, addr);
+        this->_fds.push_back(pollfd());
+        this->_fds.back().fd = client;
+        this->_fds.back().events = POLLIN;
+    };
     void    run() {
         if (poll(this->_fds.data(), this->_fds.size(), -1) < 0) {
             std::cerr << "Poll failed" << std::endl;
             exit(1);
         }
+        if (this->_fds[0].revents == POLLIN)
+            acceptClient();
     };
 };
 
