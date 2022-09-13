@@ -14,7 +14,7 @@
 #include <iostream>
 #include "server.hpp"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     Server              server;
     int                 port;
     if (argc != 3) {

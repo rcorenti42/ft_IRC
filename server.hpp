@@ -32,7 +32,7 @@ class Server {
 public:
     void    setPort(char* port) {
         std::stringstream   ss(port);
-        if (!(ss >> _port)) {
+        if (!(ss >> this->_port)) {
             std::cerr << "Invalid port" << std::endl;
             exit(1);
         }
@@ -43,35 +43,35 @@ public:
     void    init() {
         int         opt = 1;
         sockaddr_in addr;
-        if ((_sock = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        if ((this->_sock = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
             std::cerr << "Socket failed" << std::endl;
             exit(1);
         }
-        if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+        if (setsockopt(this->_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
             std::cerr << "Setsockopt failed" << std::endl;
             exit(1);
         }
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = INADDR_ANY;
-        addr.sin_port = htons(_port);
-        if (bind(_sock, (sockaddr*)&addr, sizeof(addr)) < 0) {
+        addr.sin_port = htons(this->_port);
+        if (bind(this->_sock, (sockaddr*)&addr, sizeof(addr)) < 0) {
             std::cerr << "Bind failed" << std::endl;
             exit(1);
         }
-        if (listen(_sock, 10) < 0) {
+        if (listen(this->_sock, 10) < 0) {
             std::cerr << "Listen failed" << std::endl;
             exit(1);
         }
-        if (fcntl(_sock, F_SETFL, O_NONBLOCK) < 0) {
+        if (fcntl(this->_sock, F_SETFL, O_NONBLOCK) < 0) {
             std::cerr << "Fcntl failed" << std::endl;
             exit(1);
         }
-        _fds.push_back(pollfd());
-        _fds.back().fd = _sock;
-        _fds.back().events = POLLIN;
+        this->_fds.push_back(pollfd());
+        this->_fds.back().fd = this->_sock;
+        this->_fds.back().events = POLLIN;
     };
     void    run() {
-        if (poll(_fds.data(), _fds.size(), -1) < 0) {
+        if (poll(this->_fds.data(), this->_fds.size(), -1) < 0) {
             std::cerr << "Poll failed" << std::endl;
             exit(1);
         }
