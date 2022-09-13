@@ -16,11 +16,13 @@
 
 # include <iostream>
 # include <netinet/in.h>
+# include <stdlib.h>
 
 class Client {
     int         _sock;
     std::string _nickname;
     std::string _username;
+    std::string _buff;
 public:
     Client(int sock, sockaddr_in addr): _sock(sock) {
     };
@@ -38,6 +40,13 @@ public:
     };
     void    setUsername(std::string username) {
         this->_username = username;
+    };
+    void    receiveMessage() {
+        char    buff[1024];
+        int     bytes;
+        bytes = recv(this->_sock, buff, 1024, 0);
+        buff[bytes] = '\0';
+        this->_buff += buff;
     };
 };
 
