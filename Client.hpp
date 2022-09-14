@@ -24,6 +24,13 @@
 # include <unistd.h>
 
 class Client {
+    enum e_state {
+        CONNECTED,
+        PASS,
+        REGISTERED,
+        NONE
+    };
+    e_state                     _state;
     int                         _sock;
     std::string                 _nickname;
     std::string                 _username;
@@ -53,12 +60,61 @@ public:
     void    setUsername(std::string username) {
         this->_username = username;
     };
+    void    packetsHandler() {
+        e_state state = this->_state;
+        if (state != NONE) {
+            for (std::vector<std::string>::iterator it = this->_packets.begin(); it != this->_packets.end(); it++) {
+                std::cout << "Packet: " << *it << std::endl;
+                if (state == CONNECTED) {
+                    if (*it == "PASS") {
+                        this->_state = PASS;
+                        state = PASS;
+                    }
+                    else if (*it == "NICK") {
+                        this->_state = REGISTERED;
+                        state = REGISTERED;
+                    }
+                    else {
+                        this->_state = NONE;
+                        state = NONE;
+                    }
+                }
+                else if (state == PASS) {
+                    if (*it == "NICK") {
+                        this->_state = REGISTERED;
+                        state = REGISTERED;
+                    }
+                    else {
+                        this->_state = NONE;
+                        state = NONE;
+                    }
+                }
+                else if (state == REGISTERED) {
+                    if (*it == "NICK") {
+                        this->_state = REGISTERED;
+                        state = REGISTERED;
+                    }
+                    else {
+                        this->_state = NONE;
+                        state = NONE;
+                    }
+                }
+            }
+            packetsHandler();
+        }
+    };
     void    receiveMessage() {
         char    buff[1024];
-        int     bytes;
+        size_t  bytes;
+        size_t  pos;
         bytes = recv(this->_sock, buff, 1024, 0);
         buff[bytes] = '\0';
         this->_buff += buff;
+        while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
+            this->_packets.push_back(this->_buff.substr(0, pos));
+            this->_buff.erase(0, pos + 2);
+        }
+        packetsHandler();
     };
     void    sendMessage() {
         std::string packet;
