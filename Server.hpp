@@ -34,14 +34,13 @@ class Server {
     std::string             _password;
     std::vector<pollfd>     _fds;
     std::map<int, Client*>  _clients;
-    bool    validPort(char* port) {
+    bool                validPort(char* port) {
         for (int i = 0; port[i]; i++)
             if (!isdigit(port[i]))
                 return false;
         return true;
     };
-    void    acceptClient() {
-        std::cout << "Accepting client" << std::endl;
+    void                acceptClient() {
         int         client;
         sockaddr_in addr;
         socklen_t   len = sizeof(addr);
@@ -55,17 +54,17 @@ class Server {
         this->_fds.back().events = POLLIN;
     };
 public:
-    void    setPort(char* port) {
+    void                setPort(char* port) {
         std::stringstream   ss(port);
         if (!(ss >> this->_port) || !validPort(port)) {
             std::cerr << "Invalid port" << std::endl;
             exit(1);
         }
     };
-    void    setPassword(char* password) {
+    void                setPassword(char* password) {
         this->_password.assign(password);
     };
-    void    init() {
+    void                init() {
         int         opt = 1;
         sockaddr_in addr;
         if (!(this->_sock = socket(AF_INET, SOCK_STREAM, 0))) {
@@ -95,7 +94,14 @@ public:
         this->_fds.back().fd = this->_sock;
         this->_fds.back().events = POLLIN;
     };
-    void    run() {
+    std::vector<Client*>    getClients() {
+        std::vector<Client*>    clients;
+        for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+            clients.push_back(it->second);
+        return clients;
+    };
+    void                    run() {
+        std::vector<Client*>    clients_list = getClients();
         if (poll(this->_fds.data(), this->_fds.size(), -1) < 0) {
             std::cerr << "Poll failed" << std::endl;
             exit(1);
@@ -106,6 +112,8 @@ public:
             for (int i = 1; i < this->_fds.size(); i++)
                 if (this->_fds[i].revents == POLLIN)
                     this->_clients[this->_fds[i].fd]->receiveMessage();
+        for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
+            (*it)->sendMessage();
     };
 };
 
