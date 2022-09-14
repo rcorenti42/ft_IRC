@@ -61,10 +61,13 @@ public:
         this->_buff += buff;
     };
     void    sendMessage() {
-        if (this->_packets.size() > 0) {
-            std::string packet = this->_packets[0];
-            send(this->_sock, packet.c_str(), packet.size(), 0);
-            this->_packets.erase(this->_packets.begin());
+        std::string packet;
+        if (this->_packets.size()) {
+            for (std::vector<std::string>::iterator it = this->_packets.begin(); it != this->_packets.end(); it++)
+                packet += *it + "\r\n";
+            this->_packets.clear();
+            if (packet.size())
+                send(this->_sock, packet.c_str(), packet.size(), 0);
         }
     };
 };

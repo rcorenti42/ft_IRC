@@ -106,12 +106,14 @@ public:
             std::cerr << "Poll failed" << std::endl;
             exit(1);
         }
-        if (this->_fds[0].revents == POLLIN)
-            acceptClient();
-        else
-            for (int i = 1; i < this->_fds.size(); i++)
-                if (this->_fds[i].revents == POLLIN)
-                    this->_clients[this->_fds[i].fd]->receiveMessage();
+        else {
+            if (this->_fds[0].revents == POLLIN)
+                acceptClient();
+            else
+                for (int i = 1; i < this->_fds.size(); i++)
+                    if (this->_fds[i].revents == POLLIN)
+                        this->_clients[this->_fds[i].fd]->receiveMessage();
+        }
         for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
             (*it)->sendMessage();
     };
