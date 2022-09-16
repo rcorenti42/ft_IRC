@@ -16,12 +16,15 @@
 
 # include <iostream>
 # include <vector>
+# include <algorithm>
 # include <netinet/in.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include "Server.hpp"
+# include "Commands.hpp"
 
 class Client {
     enum e_state {
@@ -37,8 +40,9 @@ class Client {
     std::string                 _host;
     std::string                 _buff;
     std::vector<std::string>    _packets;
+	std::vector<Commands*>		_commands;
 public:
-    Client(int sock, sockaddr_in addr): _sock(sock) {
+    Client(int sock, sockaddr_in addr): _sock(sock), _state(PASS) {
         fcntl(sock, F_SETFL, O_NONBLOCK);
         this->_host = inet_ntoa(addr.sin_addr);
     };
@@ -61,53 +65,30 @@ public:
         this->_username = username;
     };
     void    packetsHandler() {
-        e_state state = this->_state;
-        if (state != NONE) {
-            for (std::vector<std::string>::iterator it = this->_packets.begin(); it != this->_packets.end(); it++) {
-                std::cout << "Packet: " << *it << std::endl;
-                if (state == CONNECTED) {
-                    if (*it == "PASS") {
-                        this->_state = PASS;
-                        state = PASS;
-                    }
-                    else if (*it == "NICK") {
-                        this->_state = REGISTERED;
-                        state = REGISTERED;
-                    }
-                    else {
-                        this->_state = NONE;
-                        state = NONE;
-                    }
-                }
-                else if (state == PASS) {
-                    if (*it == "NICK") {
-                        this->_state = REGISTERED;
-                        state = REGISTERED;
-                    }
-                    else {
-                        this->_state = NONE;
-                        state = NONE;
-                    }
-                }
-                else if (state == REGISTERED) {
-                    if (*it == "NICK") {
-                        this->_state = REGISTERED;
-                        state = REGISTERED;
-                    }
-                    else {
-                        this->_state = NONE;
-                        state = NONE;
-                    }
-                }
-            }
-            packetsHandler();
+    	std::vector<Commands*>	commands;
+		if (this->_state != NONE) {
+			for (std::vector<Commands*>::iterator it = this->_commands.begin(); it != this->_commands.end(); it++) {
+				if (this->_state == PASS) {
+					if ((*it)->getCommand() != "PASS")
+						continue ;
+				}
+				else if (this->_state == REGISTERED)
+					if ((*it)->getCommand() != "NICK" && (*it)->getCommand() != "USER")
+						continue ;
+				commands.push_back(*it);
+			}
+			for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {
+				if (std::find(this->_commands.begin(), this->_commands.end(), *it) != this->_commands.end()) 
+					this->_commands.erase(std::find(this->_commands.begin(), this->_commands.end(), *it));
+			}
         }
     };
     void    receiveMessage() {
         char    buff[1024];
         size_t  bytes;
         size_t  pos;
-        bytes = recv(this->_sock, buff, 1024, 0);
+        bytes = recv(this->_sock, buff, 1023, 0);
+		std::cout << buff << std::endl;
         buff[bytes] = '\0';
         this->_buff += buff;
         while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
