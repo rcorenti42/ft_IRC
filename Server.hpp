@@ -15,6 +15,7 @@
 # define SERVER_HPP
 
 # include "Client.hpp"
+# include "Channel.hpp"
 # include <sstream>
 # include <iostream>
 # include <cctype>
@@ -29,11 +30,12 @@
 # include <poll.h>
 
 class Server {
-    int                     _sock;
-    int                     _port;
-    std::string             _password;
-    std::vector<pollfd>     _fds;
-    std::map<int, Client*>  _clients;
+    int                             _sock;
+    int                             _port;
+    std::string                     _password;
+    std::vector<pollfd>             _fds;
+    std::map<int, Client*>          _clients;
+    std::map<std::string, Channel>  _channels;
     bool                validPort(char* port) {
         for (int i = 0; port[i]; i++)
             if (!isdigit(port[i]))
@@ -94,11 +96,48 @@ public:
         this->_fds.back().fd = this->_sock;
         this->_fds.back().events = POLLIN;
     };
+    Client*             getClient(std::string nickName) {
+        // TODO
+        std::cout << "getClient called" << std::endl;
+        (void)nickName;
+        return this->_clients[0];
+    };
     std::vector<Client*>    getClients() {
         std::vector<Client*>    clients;
         for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
             clients.push_back(it->second);
         return clients;
+    };
+    Channel&                getChannel(std::string name) {
+        return this->_channels[name];
+    };
+    std::vector<Channel*>   getChannels(std::string name) {
+        // TODO
+        std::cout << "getChannels called" << std::endl;
+        (void)name;
+        return std::vector<Channel*>();
+    };
+    std::string             getTime() {
+        // TODO
+        std::cout <<"getTime called" << std::endl;
+        return "time";
+    };
+    void                    sendPing() {
+        // TODO
+        std::cout << "Ping send" << std::endl;
+        return;
+    };
+    void                    erraseClient(Client client) {
+        // TODO
+        std::cout << "Client errased" << std::endl;
+        (void)client;
+        return;
+    };
+    void                    erraseChannel(Channel channel) {
+        // TODO
+        std::cout << "Channel errased" << std::endl;
+        (void)channel;
+        return;
     };
     void                    run() {
         std::vector<Client*>    clients_list = getClients();

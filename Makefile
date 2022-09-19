@@ -4,10 +4,13 @@ CC = c++
 
 CCFLAG = -std=c++98 -Wall -Wextra -Werror
 
-SOURCES = main.cpp
+SOURCES = 	main.cpp \
+			CommandsRet.cpp
 
-HEADERS = Server.hpp \
+HEADERS = 	Server.hpp \
 			Client.hpp \
+			Channel.hpp \
+			Commands.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 

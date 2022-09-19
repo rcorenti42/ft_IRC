@@ -39,8 +39,11 @@ class Client {
     std::string                 _username;
     std::string                 _host;
     std::string                 _buff;
+    std::string                 _userMode;
+    std::string                 _channel;
     std::vector<std::string>    _packets;
 	std::vector<Commands*>		_commands;
+    time_t                      _lastPing;
 public:
     Client(int sock, sockaddr_in addr):_state(PASS),  _sock(sock) {
         fcntl(sock, F_SETFL, O_NONBLOCK);
@@ -97,6 +100,12 @@ public:
         }
         packetsHandler();
     };
+    void    writeMessage(std::string message) {
+        // TODO
+        std::cout << "Write message called" << std::endl;
+        (void)message;
+        return ;
+    };
     void    sendMessage() {
         std::string packet;
         if (this->_packets.size()) {
@@ -106,6 +115,12 @@ public:
             if (packet.size())
                 send(this->_sock, packet.c_str(), packet.size(), 0);
         }
+    };
+    void    registerClient(Commands* commands) {
+        // TODO
+        std::cout << "registerClient called" << std::endl;
+        (void)commands;
+        return ;
     };
 };
 
