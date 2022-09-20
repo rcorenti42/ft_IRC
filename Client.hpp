@@ -87,17 +87,26 @@ public:
 			}
         }
     };
-    void    receiveMessage() {
-        char    buff[1024];
-        size_t  bytes;
-        size_t  pos;
-        bytes = recv(this->_sock, buff, 1023, 0);
-		std::cout << buff << std::endl;
-        buff[bytes] = '\0';
+    void    receiveMessage(Server* serv) {
+        char    	buff[5];
+		std::string	msg;
+        size_t  	bytes;
+        size_t  	pos;
+        bytes = recv(this->_sock, buff, 4, 0);
+		buff[bytes] = '\0';
+        if (bytes < 1) {
+			if (bytes == 0)
+				this->_state = NONE;
+			return ;
+		}
         this->_buff += buff;
+		std::cout << buff << std::endl;
         while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
-            this->_packets.push_back(this->_buff.substr(0, pos));
-            this->_buff.erase(0, pos + 2);
+        	msg = this->_buff.substr(0, pos);
+			this->_buff.erase(0, pos + 2);
+			if (!msg.size())
+				continue;
+			this->_commands.push_back(new Commands(this, serv, msg));
         }
         packetsHandler();
     };
