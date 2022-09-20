@@ -15,6 +15,7 @@
 # define CLIENT_HPP
 
 # include <iostream>
+# include <ctime>
 # include <vector>
 # include <algorithm>
 # include <netinet/in.h>
@@ -43,9 +44,9 @@ class Client {
     std::string                 _channel;
     std::vector<std::string>    _packets;
 	std::vector<Commands*>		_commands;
-    time_t                      _lastPing;
+    time_t                      _ping;
 public:
-    Client(int sock, sockaddr_in addr):_state(PASS),  _sock(sock) {
+    Client(int sock, sockaddr_in addr):_state(PASS),  _sock(sock), _ping(std::time(NULL)) {
         fcntl(sock, F_SETFL, O_NONBLOCK);
         this->_host = inet_ntoa(addr.sin_addr);
     };
@@ -81,7 +82,7 @@ public:
 				commands.push_back(*it);
 			}
 			for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {
-				if (std::find(this->_commands.begin(), this->_commands.end(), *it) != this->_commands.end()) 
+				if (std::find(this->_commands.begin(), this->_commands.end(), *it) != this->_commands.end())
 					this->_commands.erase(std::find(this->_commands.begin(), this->_commands.end(), *it));
 			}
         }
