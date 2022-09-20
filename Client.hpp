@@ -27,13 +27,14 @@
 # include "Server.hpp"
 # include "Commands.hpp"
 
+enum e_state {
+    CONNECTED,
+    PASS,
+    REGISTERED,
+    NONE
+};
+
 class Client {
-    enum e_state {
-        CONNECTED,
-        PASS,
-        REGISTERED,
-        NONE
-    };
     e_state                     _state;
     int                         _sock;
     std::string                 _nickname;
@@ -62,6 +63,9 @@ public:
     std::string getUsername() const {
         return this->_username;
     };
+	e_state		getStats() const {
+		return this->_state;
+	};
     void    setNickname(std::string nickname) {
         this->_nickname = nickname;
     };
@@ -88,11 +92,11 @@ public:
         }
     };
     void    receiveMessage(Server* serv) {
-        char    	buff[5];
+        char    	buff[1025];
 		std::string	msg;
         size_t  	bytes;
         size_t  	pos;
-        bytes = recv(this->_sock, buff, 4, 0);
+        bytes = recv(this->_sock, buff, 1024, 0);
 		buff[bytes] = '\0';
         if (bytes < 1) {
 			if (bytes == 0)

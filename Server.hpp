@@ -145,15 +145,17 @@ public:
             std::cerr << "Poll failed" << std::endl;
             exit(1);
         }
-        else {
-            if (this->_fds[0].revents == POLLIN)
-                acceptClient();
-            else
-                for (size_t i = 1; i < this->_fds.size(); i++)
-                    if (this->_fds[i].revents == POLLIN)
-                        this->_clients[this->_fds[i].fd]->receiveMessage(this);
-        }
+        if (this->_fds[0].revents == POLLIN)
+            acceptClient();
+        else
+            for (std::vector<pollfd>::iterator it = this->_fds.begin(); it != this->_fds.end(); it++)
+                if ((*it).revents == POLLIN)
+                    this->_clients[(*it).fd]->receiveMessage(this);
         for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
+			if ((*it)->getStats() == NONE)
+				erraseClient(*(*it));
+		clients_list = getClients();
+		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
             (*it)->sendMessage();
     };
 };

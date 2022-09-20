@@ -29,7 +29,7 @@ class Commands {
 	std::string					_message;
 	std::vector<std::string>	_args;
 public:
-	Commands(Client *client, Server *server, std::string message): _client(client), _server(server), _message(message) {
+	Commands(Client *client, Server *server, std::string message): _client(client), _server(server), _base(message) {
 		// TODO: parse message
 		std::cout << "Commands constructor called" << std::endl;
 	};
