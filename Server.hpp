@@ -151,7 +151,7 @@ public:
             else
                 for (size_t i = 1; i < this->_fds.size(); i++)
                     if (this->_fds[i].revents == POLLIN)
-                        this->_clients[this->_fds[i].fd]->receiveMessage();
+                        this->_clients[this->_fds[i].fd]->receiveMessage(this);
         }
         for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
             (*it)->sendMessage();
