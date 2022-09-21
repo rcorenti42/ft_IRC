@@ -43,6 +43,7 @@ void    Client::setUsername(std::string username) {
 };
 void    Client::packetsHandler() {
 	std::vector<Commands*>	commands;
+	e_state					state = this->_state;
 	if (this->_state != NONE) {
 		for (std::vector<Commands*>::iterator it = this->_commands.begin(); it != this->_commands.end(); it++) {
 			if (this->_state == CHECKPASS) {
@@ -52,11 +53,22 @@ void    Client::packetsHandler() {
 			else if (this->_state == REGISTERED)
 				if ((*it)->getCommand() != "NICK" && (*it)->getCommand() != "USER")
 					continue ;
+			if (this->_listCommands.count((*it)->getCommand()))
+				this->_listCommands[(*it)->getCommand()](*it);
 			commands.push_back(*it);
 		}
 		for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {
-			if (std::find(this->_commands.begin(), this->_commands.end(), *it) != this->_commands.end())
+			if (std::find(this->_commands.begin(), this->_commands.end(), *it) != this->_commands.end()) {
 				this->_commands.erase(std::find(this->_commands.begin(), this->_commands.end(), *it));
+				delete *it;
+			}
+		}
+		if (this->_state == REGISTERED && this->_nickname.size())
+			this->_state = CONNECTED;
+		if (this->_state != state) {
+			if (this->_state == CONNECTED)
+				registerClient(*this->_commands.begin());
+			packetsHandler();
 		}
     }
 };
@@ -84,10 +96,7 @@ void    Client::receiveMessage(Server* serv) {
     packetsHandler();
 };
 void    Client::writeMessage(std::string message) {
-    // TODO
-    std::cout << "Write message called" << std::endl;
-    (void)message;
-    return ;
+	this->_packets.push_back(message);
 };
 void    Client::sendMessage() {
     std::string packet;
