@@ -4,24 +4,28 @@ CC = c++
 
 CCFLAG = -std=c++98 -Wall -Wextra -Werror
 
-SOURCES = 	main.cpp \
-			CommandsRet.cpp
+SOURCES = 	srcs/main.cpp \
+			srcs/Server.cpp \
+			srcs/Client.cpp \
+			srcs/Channel.cpp \
+			srcs/Commands.cpp \
+			srcs/CommandsRet.cpp
 
-HEADERS = 	Server.hpp \
-			Client.hpp \
-			Channel.hpp \
-			Commands.hpp
+HEADERS = 	includes/Server.hpp \
+			includes/Client.hpp \
+			includes/Channel.hpp \
+			includes/Commands.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJECTS)
-	$(CC) $(CCFLAG) $(OBJECTS) -o $(NAME)
+$(NAME) : $(OBJECTS) $(HEADERS)
+	$(CC) $(CCFLAG) -I includes $(OBJECTS) -o $(NAME)
 	@echo "\033[0;92m* $(NAME) binary was created *\033[0m"
 
-$(OBJECTS) : $(SOURCES) $(HEADERS)
-	$(CC) $(CCFLAG) -c $(SOURCES)
+%.o: %.cpp $(HEADERS)
+	$(CC) $(CCFLAG) -I includes -c $< -o $@
 
 clean :
 	rm -rf $(OBJECTS)

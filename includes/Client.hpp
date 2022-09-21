@@ -1,0 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/20 21:46:48 by sobouatt         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
+
+# include <iostream>
+# include <ctime>
+# include <vector>
+# include <algorithm>
+# include <netinet/in.h>
+# include <sys/socket.h>
+# include <arpa/inet.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
+
+class Commands;
+class Server;
+
+enum e_state {
+    CONNECTED,
+    PASS,
+    REGISTERED,
+    NONE
+};
+
+class Client {
+    e_state                     _state;
+    int                         _sock;
+    std::string                 _nickname;
+    std::string                 _username;
+    std::string                 _host;
+    std::string                 _buff;
+    std::string                 _userMode;
+    std::string                 _channel;
+    std::vector<std::string>    _packets;
+	std::vector<Commands*>		_commands;
+    time_t                      _ping;
+public:
+    Client(int sock, sockaddr_in addr);
+    ~Client();
+    int     	getSocket() const;
+    std::string getNickname() const;
+    std::string getUsername() const;
+	e_state		getStats() const;
+    void    	setNickname(std::string nickname);
+    void    	setUsername(std::string username);
+    void    	packetsHandler();
+    void    	receiveMessage(Server* serv);
+    void    	writeMessage(std::string message);
+    void    	sendMessage();
+    void    	registerClient(Commands* commands);
+};
+
+#endif

@@ -11,3 +11,12 @@
 /*   CommandsRet.cpp                                                          */
 /* ************************************************************************** */
 
+#include "Commands.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
+
+int	PASSW(Commands* command) {
+	(void)command;
+	return 0;
+};
