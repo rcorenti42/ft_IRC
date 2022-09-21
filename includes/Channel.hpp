@@ -17,35 +17,43 @@
 # include <iostream>
 # include <vector>
 # include <map>
+# include "Client.hpp"
+using std::string;
+using std::cout;
 
 class Client;
 
 class Channel {
-    std::string					_name;
-    std::string					_topic;
-    std::string                 _mode;
-    std::string                 _password;
-    std::map<int, Client*>		_clients;
-    std::map<int, std::string>  _modeClients;
+private:	
+    struct ClientMod {
+	    Client client;
+	    string mode;
+	    ClientMod(Client &c, string m) : client(c), mode(m) {}
+    };
+    string					_name;
+    string					_topic;
+    string                 _mode;
+    string                 _password;
+    std::map<int, ClientMod>		_clients;
     std::vector<Client*>		_invit;
+    typedef std::map<int, ClientMod>::iterator CliIt;
+    typedef std::map<int, ClientMod>::const_iterator CliCstIt;
 public:
-    Channel();
-    void                	setName(std::string name);
-    void                	setTopic(std::string topic);
-    void                	setMode(std::string mode);
-    void                	setPassword(std::string password);
-    void                	setmodeClients(std::string modeClients, Client& client);
-    std::string         	getName() const;
-    std::string         	getTopic() const;
-    std::string         	getMode() const;
-    std::string         	getPassword() const;
-    std::string         	getmodeClients(Client& client) const;
-    std::vector<Client*>	getClients() const;
+    Channel(string &name, Client &creator);
+    void                	setName(string name);
+    void                	setTopic(string topic);
+    void                	setMode(string mode);
+    void                	setPassword(string password);
+    string     		    	getName() const;
+    string     		    	getTopic() const;
+    string     		    	getMode() const;
+    string     		    	getPassword() const;
+    std::vector<Client>		getClients() const;
     void                	addClient(Client& client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);
-    void                	broadcastMessage(Client& client, std::string message);
+    void                	broadcastMessage(Client& client, string message);
 };
 
 #endif
