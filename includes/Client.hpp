@@ -18,6 +18,7 @@
 # include <ctime>
 # include <vector>
 # include <algorithm>
+# include <map>
 # include <netinet/in.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
@@ -30,25 +31,25 @@ class Server;
 
 enum e_state {
     CONNECTED,
-    PASS,
+    CHECKPASS,
     REGISTERED,
     NONE
 };
 
 class Client {
-    e_state                     _state;
-    int                         _sock;
-    std::string                 _nickname;
-    std::string                 _username;
-    std::string                 _host;
-    std::string                 _buff;
-    std::string                 _userMode;
-    std::string                 _channel;
-    std::vector<std::string>    _packets;
-	std::vector<Commands*>		_commands;
-    time_t                      _ping;
+    e_state                     				_state;
+    int                         				_sock;
+    std::string                 				_nickname;
+    std::string                 				_username;
+    std::string                 				_buff;
+    std::string                 				_userMode;
+    std::string                 				_channel;
+    std::vector<std::string>    				_packets;
+	std::vector<Commands*>						_commands;
+	std::map<std::string, int(*)(Commands*)>	_listCommands;
+    time_t                      				_ping;
 public:
-    Client(int sock, sockaddr_in addr);
+    Client(int sock);
     ~Client();
     int     	getSocket() const;
     std::string getNickname() const;

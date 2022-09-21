@@ -29,7 +29,7 @@ void                Server::acceptClient() {
         std::cerr << "Accept failed" << std::endl;
         exit(1);
     }
-    this->_clients[client] = new Client(client, addr);
+    this->_clients[client] = new Client(client);
     this->_fds.push_back(pollfd());
     this->_fds.back().fd = client;
     this->_fds.back().events = POLLIN;

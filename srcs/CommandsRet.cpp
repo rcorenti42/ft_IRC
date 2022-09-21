@@ -16,7 +16,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-int	PASSW(Commands* command) {
+int	PASS(Commands* command) {
 	(void)command;
 	return 0;
 };

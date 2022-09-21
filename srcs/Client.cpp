@@ -15,9 +15,10 @@
 #include "Server.hpp"
 #include "Commands.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(PASS),  _sock(sock), _ping(std::time(NULL)) {
-    fcntl(sock, F_SETFL, O_NONBLOCK);
-    this->_host = inet_ntoa(addr.sin_addr);
+int PASS(Commands* command);
+
+Client::Client(int sock):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
+	this->_listCommands["PASS"] = PASS;
 };
 Client::~Client() {
     close(this->_sock);
@@ -44,7 +45,7 @@ void    Client::packetsHandler() {
 	std::vector<Commands*>	commands;
 	if (this->_state != NONE) {
 		for (std::vector<Commands*>::iterator it = this->_commands.begin(); it != this->_commands.end(); it++) {
-			if (this->_state == PASS) {
+			if (this->_state == CHECKPASS) {
 				if ((*it)->getCommand() != "PASS")
 					continue ;
 			}
