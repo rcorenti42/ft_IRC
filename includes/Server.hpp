@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/18 21:25:18 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/21 07:49:51 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ public:
     std::vector<Client*>    getClients();
     Channel&                getChannel(std::string name);
     std::vector<Channel*>   getChannels();
+	std::string				getPassword();
     std::string             getTime();
     void                    sendPing();
     void                    erraseClient(Client client);

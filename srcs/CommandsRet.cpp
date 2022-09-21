@@ -1,22 +1,33 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/20 00:13:56               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   CommandsRet.cpp                                                          */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CommandsRet.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/21 08:19:27 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #include "Commands.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
-int	PASS(Commands* command) {
-	(void)command;
-	return 0;
+#define ERR_ALREADYREGISTERED 462
+#define ERR_PASSWDMISMATCH 464
+
+int	PASS(Commands* command)
+{
+	if (command->getClient()->getStats() == REGISTERED)
+		return (ERR_ALREADYREGISTERED);
+	if (*(command->getArgs().begin()) == command->getServer()->getPassword())
+	{
+		command->getClient()->setState(REGISTERED);	
+		return (0);
+	}
+	else 
+		return (ERR_PASSWDMISMATCH);
 };

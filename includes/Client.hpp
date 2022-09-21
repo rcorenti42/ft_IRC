@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/20 21:46:48 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/21 08:17:56 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ public:
     void    	writeMessage(std::string message);
     void    	sendMessage();
     void    	registerClient(Commands* commands);
+	void		setState(e_state mode);
 };
 
 #endif
