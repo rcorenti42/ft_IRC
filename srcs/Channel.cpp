@@ -15,9 +15,11 @@
 #include "Client.hpp"
 
 Channel::Channel(string &name, Client &creator) : _name(name) {
-	ClientMod elem(creator, "");
-	//_clients[creator.getSocket()] = elem;
+	ClientMode elem(creator, "");
+	_clients[creator.getSocket()] = elem;
 }
+
+Channel::Channel() {}
 
 std::vector<Client> Channel::getClients() const {
     std::vector<Client> clients;
@@ -26,8 +28,8 @@ std::vector<Client> Channel::getClients() const {
     return clients;
 }
 void                Channel::addClient(Client& client) {
-	ClientMod elem(client, "");
-	//_clients[client.getSocket()] = elem;
+	ClientMode elem(client, "");
+	_clients[client.getSocket()] = elem;
 }
 
 void                Channel::removeClient(Client& client) {

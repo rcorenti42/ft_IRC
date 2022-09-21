@@ -25,20 +25,22 @@ class Client;
 
 class Channel {
 private:	
-    struct ClientMod {
+    struct ClientMode {
 	    Client client;
 	    string mode;
-	    ClientMod(Client &c, string m) : client(c), mode(m) {}
+	    ClientMode(const Client &c, string m) : client(c), mode(m) {}
+	    ClientMode() : client(0), mode("") {}
     };
     string					_name;
     string					_topic;
     string                 _mode;
     string                 _password;
-    std::map<int, ClientMod>		_clients;
+    std::map<int, ClientMode>		_clients;
     std::vector<Client*>		_invit;
-    typedef std::map<int, ClientMod>::iterator CliIt;
-    typedef std::map<int, ClientMod>::const_iterator CliCstIt;
+    typedef std::map<int, ClientMode>::iterator CliIt;
+    typedef std::map<int, ClientMode>::const_iterator CliCstIt;
 public:
+    Channel();
     Channel(string &name, Client &creator);
     void                	setName(string name);
     void                	setTopic(string topic);
