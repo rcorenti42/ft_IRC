@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/21 08:18:54 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 00:56:35 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ void    Client::setUsername(std::string username) {
     this->_username = username;
 };
 
+void	Client::setRealName(std::string realname) {
+	this->_realname = realname;
+}
 void		Client::setState(e_state mode) {
 	this->_state = mode;
 }
