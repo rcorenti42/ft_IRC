@@ -114,8 +114,8 @@ void    Client::sendMessage() {
     }
 };
 void    Client::registerClient(Commands* commands) {
-    commands->sendRep(1);
-	commands->sendRep(2);
-	commands->sendRep(3);
-	commands->sendRep(4);
+    writeMessage(commands->sendRep(1));
+	writeMessage(commands->sendRep(2));
+	writeMessage(commands->sendRep(3));
+	writeMessage(commands->sendRep(4));
 };

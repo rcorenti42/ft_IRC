@@ -12,6 +12,7 @@
 /* ************************************************************************** */
 
 #include "Commands.hpp"
+#include "CommandsRet.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 
@@ -72,7 +73,16 @@ Client*						Commands::getClient() const {
 Server*						Commands::getServer() const {
 	return this->_server;
 };
-void						Commands::sendRep(int code) {
-	// TODO
-	(void)code;
+std::string					Commands::sendRep(int code) {
+	switch (code) {
+	case 1:
+		return RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername());
+	case 2:
+		return RPL_YOURHOST();
+	case 3:
+		return RPL_CREATED();
+	case 4:
+		return RPL_MYINFO();
+	}
+	return "";
 };

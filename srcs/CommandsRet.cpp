@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include "CommandsRet.hpp"
 #include "Commands.hpp"
 #include "Server.hpp"
 #include "Client.hpp"

@@ -14,7 +14,8 @@ SOURCES = 	srcs/main.cpp \
 HEADERS = 	includes/Server.hpp \
 			includes/Client.hpp \
 			includes/Channel.hpp \
-			includes/Commands.hpp
+			includes/Commands.hpp \
+			includes/CommandsRet.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 
