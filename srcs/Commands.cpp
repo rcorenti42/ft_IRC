@@ -72,3 +72,7 @@ Client*						Commands::getClient() const {
 Server*						Commands::getServer() const {
 	return this->_server;
 };
+void						Commands::sendRep(int code) {
+	// TODO
+	(void)code;
+};

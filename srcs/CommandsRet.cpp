@@ -31,3 +31,21 @@ int	PASS(Commands* command)
 	else 
 		return (ERR_PASSWDMISMATCH);
 };
+
+//////////////////////////////////////////////////////////
+
+std::string	RPL_WELCOME(std::string nick, std::string user) {
+	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + user;
+};
+
+std::string	RPL_YOURHOST() {
+	return ":Your host is 42, running version 420";
+};
+
+std::string	RPL_CREATED() {
+	return ":This server was created 42/42/4242";
+};
+
+std::string	RPL_MYINFO() {
+	return "42 420 w n";
+};
