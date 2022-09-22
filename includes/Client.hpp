@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/21 08:17:56 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 00:57:15 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Client {
     int                         				_sock;
     std::string                 				_nickname;
     std::string                 				_username;
+	std::string									_realname;
     std::string                 				_buff;
     std::string                 				_userMode;
     std::string                 				_channel;
@@ -57,6 +58,7 @@ public:
 	e_state		getStats() const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
+	void		setRealName(std::string realname);
     void    	packetsHandler();
     void    	receiveMessage(Server* serv);
     void    	writeMessage(std::string message);
