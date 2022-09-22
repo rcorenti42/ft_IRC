@@ -46,6 +46,7 @@ int	NICK(Commands *command)
 			return (ERR_NICKNAMEINUSE);
 	}
 	command->getClient()->setNickname(*(command->getArgs().begin()));
+	command->getClient()->setState(CONNECTED);
 	return (0);
 }
 
