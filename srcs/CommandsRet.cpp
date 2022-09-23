@@ -101,6 +101,35 @@ int	PONG(Commands *command)
 	return (0);
 }
 
+int	MOTD(Commands* command) {
+	std::string	message = "";
+	message += "- irc.42.org Message of the Day -\r\n";
+	message += "- 2042-5-4 00:42\r\n";
+	message += "- Welcome on ft_IRC Server !\r\n-\r\n-\r\n";
+	message += "-          ,---.      .`````-.  \r\n";
+	message += "-         /,--.|     /   ,-.  \\ \r\n";
+	message += "-        //_  ||    (___/  |   |\r\n";
+	message += "-       /_( )_||          .'  / \r\n";
+	message += "-      /(_ o _)|      _.-'_.-'  \r\n";
+	message += "-     / /(_,_)||_   _/_  .'     \r\n";
+	message += "-    /  `-----' || ( ' )(__..--.\r\n";
+	message += "-    `-------|||-'(_{;}_)      |\r\n";
+	message += "-            '-'   (_,_)-------'\r\n-\r\n-\r\n";
+	message += "- En vous connectant, vous acceptez implicitement les regles de 42school.\r\n-\r\n";
+	message += "- In Trartiflette We Trust\r\n-\r\n";
+	message += "- UTK SoundSystem Is Here\r\n-\r\n";
+	message += "- Bonne discussion sur notre server !\r\n-\r\n";
+	message += "End of /MOTD command.";
+	command->getClient()->writeMessage(message);
+	return 0;
+}
+
+int	LUSERS(Commands* command) {
+	// TODO
+	(void)command;
+	return 0;
+}
+
 // int	ISON(Commands *command)
 // {
 	
@@ -128,9 +157,9 @@ std::string	RPL_YOURHOST() {
 };
 
 std::string	RPL_CREATED() {
-	return ":This server was created 42/42/4242";
+	return ":This server was created 4 may at 2042, 00:42:42";
 };
 
 std::string	RPL_MYINFO() {
-	return "42 420 w n";
+	return "irc.42.org 420 woisx inpstmcqaovlbkSR";
 };

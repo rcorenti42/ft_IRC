@@ -18,12 +18,17 @@
 int PASS(Commands*);
 int	NICK(Commands*);
 int USER(Commands*);
+int	TIME(Commands*);
+int	MOTD(Commands*);
+int	LUSERS(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;
 	this->_listCommands["NICK"] = NICK;
 	this->_listCommands["USER"] = USER;
-
+	this->_listCommands["TIME"] = TIME;
+	this->_listCommands["MOTD"] = MOTD;
+	this->_listCommands["LUSERS"] = LUSERS;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
@@ -37,6 +42,9 @@ std::string Client::getNickname() const {
 };
 std::string Client::getUsername() const {
     return this->_username;
+};
+std::string	Client::getUsermode() const {
+	return this->_userMode;
 };
 std::string	Client::getAddr() const {
 	return this->_addr;
@@ -142,4 +150,6 @@ void    Client::registerClient(Commands* commands) {
 	writeMessage(commands->sendRep(2));
 	writeMessage(commands->sendRep(3));
 	writeMessage(commands->sendRep(4));
+	LUSERS(commands);
+	MOTD(commands);
 };

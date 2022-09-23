@@ -19,9 +19,11 @@
 
 
 int	PASS(Commands* command);
-int	NICK(Commands *command);
-int	USER(Commands *command);
-int	TIME(Commands *command);
+int	NICK(Commands* command);
+int	USER(Commands* command);
+int	TIME(Commands* command);
+int	MOTD(Commands* command);
+int	LUSERS(Commands* command);
 
 std::string	RPL_WELCOME(std::string, std::string, std::string);
 

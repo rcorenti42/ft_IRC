@@ -57,6 +57,7 @@ public:
     int     	getSocket() const;
     std::string getNickname() const;
     std::string getUsername() const;
+	std::string	getUsermode() const;
 	std::string	getAddr() const;
 	e_state		getStats() const;
     void    	setNickname(std::string nickname);
