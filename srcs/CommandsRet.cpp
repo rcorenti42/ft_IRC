@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 00:54:59 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 02:35:12 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	PASS(Commands* command)
 		return (ERR_ALREADYREGISTERED);
 	if (*(command->getArgs().begin()) == command->getServer()->getPassword())
 	{
-		command->getClient()->setState(REGISTERED);	
+		command->getClient()->setState(CHECKPASS);	
 		return (0);
 	}
 	else 
@@ -49,6 +49,7 @@ int	NICK(Commands *command)
 	return (0);
 }
 
+//add the other fields ?
 int	USER(Commands *command)
 {
 	if (command->getArgs().empty())
@@ -60,6 +61,23 @@ int	USER(Commands *command)
 		command->getClient()->setRealName(command->getMessage());
 	return (0);	
 };
+
+//todo
+int	TIME(Commands *command)
+{
+	std::cout << command->getServer()->getTime() << std::endl;
+	return (0);
+}
+
+int PING(Commands *command)
+{
+	if (command->getArgs().empty())
+		return (ERR_NEEDMOREPARAMS);
+	else
+		std::cout << "PON";
+	return (0);
+	
+}
 
 std::string	RPL_WELCOME(std::string nick, std::string user) {
 	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + user;
