@@ -33,7 +33,8 @@ enum e_state {
     CONNECTED,
     CHECKPASS,
     REGISTERED,
-    NONE
+    NONE,
+	DEBUG
 };
 
 class Client {

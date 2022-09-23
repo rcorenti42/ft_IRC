@@ -116,7 +116,7 @@ void                    Server::sendPing() {
 };
 void                    Server::erraseClient(Client client) {
     // TODO
-	client.setState(NONE);
+	client.setState(DEBUG);
 };
 void                    Server::erraseChannel(Channel channel) {
     // TODO
@@ -130,6 +130,7 @@ void                    Server::run() {
         std::cerr << "Poll failed" << std::endl;
         exit(1);
     }
+
     if (this->_fds[0].revents == POLLIN)
         acceptClient();
     else

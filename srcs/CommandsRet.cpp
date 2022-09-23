@@ -37,7 +37,7 @@ int	PASS(Commands* command)
 		return (ERR_ALREADYREGISTERED);
 	if (*(command->getArgs().begin()) == command->getServer()->getPassword())
 	{
-		command->getClient()->setState(CHECKPASS);	
+		command->getClient()->setState(REGISTERED);
 		return (0);
 	}
 	else 
@@ -55,7 +55,6 @@ int	NICK(Commands *command)
 			return (ERR_NICKNAMEINUSE);
 	}
 	command->getClient()->setNickname(*(command->getArgs().begin()));
-	command->getClient()->setState(CONNECTED);
 	return (0);
 }
 

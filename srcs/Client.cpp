@@ -91,6 +91,8 @@ void    Client::packetsHandler() {
 				delete *it;
 			}
 		}
+		if (this->_state == REGISTERED && !this->_nickname.empty())
+			this->_state = CONNECTED;
 		if (this->_state != state) {
 			if (this->_state == CONNECTED)
 				registerClient(*this->_commands.begin());
