@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:52:23 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 05:13:59 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,38 @@ int PING(Commands *command)
 {
 	if (command->getArgs().empty())
 		return (ERR_NEEDMOREPARAMS);
-	else
-		std::cout << "PON";
+	command->getClient()->writeMessage("PING :temporary ping");
 	return (0);
 	
 }
+
+int	PONG(Commands *command)
+{
+	std::string str;
+	if (command->getArgs().empty())
+		return (ERR_NEEDMOREPARAMS);
+	str = "PONG";
+	command->getClient()->writeMessage("PONG :temporary pong");
+	return (0);
+}
+
+// int	ISON(Commands *command)
+// {
+	
+// 	if (command->getArgs().empty())
+// 		return (ERR_NEEDMOREPARAMS);
+// 	std::vector<Client *> clients = command->getClients();
+// 	std::vector<std::string> provided = command->getArgs();
+// 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
+// 	{
+// 		for (std::vector<Client *>)::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
+// 		{
+// 			if (*it == (*it2))
+				
+// 		}
+// 	}
+
+// }
 
 std::string	RPL_WELCOME(std::string nick, std::string user, std::string addr) {
 	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + addr;
