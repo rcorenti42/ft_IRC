@@ -29,7 +29,7 @@ private:
 	    Client client;
 	    string mode;
 	    ClientMode(const Client &c, string m) : client(c), mode(m) {}
-	    ClientMode() : client(0), mode("") {}
+	    ClientMode() : client(0, sockaddr_in()), mode("") {}
     };
     string					_name;
     string					_topic;

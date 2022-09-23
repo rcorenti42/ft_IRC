@@ -18,7 +18,7 @@
 # include "Commands.hpp"
 
 int			PASS(Commands*);
-std::string	RPL_WELCOME(std::string, std::string);
+std::string	RPL_WELCOME(std::string, std::string, std::string);
 
 std::string	RPL_YOURHOST();
 

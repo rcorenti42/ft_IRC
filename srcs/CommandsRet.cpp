@@ -62,8 +62,8 @@ int	USER(Commands *command)
 	return (0);	
 };
 
-std::string	RPL_WELCOME(std::string nick, std::string user) {
-	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + user;
+std::string	RPL_WELCOME(std::string nick, std::string user, std::string addr) {
+	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + addr;
 };
 
 std::string	RPL_YOURHOST() {
