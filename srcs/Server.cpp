@@ -116,9 +116,7 @@ void                    Server::sendPing() {
 };
 void                    Server::erraseClient(Client client) {
     // TODO
-    std::cout << "Client errased" << std::endl;
-    (void)client;
-    return;
+	client.setState(NONE);
 };
 void                    Server::erraseChannel(Channel channel) {
     // TODO
