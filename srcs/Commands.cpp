@@ -13,6 +13,7 @@
 
 #include "Commands.hpp"
 #include "CommandsRet.hpp"
+#include "CommandsReply.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
 
@@ -73,7 +74,9 @@ Client*						Commands::getClient() const {
 Server*						Commands::getServer() const {
 	return this->_server;
 };
-std::string					Commands::sendRep(int code) {
+std::string					Commands::sendRep(int code, std::string arg1, std::string arg2) {
+	(void)arg1;
+	(void)arg2;
 	switch (code) {
 	case 1:
 		return RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername(), this->_client->getAddr());
@@ -83,6 +86,16 @@ std::string					Commands::sendRep(int code) {
 		return RPL_CREATED();
 	case 4:
 		return RPL_MYINFO();
+	case 251:
+		return RPL_LUSERCLIENT(arg1, arg2);
+	case 252:
+		return RPL_LUSEROP(arg1);
+	case 253:
+		return RPL_LUSERUNKNOWN(arg1);
+	case 254:
+		return RPL_LUSERCHANNELS(arg1);
+	case 255:
+		return RPL_LUSERME(arg1);
 	}
 	return "";
 };

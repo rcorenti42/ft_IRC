@@ -9,13 +9,15 @@ SOURCES = 	srcs/main.cpp \
 			srcs/Client.cpp \
 			srcs/Channel.cpp \
 			srcs/Commands.cpp \
-			srcs/CommandsRet.cpp
+			srcs/CommandsRet.cpp \
+			srcs/CommandsReply.cpp
 
 HEADERS = 	includes/Server.hpp \
 			includes/Client.hpp \
 			includes/Channel.hpp \
 			includes/Commands.hpp \
-			includes/CommandsRet.hpp
+			includes/CommandsRet.hpp \
+			includes/CommandsReply.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 

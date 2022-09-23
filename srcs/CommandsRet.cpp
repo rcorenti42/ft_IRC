@@ -16,6 +16,7 @@
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include <sstream>
 
 #define RPL_TIME 391
 #define ERR_NONICKNAMEGIVEN 431
@@ -30,6 +31,12 @@ std::string format_num_replay(Commands* command, int code)
 	ss << ":" << command->getServer()->getName() << " " << code << " " << command->getClient()->getNickname();
 	return (ss.str());
 }
+
+std::string	to_string(int n) {
+	std::ostringstream	ss;
+	ss << n;
+	return ss.str();
+};
 
 int	PASS(Commands* command)
 {
@@ -125,8 +132,32 @@ int	MOTD(Commands* command) {
 }
 
 int	LUSERS(Commands* command) {
-	// TODO
-	(void)command;
+	int						visibles = 0;
+	int						invisibles = 0;
+	int						operators = 0;
+	int						unknown = 0;
+	int						channels = command->getServer()->getChannels().size();
+	std::vector<Client*>	clients = command->getServer()->getClients();
+	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if ((*it)->getStats() == CONNECTED) {
+			if ((*it)->getUsermode().find('i') == std::string::npos)
+				visibles++;
+			else
+				invisibles++;
+			if ((*it)->getUsermode().find('o') != std::string::npos)
+				operators++;
+		}
+		else
+			unknown++;
+	}
+	command->getClient()->writeMessage(command->sendRep(251, to_string(visibles), to_string(invisibles)));
+	if (operators)
+		command->getClient()->writeMessage(command->sendRep(252, to_string(operators)));
+	if (unknown)
+		command->getClient()->writeMessage(command->sendRep(253, to_string(unknown)));
+	if (channels)
+		command->getClient()->writeMessage(command->sendRep(254, to_string(channels)));
+	command->getClient()->writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
 	return 0;
 }
 
@@ -147,19 +178,3 @@ int	LUSERS(Commands* command) {
 // 	}
 
 // }
-
-std::string	RPL_WELCOME(std::string nick, std::string user, std::string addr) {
-	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + addr;
-};
-
-std::string	RPL_YOURHOST() {
-	return ":Your host is 42, running version 420";
-};
-
-std::string	RPL_CREATED() {
-	return ":This server was created 4 may at 2042, 00:42:42";
-};
-
-std::string	RPL_MYINFO() {
-	return "irc.42.org 420 woisx inpstmcqaovlbkSR";
-};
