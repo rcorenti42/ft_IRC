@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/23 00:13:33               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   CommandsRet.hpp                                                          */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CommandsRet.hpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/23 03:31:04 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef COMMANDSRET_HPP
 # define  COMMANDSRET_HPP
@@ -17,7 +17,12 @@
 # include <iostream>
 # include "Commands.hpp"
 
-int			PASS(Commands*);
+
+int	PASS(Commands* command);
+int	NICK(Commands *command);
+int	USER(Commands *command);
+int	TIME(Commands *command);
+
 std::string	RPL_WELCOME(std::string, std::string);
 
 std::string	RPL_YOURHOST();

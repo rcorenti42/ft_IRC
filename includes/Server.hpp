@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/21 07:49:51 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 03:25:04 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ class Server {
     int                             _sock;
     int                             _port;
     std::string                     _password;
-    std::vector<pollfd>             _fds;
+	std::string						_name;
+    time_t*							_time;
+	std::vector<pollfd>             _fds;
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
     bool                	validPort(char* port);
@@ -47,7 +49,8 @@ public:
     Channel&                getChannel(std::string name);
     std::vector<Channel*>   getChannels();
 	std::string				getPassword();
-    std::string             getTime();
+    time_t		            *getTime();
+	std::string				getName();
     void                    sendPing();
     void                    erraseClient(Client client);
     void                    erraseChannel(Channel channel);

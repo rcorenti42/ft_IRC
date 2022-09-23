@@ -6,21 +6,30 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 02:35:12 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 03:52:23 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "time.h"
 #include "CommandsRet.hpp"
 #include "Commands.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
+#define RPL_TIME 391
 #define ERR_NONICKNAMEGIVEN 431
 #define ERR_NICKNAMEINUSE 433
 #define ERR_NEEDMOREPARAMS 461
 #define ERR_ALREADYREGISTERED 462
 #define ERR_PASSWDMISMATCH 464	
+
+std::string format_num_replay(Commands* command, int code)
+{
+	std::stringstream ss;
+	ss << ":" << command->getServer()->getName() << " " << code << " " << command->getClient()->getNickname();
+	return (ss.str());
+}
 
 int	PASS(Commands* command)
 {
@@ -63,10 +72,14 @@ int	USER(Commands *command)
 	return (0);	
 };
 
-//todo
 int	TIME(Commands *command)
 {
-	std::cout << command->getServer()->getTime() << std::endl;
+	struct tm *readable = localtime(command->getServer()->getTime());
+
+	std::string str = format_num_replay(command, RPL_TIME);
+	str += " :";
+	str += asctime(readable);
+	command->getClient()->writeMessage(str);
 	return (0);
 }
 

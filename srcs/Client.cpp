@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 00:56:35 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 02:39:19 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void    Client::receiveMessage(Server* serv) {
     }
     packetsHandler();
 };
+
 void    Client::writeMessage(std::string message) {
 	this->_packets.push_back(message);
 };

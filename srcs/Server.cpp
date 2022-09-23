@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/21 17:39:15 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/09/23 03:24:52 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,14 @@ std::string				Server::getPassword() {
 }
 
 
-std::string             Server::getTime() {
+time_t*            Server::getTime() {
     // TODO
-    std::cout <<"getTime called" << std::endl;
-    return "time";
+    return this->_time;
 };
+
+std::string				Server::getName(){
+	return this->_name;
+}
 void                    Server::sendPing() {
     // TODO
     std::cout << "Ping send" << std::endl;
