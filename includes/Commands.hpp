@@ -33,7 +33,7 @@ public:
 	std::vector<std::string>	getArgs() const;
 	Client*						getClient() const;
 	Server*						getServer() const;
-	void						sendRep(int code);
+	std::string					sendRep(int code);
 };
 
 #endif

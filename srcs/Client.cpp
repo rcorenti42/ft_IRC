@@ -15,10 +15,14 @@
 #include "Server.hpp"
 #include "Commands.hpp"
 
-int PASS(Commands* command);
+int PASS(Commands*);
+int	NICK(Commands*);
+int USER(Commands*);
 
 Client::Client(int sock):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;
+	this->_listCommands["NICK"] = NICK;
+	this->_listCommands["USER"] = USER;
 };
 Client::~Client() {
     close(this->_sock);
@@ -71,8 +75,6 @@ void    Client::packetsHandler() {
 				delete *it;
 			}
 		}
-		if (this->_state == REGISTERED && this->_nickname.size())
-			this->_state = CONNECTED;
 		if (this->_state != state) {
 			if (this->_state == CONNECTED)
 				registerClient(*this->_commands.begin());
@@ -108,7 +110,7 @@ void    Client::writeMessage(std::string message) {
 };
 void    Client::sendMessage() {
     std::string packet;
-    if (this->_packets.size()) {
+    if (!this->_packets.empty()) {
         for (std::vector<std::string>::iterator it = this->_packets.begin(); it != this->_packets.end(); it++)
             packet += *it + "\r\n";
         this->_packets.clear();
@@ -117,8 +119,8 @@ void    Client::sendMessage() {
     }
 };
 void    Client::registerClient(Commands* commands) {
-    commands->sendRep(1);
-	commands->sendRep(2);
-	commands->sendRep(3);
-	commands->sendRep(4);
+    writeMessage(commands->sendRep(1));
+	writeMessage(commands->sendRep(2));
+	writeMessage(commands->sendRep(3));
+	writeMessage(commands->sendRep(4));
 };
