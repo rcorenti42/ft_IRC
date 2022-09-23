@@ -19,10 +19,12 @@ int PASS(Commands*);
 int	NICK(Commands*);
 int USER(Commands*);
 
-Client::Client(int sock):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;
 	this->_listCommands["NICK"] = NICK;
 	this->_listCommands["USER"] = USER;
+
+	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
     close(this->_sock);
@@ -36,6 +38,9 @@ std::string Client::getNickname() const {
 std::string Client::getUsername() const {
     return this->_username;
 };
+std::string	Client::getAddr() const {
+	return this->_addr;
+};
 e_state		Client::getStats() const {
 	return this->_state;
 };
@@ -48,11 +53,22 @@ void    Client::setUsername(std::string username) {
 
 void	Client::setRealName(std::string realname) {
 	this->_realname = realname;
-}
+};
 void		Client::setState(e_state mode) {
 	this->_state = mode;
-}
-
+};
+std::string	Client::stateMsg() {
+	std::string	state = "";
+	if (this->_state == CONNECTED) {
+		state = this->_nickname;
+		if (!this->_addr.empty()) {
+			if (!this->_username.empty())
+				state += "!" + this->_username;
+			state += "@" + this->_addr;
+		}
+	}
+	return state;
+};
 void    Client::packetsHandler() {
 	std::vector<Commands*>	commands;
 	e_state					state = this->_state;
@@ -107,7 +123,7 @@ void    Client::receiveMessage(Server* serv) {
 };
 
 void    Client::writeMessage(std::string message) {
-	this->_packets.push_back(message);
+	this->_packets.push_back(":" + stateMsg() + " " + message);
 };
 void    Client::sendMessage() {
     std::string packet;

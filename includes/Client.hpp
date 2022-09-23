@@ -45,20 +45,23 @@ class Client {
     std::string                 				_buff;
     std::string                 				_userMode;
     std::string                 				_channel;
+	std::string									_addr;
     std::vector<std::string>    				_packets;
 	std::vector<Commands*>						_commands;
 	std::map<std::string, int(*)(Commands*)>	_listCommands;
     time_t                      				_ping;
 public:
-    Client(int sock);
+    Client(int, sockaddr_in);
     ~Client();
     int     	getSocket() const;
     std::string getNickname() const;
     std::string getUsername() const;
+	std::string	getAddr() const;
 	e_state		getStats() const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
 	void		setRealName(std::string realname);
+	std::string	stateMsg();
     void    	packetsHandler();
     void    	receiveMessage(Server* serv);
     void    	writeMessage(std::string message);

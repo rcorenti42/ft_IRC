@@ -76,7 +76,7 @@ Server*						Commands::getServer() const {
 std::string					Commands::sendRep(int code) {
 	switch (code) {
 	case 1:
-		return RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername());
+		return RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername(), this->_client->getAddr());
 	case 2:
 		return RPL_YOURHOST();
 	case 3:

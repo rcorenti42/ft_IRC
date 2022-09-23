@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:31:04 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/23 04:24:34 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	NICK(Commands *command);
 int	USER(Commands *command);
 int	TIME(Commands *command);
 
-std::string	RPL_WELCOME(std::string, std::string);
+std::string	RPL_WELCOME(std::string, std::string, std::string);
 
 std::string	RPL_YOURHOST();
 
