@@ -18,11 +18,11 @@
 # include "Commands.hpp"
 
 
-int	PASS(Commands* command);
-int	NICK(Commands* command);
-int	USER(Commands* command);
-int	TIME(Commands* command);
-int	MOTD(Commands* command);
-int	LUSERS(Commands* command);
+void	PASS(Commands* command);
+void	NICK(Commands* command);
+void	USER(Commands* command);
+void	TIME(Commands* command);
+void	MOTD(Commands* command);
+void	LUSERS(Commands* command);
 
 #endif

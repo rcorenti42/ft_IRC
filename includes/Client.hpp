@@ -49,7 +49,7 @@ class Client {
 	std::string									_addr;
     std::vector<std::string>    				_packets;
 	std::vector<Commands*>						_commands;
-	std::map<std::string, int(*)(Commands*)>	_listCommands;
+	std::map<std::string, void(*)(Commands*)>	_listCommands;
     time_t                      				_ping;
 public:
     Client(int, sockaddr_in);

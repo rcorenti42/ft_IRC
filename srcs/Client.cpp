@@ -15,12 +15,12 @@
 #include "Server.hpp"
 #include "Commands.hpp"
 
-int PASS(Commands*);
-int	NICK(Commands*);
-int USER(Commands*);
-int	TIME(Commands*);
-int	MOTD(Commands*);
-int	LUSERS(Commands*);
+void	PASS(Commands*);
+void	NICK(Commands*);
+void	USER(Commands*);
+void	TIME(Commands*);
+void	MOTD(Commands*);
+void	LUSERS(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;

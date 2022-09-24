@@ -18,13 +18,6 @@
 #include "Channel.hpp"
 #include <sstream>
 
-#define RPL_TIME 391
-#define ERR_NONICKNAMEGIVEN 431
-#define ERR_NICKNAMEINUSE 433
-#define ERR_NEEDMOREPARAMS 461
-#define ERR_ALREADYREGISTERED 462
-#define ERR_PASSWDMISMATCH 464	
-
 std::string format_num_replay(Commands* command, int code)
 {
 	std::stringstream ss;
@@ -38,77 +31,76 @@ std::string	to_string(int n) {
 	return ss.str();
 };
 
-int	PASS(Commands* command)
+void	PASS(Commands* command)
 {
 	if (command->getClient()->getStats() == REGISTERED)
-		return (ERR_ALREADYREGISTERED);
-	if (*(command->getArgs().begin()) == command->getServer()->getPassword())
-	{
+		command->getClient()->writeMessage(command->sendRep(462));
+	else if (*(command->getArgs().begin()) == command->getServer()->getPassword())
 		command->getClient()->setState(REGISTERED);
-		return (0);
-	}
 	else 
-		return (ERR_PASSWDMISMATCH);
+		command->getClient()->writeMessage(command->sendRep(464));
 };
 
-int	NICK(Commands *command)
+void	NICK(Commands *command)
 {
 	if (command->getArgs().empty())
-		return (ERR_NONICKNAMEGIVEN);
-	std::vector<Client *> clients = command->getServer()->getClients();
-	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++	)
-	{
-		if (*(command->getArgs().begin()) == (*it)->getNickname())
-			return (ERR_NICKNAMEINUSE);
+		command->getClient()->writeMessage(command->sendRep(431));
+	else {
+		std::vector<Client *> clients = command->getServer()->getClients();
+		for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++	)
+		{
+			if (*(command->getArgs().begin()) == (*it)->getNickname()) {
+				command->getClient()->writeMessage(command->sendRep(433));
+				return;
+			}
+		}
+		command->getClient()->setNickname(*(command->getArgs().begin()));
 	}
-	command->getClient()->setNickname(*(command->getArgs().begin()));
-	return (0);
 }
 
 //add the other fields ?
-int	USER(Commands *command)
+void	USER(Commands *command)
 {
 	if (command->getArgs().empty())
-		return (ERR_NEEDMOREPARAMS);
-	if (command->getClient()->getStats() == REGISTERED)
-		return (ERR_ALREADYREGISTERED);
-	command->getClient()->setUsername(*(command->getArgs().begin()));
-	if (!command->getMessage().empty())
-		command->getClient()->setRealName(command->getMessage());
-	return (0);	
+		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
+	else if (command->getClient()->getStats() == REGISTERED)
+		command->getClient()->writeMessage(command->sendRep(462));
+	else {
+		command->getClient()->setUsername(*(command->getArgs().begin()));
+		if (!command->getMessage().empty())
+			command->getClient()->setRealName(command->getMessage());
+	}
 };
 
-int	TIME(Commands *command)
+void	TIME(Commands *command)
 {
 	struct tm *readable = localtime(command->getServer()->getTime());
-
-	std::string str = format_num_replay(command, RPL_TIME);
+	std::string str = command->sendRep(391, "localtime");
 	str += " :";
 	str += asctime(readable);
 	command->getClient()->writeMessage(str);
-	return (0);
 }
 
-int PING(Commands *command)
+void PING(Commands *command)
 {
 	if (command->getArgs().empty())
-		return (ERR_NEEDMOREPARAMS);
-	command->getClient()->writeMessage("PING :temporary ping");
-	return (0);
-	
+		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
+	else
+		command->getClient()->writeMessage("PING :temporary ping");
 }
 
-int	PONG(Commands *command)
+void	PONG(Commands *command)
 {
 	std::string str;
 	if (command->getArgs().empty())
-		return (ERR_NEEDMOREPARAMS);
-	str = "PONG";
-	command->getClient()->writeMessage("PONG :temporary pong");
-	return (0);
+		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
+	else {
+		str = "PONG";
+		command->getClient()->writeMessage("PONG :temporary pong");
+	}
 }
 
-int	MOTD(Commands* command) {
+void	MOTD(Commands* command) {
 	std::string	message = "";
 	message += "- irc.42.org Message of the Day -\r\n";
 	message += "- 2042-5-4 00:42\r\n";
@@ -128,10 +120,9 @@ int	MOTD(Commands* command) {
 	message += "- Bonne discussion sur notre server !\r\n-\r\n";
 	message += "End of /MOTD command.";
 	command->getClient()->writeMessage(message);
-	return 0;
 }
 
-int	LUSERS(Commands* command) {
+void	LUSERS(Commands* command) {
 	int						visibles = 0;
 	int						invisibles = 0;
 	int						operators = 0;
@@ -158,7 +149,6 @@ int	LUSERS(Commands* command) {
 	if (channels)
 		command->getClient()->writeMessage(command->sendRep(254, to_string(channels)));
 	command->getClient()->writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
-	return 0;
 }
 
 // int	ISON(Commands *command)
