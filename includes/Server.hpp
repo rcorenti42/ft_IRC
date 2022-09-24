@@ -34,13 +34,14 @@ class Server {
     int                             _port;
     std::string                     _password;
 	std::string						_name;
-    time_t*							_time;
+    time_t							_ping;
 	std::vector<pollfd>             _fds;
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
     bool                	validPort(char* port);
     void                	acceptClient();
 public:
+	Server();
     void                	setPort(char* port);
     void                	setPassword(char* password);
     void                	init();
@@ -48,9 +49,8 @@ public:
     std::vector<Client*>    getClients();
     Channel&                getChannel(std::string name);
     std::vector<Channel*>   getChannels();
-	std::string				getPassword();
-    time_t		            *getTime();
-	std::string				getName();
+	std::string				getPassword() const;
+	std::string				getName() const;
     void                    sendPing();
     void                    erraseClient(Client client);
     void                    erraseChannel(Channel channel);

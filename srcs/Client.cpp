@@ -21,6 +21,8 @@ void	USER(Commands*);
 void	TIME(Commands*);
 void	MOTD(Commands*);
 void	LUSERS(Commands*);
+void	PING(Commands*);
+void	PONG(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;
@@ -29,6 +31,8 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["TIME"] = TIME;
 	this->_listCommands["MOTD"] = MOTD;
 	this->_listCommands["LUSERS"] = LUSERS;
+	this->_listCommands["PING"] = PING;
+	this->_listCommands["PONG"] = PONG;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
@@ -42,6 +46,9 @@ std::string Client::getNickname() const {
 };
 std::string Client::getUsername() const {
     return this->_username;
+};
+std::string	Client::getRealname() const {
+	return this->_realname;
 };
 std::string	Client::getUsermode() const {
 	return this->_userMode;
@@ -64,6 +71,9 @@ void	Client::setRealName(std::string realname) {
 };
 void		Client::setState(e_state mode) {
 	this->_state = mode;
+};
+void		Client::setPing(time_t ping) {
+	this->_ping = ping;
 };
 std::string	Client::stateMsg() {
 	std::string	state = "";
@@ -131,6 +141,10 @@ void    Client::receiveMessage(Server* serv) {
     }
     packetsHandler();
 };
+
+
+// add command number + username in packets to send
+
 
 void    Client::writeMessage(std::string message) {
 	this->_packets.push_back(":" + stateMsg() + " " + message);

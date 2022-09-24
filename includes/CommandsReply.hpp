@@ -34,4 +34,16 @@ std::string	RPL_LUSERCHANNELS(std::string);
 
 std::string	RPL_LUSERME(std::string);
 
+std::string	RPL_TIME(std::string);
+
+std::string	ERR_NOORIGIN();
+
+std::string	ERR_NONICKNAMEGIVEN();
+
+std::string	ERR_NEEDMOREPARAMS(std::string);
+
+std::string	ERR_ALREADYREGISTERED();
+
+std::string	ERR_PASSWDMISMATCH();
+
 #endif

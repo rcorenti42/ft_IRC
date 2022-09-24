@@ -55,6 +55,7 @@ void	NICK(Commands *command)
 			}
 		}
 		command->getClient()->setNickname(*(command->getArgs().begin()));
+		command->getClient()->writeMessage("NICK :" + command->getClient()->getNickname());
 	}
 }
 
@@ -63,7 +64,7 @@ void	USER(Commands *command)
 {
 	if (command->getArgs().empty())
 		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
-	else if (command->getClient()->getStats() == REGISTERED)
+	else if (!command->getClient()->getRealname().empty())
 		command->getClient()->writeMessage(command->sendRep(462));
 	else {
 		command->getClient()->setUsername(*(command->getArgs().begin()));
@@ -74,35 +75,32 @@ void	USER(Commands *command)
 
 void	TIME(Commands *command)
 {
-	struct tm *readable = localtime(command->getServer()->getTime());
+	//struct tm *readable = localtime(command->getServer()->getPing());
 	std::string str = command->sendRep(391, "localtime");
 	str += " :";
-	str += asctime(readable);
+	//str += asctime(readable);
 	command->getClient()->writeMessage(str);
 }
 
 void PING(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
+		command->getClient()->writeMessage(command->sendRep(409));
 	else
-		command->getClient()->writeMessage("PING :temporary ping");
+		command->getClient()->writeMessage("PONG :" + command->getArgs()[0]);
 }
 
 void	PONG(Commands *command)
 {
 	std::string str;
 	if (command->getArgs().empty())
-		command->getClient()->writeMessage(command->sendRep(461, command->getCommand()));
-	else {
-		str = "PONG";
-		command->getClient()->writeMessage("PONG :temporary pong");
-	}
+		command->getClient()->writeMessage(command->sendRep(409));
+	else
+		command->getClient()->setPing(std::time(NULL));
 }
 
 void	MOTD(Commands* command) {
-	std::string	message = "";
-	message += "- irc.42.org Message of the Day -\r\n";
+	std::string	message = "- irc.UTK.org Message of the Day -\r\n";
 	message += "- 2042-5-4 00:42\r\n";
 	message += "- Welcome on ft_IRC Server !\r\n-\r\n-\r\n";
 	message += "-          ,---.      .`````-.  \r\n";
@@ -114,7 +112,7 @@ void	MOTD(Commands* command) {
 	message += "-    /  `-----' || ( ' )(__..--.\r\n";
 	message += "-    `-------|||-'(_{;}_)      |\r\n";
 	message += "-            '-'   (_,_)-------'\r\n-\r\n-\r\n";
-	message += "- En vous connectant, vous acceptez implicitement les regles de 42school.\r\n-\r\n";
+	message += "- En vous connectant, vous acceptez implicitement les regles de 42Network.\r\n-\r\n";
 	message += "- In Trartiflette We Trust\r\n-\r\n";
 	message += "- UTK SoundSystem Is Here\r\n-\r\n";
 	message += "- Bonne discussion sur notre server !\r\n-\r\n";

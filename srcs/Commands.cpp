@@ -75,27 +75,37 @@ Server*						Commands::getServer() const {
 	return this->_server;
 };
 std::string					Commands::sendRep(int code, std::string arg1, std::string arg2) {
-	(void)arg1;
-	(void)arg2;
 	switch (code) {
 	case 1:
-		return RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername(), this->_client->getAddr());
+		return " 001 " + this->_client->getNickname() + " " + RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername(), this->_client->getAddr());
 	case 2:
-		return RPL_YOURHOST();
+		return " 002 " + this->_client->getNickname() + " " + RPL_YOURHOST();
 	case 3:
-		return RPL_CREATED();
+		return " 003 " + this->_client->getNickname() + " " + RPL_CREATED();
 	case 4:
-		return RPL_MYINFO();
+		return " 004 " + this->_client->getNickname() + " " + RPL_MYINFO();
 	case 251:
-		return RPL_LUSERCLIENT(arg1, arg2);
+		return " 251 " + this->_client->getNickname() + " " + RPL_LUSERCLIENT(arg1, arg2);
 	case 252:
-		return RPL_LUSEROP(arg1);
+		return " 252 " + this->_client->getNickname() + " " + RPL_LUSEROP(arg1);
 	case 253:
-		return RPL_LUSERUNKNOWN(arg1);
+		return " 253 " + this->_client->getNickname() + " " + RPL_LUSERUNKNOWN(arg1);
 	case 254:
-		return RPL_LUSERCHANNELS(arg1);
+		return " 254 " + this->_client->getNickname() + " " + RPL_LUSERCHANNELS(arg1);
 	case 255:
-		return RPL_LUSERME(arg1);
+		return " 255 " + this->_client->getNickname() + " " + RPL_LUSERME(arg1);
+	case 391:
+		return " 391 " + this->_client->getNickname() + " " + RPL_TIME(arg1);
+	case 409:
+		return " 409 " + this->_client->getNickname() + " " + ERR_NOORIGIN();
+	case 431:
+		return " 431 " + this->_client->getNickname() + " " + ERR_NONICKNAMEGIVEN();
+	case 461:
+		return " 461 " + this->_client->getNickname() + " " + ERR_NEEDMOREPARAMS(arg1);
+	case 462:
+		return " 462 " + this->_client->getNickname() + " " + ERR_ALREADYREGISTERED();
+	case 464:
+		return " 464 " + this->_client->getNickname() + " " + ERR_PASSWDMISMATCH();
 	}
-	return "";
+	return "UNKNOWN ERROR !";
 };

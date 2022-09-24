@@ -15,6 +15,8 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Server::Server(): _name(""), _ping(std::time(NULL)) {
+};
 bool                Server::validPort(char* port) {
     for (int i = 0; port[i]; i++)
         if (!isdigit(port[i]))
@@ -95,24 +97,17 @@ std::vector<Channel*>   Server::getChannels() {
 		channels.push_back(&(*it).second);
 	return channels;
 };
-
-std::string				Server::getPassword() {
+std::string				Server::getPassword() const {
 	return (this->_password);
-}
-
-
-time_t*            Server::getTime() {
-    // TODO
-    return this->_time;
 };
-
-std::string				Server::getName(){
+std::string				Server::getName() const {
 	return this->_name;
-}
+};
 void                    Server::sendPing() {
-    // TODO
-    std::cout << "Ping send" << std::endl;
-    return;
+	this->_ping = std::time(NULL);
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		if ((*it).second->getStats() == CONNECTED)
+			(*it).second->writeMessage("PING 42");
 };
 void                    Server::erraseClient(Client client) {
     // TODO
@@ -130,7 +125,8 @@ void                    Server::run() {
         std::cerr << "Poll failed" << std::endl;
         exit(1);
     }
-
+	if (std::time(NULL) - this->_ping > 4)
+		sendPing();
     if (this->_fds[0].revents == POLLIN)
         acceptClient();
     else

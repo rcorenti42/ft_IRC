@@ -18,7 +18,7 @@ std::string	RPL_WELCOME(std::string nick, std::string user, std::string addr) {
 };
 
 std::string	RPL_YOURHOST() {
-	return ":Your host is 42, running version 420";
+	return ":Your host is UTK, running version 420";
 };
 
 std::string	RPL_CREATED() {
@@ -26,7 +26,7 @@ std::string	RPL_CREATED() {
 };
 
 std::string	RPL_MYINFO() {
-	return "irc.42.org 420 woisx inpstmcqaovlbkSR";
+	return "irc.UTK.org 420 woisx inpstmcqaovlbkSR";
 };
 
 std::string	RPL_LUSERCLIENT(std::string invisiblesClientsNbr, std::string noInvisiblesClientsNbr) {
@@ -47,4 +47,28 @@ std::string	RPL_LUSERCHANNELS(std::string channelsNbr) {
 
 std::string	RPL_LUSERME(std::string clientsNbr) {
 	return ":I have " + clientsNbr + " clients and 1 servers";
+};
+
+std::string	RPL_TIME(std::string time) {
+	return "UTK:" + time;
+};
+
+std::string	ERR_NOORIGIN() {
+	return ":No origin specified";
+};
+
+std::string	ERR_NONICKNAMEGIVEN() {
+	return ":No nickname given";
+};
+
+std::string	ERR_NEEDMOREPARAMS(std::string cmd) {
+	return cmd + " :Not enough parameters";
+};
+
+std::string	ERR_ALREADYREGISTERED() {
+	return ":You may not reregister";
+};
+
+std::string	ERR_PASSWDMISMATCH() {
+	return ":Password incorrect";
 };
