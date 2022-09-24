@@ -24,5 +24,7 @@ void	USER(Commands* command);
 void	TIME(Commands* command);
 void	MOTD(Commands* command);
 void	LUSERS(Commands* command);
+void	MODE(Commands* command);
+
 
 #endif

@@ -24,6 +24,8 @@ std::string	RPL_CREATED();
 
 std::string	RPL_MYINFO();
 
+std::string	RPL_UMODEIS(std::string);
+
 std::string	RPL_LUSERCLIENT(std::string, std::string);
 
 std::string	RPL_LUSEROP(std::string);
@@ -34,16 +36,38 @@ std::string	RPL_LUSERCHANNELS(std::string);
 
 std::string	RPL_LUSERME(std::string);
 
+std::string	RPL_CHANNELMODEIS(std::string, std::string, std::string);
+
+std::string	RPL_BANLIST(std::string, std::string);
+
+std::string	RPL_ENDOFBANLIST(std::string);
+
 std::string	RPL_TIME(std::string);
+
+std::string	ERR_NOSUCHNICK(std::string);
+
+std::string	ERR_NOSUCHCHANNEL(std::string);
 
 std::string	ERR_NOORIGIN();
 
 std::string	ERR_NONICKNAMEGIVEN();
+
+std::string	ERR_NOTONCHANNEL(std::string);
 
 std::string	ERR_NEEDMOREPARAMS(std::string);
 
 std::string	ERR_ALREADYREGISTERED();
 
 std::string	ERR_PASSWDMISMATCH();
+
+std::string	ERR_KEYSET(std::string);
+
+std::string	ERR_UNKNOWNMODE(std::string);
+
+std::string	ERR_CHANOPRIVSNEEDED(std::string);
+
+std::string	ERR_UMODEUNKNOWNFLAG();
+
+std::string	ERR_USERSDONTMATCH();
 
 #endif

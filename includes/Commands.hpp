@@ -14,6 +14,7 @@
 # define COMMANDS_HPP
 
 # include <iostream>
+# include <cctype>
 # include <vector>
 
 class Client;
@@ -33,7 +34,7 @@ public:
 	std::vector<std::string>	getArgs() const;
 	Client*						getClient() const;
 	Server*						getServer() const;
-	std::string					sendRep(int, std::string = "", std::string = "");
+	std::string					sendRep(int, std::string = "", std::string = "", std::string = "");
 };
 
 #endif

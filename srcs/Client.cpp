@@ -23,6 +23,7 @@ void	MOTD(Commands*);
 void	LUSERS(Commands*);
 void	PING(Commands*);
 void	PONG(Commands*);
+void	MODE(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["PASS"] = PASS;
@@ -33,6 +34,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["LUSERS"] = LUSERS;
 	this->_listCommands["PING"] = PING;
 	this->_listCommands["PONG"] = PONG;
+	this->_listCommands["MODE"] = MODE;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {

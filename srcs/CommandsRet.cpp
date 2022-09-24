@@ -149,6 +149,11 @@ void	LUSERS(Commands* command) {
 	command->getClient()->writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
 }
 
+void	MODE(Commands* command) {
+	// TODO
+	command->getClient()->writeMessage(command->sendRep(221, "+" + command->getClient()->getUsermode() + "i"));
+}
+
 // int	ISON(Commands *command)
 // {
 	
