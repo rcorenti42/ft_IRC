@@ -52,7 +52,9 @@ Commands::Commands(Client *client, Server *server, std::string str) : _client(cl
 		str.erase(0, pos + 1);
 	}
 	this->_args.push_back(str);
-	_command = *(_args.begin());
+	this->_command = *(this->_args.begin());
+	for (size_t i = 0; i < this->_command.length(); i++)
+		this->_command[i] = toupper(this->_command[i]);
 	this->_args.erase(this->_args.begin());
 	std::cout << "command : " << this->_command << std::endl;
 	std::cout << "args : {";

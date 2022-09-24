@@ -144,10 +144,6 @@ void    Client::receiveMessage(Server* serv) {
     packetsHandler();
 };
 
-
-// add command number + username in packets to send
-
-
 void    Client::writeMessage(std::string message) {
 	this->_packets.push_back(":" + stateMsg() + " " + message);
 };
