@@ -154,6 +154,12 @@ void	MODE(Commands* command) {
 	command->getClient()->writeMessage(command->sendRep(221, "+" + command->getClient()->getUsermode() + "i"));
 }
 
+void	JOIN(Commands* command) {
+	// TODO
+	(void)command;
+}
+
+
 // int	ISON(Commands *command)
 // {
 	
