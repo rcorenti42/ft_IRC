@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 05:13:59 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/26 18:30:48 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include <sstream>
-
-std::string format_num_replay(Commands* command, int code)
-{
-	std::stringstream ss;
-	ss << ":" << command->getServer()->getName() << " " << code << " " << command->getClient()->getNickname();
-	return (ss.str());
-}
 
 std::string	to_string(int n) {
 	std::ostringstream	ss;
@@ -72,6 +65,37 @@ void	USER(Commands *command)
 			command->getClient()->setRealName(command->getMessage());
 	}
 };
+
+void	ISON(Commands *command)
+{
+	
+	if (command->getArgs().empty())
+		command->getClient()->writeMessage(command->sendRep(461));
+	std::vector<Client *> clients = command->getServer()->getClients();
+	std::vector<std::string> provided = command->getArgs();
+	std::vector<std::string> online;
+	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
+	{
+		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
+		{
+			if ((*it) == (*it2)->getNickname()) {
+				online.push_back(*it);
+				provided.erase(it);
+			}
+		}
+	}
+	std::string ret;
+	ret = "Users online: ";
+	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
+	{
+			ret += (*it);
+			ret += " ";
+	}
+	if (ret != "Users online: ")
+		ret.erase(ret.size() - 1, ret.size());
+	std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
+	command->getClient()->writeMessage(ret);
+}
 
 void	TIME(Commands *command)
 {
@@ -158,22 +182,3 @@ void	JOIN(Commands* command) {
 	// TODO
 	(void)command;
 }
-
-
-// int	ISON(Commands *command)
-// {
-	
-// 	if (command->getArgs().empty())
-// 		return (ERR_NEEDMOREPARAMS);
-// 	std::vector<Client *> clients = command->getClients();
-// 	std::vector<std::string> provided = command->getArgs();
-// 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
-// 	{
-// 		for (std::vector<Client *>)::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
-// 		{
-// 			if (*it == (*it2))
-				
-// 		}
-// 	}
-
-// }
