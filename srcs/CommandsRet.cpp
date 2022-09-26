@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 18:30:48 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/26 22:30:34 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void	USER(Commands *command)
 };
 
 void	ISON(Commands *command)
-{
-	
+{	
 	if (command->getArgs().empty())
 		command->getClient()->writeMessage(command->sendRep(461));
 	std::vector<Client *> clients = command->getServer()->getClients();
@@ -97,6 +96,19 @@ void	ISON(Commands *command)
 	command->getClient()->writeMessage(ret);
 }
 
+void	INFO(Commands *command)
+{
+	command->getClient()->writeMessage(command->sendRep(371, "            IRCSERV          "));
+	command->getClient()->writeMessage(command->sendRep(371, "            2022             "));
+	command->getClient()->writeMessage(command->sendRep(371, "Core developpers:            "));
+	command->getClient()->writeMessage(command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
+	command->getClient()->writeMessage(command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
+	command->getClient()->writeMessage(command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
+	command->getClient()->writeMessage(command->sendRep(371, "IRCSERV local time: "));
+	command->getClient()->writeMessage(command->sendRep(371, "IRCSERV is best experienced with an IRC client"));
+	command->getClient()->writeMessage(command->sendRep(374));
+}
+
 void	TIME(Commands *command)
 {
 	//struct tm *readable = localtime(command->getServer()->getPing());
@@ -105,6 +117,8 @@ void	TIME(Commands *command)
 	//str += asctime(readable);
 	command->getClient()->writeMessage(str);
 }
+
+
 
 void PING(Commands *command)
 {

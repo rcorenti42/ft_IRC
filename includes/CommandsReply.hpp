@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/23 23:56:41               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   CommandsReply.hpp                                                        */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CommandsReply.hpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/26 22:28:02 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef COMMANDSREPLY_HPP
 # define COMMANDSREPLY_HPP
@@ -43,6 +43,10 @@ std::string	RPL_BANLIST(std::string, std::string);
 std::string	RPL_ENDOFBANLIST(std::string);
 
 std::string	RPL_TIME(std::string);
+
+std::string RPL_INFO(std::string);
+
+std::string RPL_ENDOFINFO();
 
 std::string	ERR_NOSUCHNICK(std::string);
 

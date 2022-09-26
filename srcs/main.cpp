@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:53:12 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/26 22:10:53 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 // 	std::cout << asctime(readable);
 // }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     Server              server;
     if (argc != 3)
 	{

@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/21 03:25:10               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   Commands.cpp                                                             */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Commands.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/26 22:28:41 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #include "Commands.hpp"
 #include "CommandsRet.hpp"
@@ -106,6 +106,10 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 367 " + this->_client->getNickname() + " " + RPL_BANLIST(arg1, arg2);
 	case 368:
 		return " 368 " + this->_client->getNickname() + " " + RPL_ENDOFBANLIST(arg1);
+	case 371:
+		return " 371 " + this->_client->getNickname() + " " + RPL_INFO(arg1);
+	case 374:
+		return " 374 " + this->_client->getNickname() + " " + RPL_ENDOFINFO();
 	case 391:
 		return " 391 " + this->_client->getNickname() + " " + RPL_TIME(arg1);
 	case 401:
