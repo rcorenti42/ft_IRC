@@ -6,34 +6,38 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:53:12 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/26 14:51:03 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include <iostream>
+#include <sstream>
 #include "Server.hpp"
-#include "CommandsRet.hpp"
 
-// int		main()
-// {
-// 	time_t date;
-// 	date = time(NULL);
-// 	struct tm *readable = localtime(&date);
-// 	std::cout << asctime(readable);
-// }
+using std::stringstream;
+
+bool	validPort(char* port) {
+	for (int i = 0; port[i]; i++)
+		if (!isdigit(port[i]))
+			return false;
+	return true;
+};
 
 int main(int argc, char** argv) {
-    Server              server;
+    Server  server;
+	int		port;
     if (argc != 3)
 	{
         std::cerr << "Usage: ./ircserv <port> <password>" << std::endl;
         return 1;
     }
-    server.setPort(argv[1]);
-    server.setPassword(argv[2]);
-    server.init();
-    while (1)
-        server.run();
+	stringstream ss(argv[1]);
+	if (!(ss >> port) || !validPort(argv[1])) {
+		std::cerr << "Invalid port" << std::endl;
+		exit(1);
+	}
+    server.init(port, argv[2]);
+    server.run();
     return 0;
 }

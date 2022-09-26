@@ -6,26 +6,26 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:25:04 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/26 14:51:16 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_HPP
-# define SERVER_HPP
+#pragma once
 
-# include <sstream>
-# include <iostream>
-# include <cctype>
-# include <vector>
-# include <map>
-# include <sys/types.h>
-# include <netinet/in.h>
-# include <sys/socket.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <poll.h>
-# include "Channel.hpp"
+#include <iostream>
+#include <cctype>
+#include <vector>
+#include <map>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <poll.h>
+#include "Channel.hpp"
+#include "Client.hpp"
+#include "ConnectionManager.hpp"
 
 class Client;
 
@@ -34,6 +34,7 @@ class Server {
     int                             _port;
     std::string                     _password;
 	std::string						_name;
+	ConnectionManager				*_connectionManager;
     time_t							_ping;
 	std::vector<pollfd>             _fds;
     std::map<int, Client*>          _clients;
@@ -42,9 +43,9 @@ class Server {
     void                	acceptClient();
 public:
 	Server();
-    void                	setPort(char* port);
+    void                	init(int port, char *password);
+    void                	setPort(int port);
     void                	setPassword(char* password);
-    void                	init();
     Client*             	getClient(std::string nickName);
     std::vector<Client*>    getClients();
     Channel&                getChannel(std::string name);
@@ -57,4 +58,3 @@ public:
     void                    run();
 };
 
-#endif
