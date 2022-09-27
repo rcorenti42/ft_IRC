@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 22:30:34 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:30:43 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	ISON(Commands *command)
 	}
 	if (ret != "Users online: ")
 		ret.erase(ret.size() - 1, ret.size());
-	std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
+	// std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
 	command->getClient()->writeMessage(ret);
 }
 

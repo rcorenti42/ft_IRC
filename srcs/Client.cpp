@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/25 12:55:37 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:28:55 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,18 @@
 void	PASS(Commands*);
 void	NICK(Commands*);
 void	USER(Commands*);
+void	INFO(Commands *);
 void	TIME(Commands*);
 void	MOTD(Commands*);
 void	LUSERS(Commands*);
 void	PING(Commands*);
 void	PONG(Commands*);
 void	MODE(Commands*);
+void	ISON(Commands *);
 void	JOIN(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
+	this->_listCommands["INFO"] = INFO;
 	this->_listCommands["PASS"] = PASS;
 	this->_listCommands["NICK"] = NICK;
 	this->_listCommands["USER"] = USER;
@@ -37,6 +40,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["PONG"] = PONG;
 	this->_listCommands["MODE"] = MODE;
 	this->_listCommands["JOIN"] = JOIN;
+	this->_listCommands["ISON"] = ISON;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
