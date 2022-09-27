@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 21:04:50 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 21:38:46 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,17 @@ void	ISON(Commands *command)
 {	
 	if (command->getArgs().empty())
 		command->getClient()->writeMessage(command->sendRep(461));
+	size_t pos;
+	std::string str = command->getMessage();
 	std::vector<Client *> clients = command->getServer()->getClients();
-	std::vector<std::string> provided = command->getArgs();
+	std::vector<std::string> provided;
 	std::vector<std::string> online;
+	while ((pos = str.find(" ")) != std::string::npos)
+	{
+		provided.push_back(str.substr(0, pos));
+		str.erase(0, pos + 1);
+	}
+	provided.push_back(str);
 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
 	{
 		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
@@ -90,11 +98,41 @@ void	ISON(Commands *command)
 			ret += (*it);
 			ret += " ";
 	}
-	if (ret != "Users online: ")
-		ret.erase(ret.size() - 1, ret.size());
-	// std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
+	std::cout << "isonret == " << ret << std::endl;
+	// if (ret != "Users online: ")
+		// ret.erase(ret.size() - 1, ret.size());
 	command->getClient()->writeMessage(ret);
 }
+
+// void	ISON(Commands *command)
+// {	
+// 	if (command->getArgs().empty())
+// 		command->getClient()->writeMessage(command->sendRep(461));
+// 	std::vector<Client *> clients = command->getServer()->getClients();
+// 	std::vector<std::string> provided = command->getArgs();
+// 	std::vector<std::string> online;
+// 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
+// 	{
+// 		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
+// 		{
+// 			if ((*it) == (*it2)->getNickname()) {
+// 				online.push_back(*it);
+// 				provided.erase(it);
+// 			}
+// 		}
+// 	}
+// 	std::string ret;
+// 	ret = "Users online: ";
+// 	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
+// 	{
+// 			ret += (*it);
+// 			ret += " ";
+// 	}
+// 	if (ret != "Users online: ")
+// 		ret.erase(ret.size() - 1, ret.size());
+// 	// std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
+// 	command->getClient()->writeMessage(ret);
+// }
 
 void	INFO(Commands *command)
 {
