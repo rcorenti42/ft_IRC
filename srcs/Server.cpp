@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 03:24:52 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:02:12 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void                    Server::run() {
         std::cerr << "Poll failed" << std::endl;
         exit(1);
     }
-	if (std::time(NULL) - this->_ping > 4)
+	if (std::time(NULL) - this->_ping > 42)
 		sendPing();
     if (this->_fds[0].revents == POLLIN)
         acceptClient();
