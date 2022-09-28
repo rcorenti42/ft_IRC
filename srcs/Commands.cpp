@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 22:28:41 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 20:16:42 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 Commands::Commands(std::string str) //constructor for testing purpose
 {
 	size_t pos;
+	
 	if ((pos = str.find(":")) != std::string::npos) {
 		this->_message = str.substr(pos + 1);
 		str.erase(pos);
 	}
-	while ((pos = str.find(" ")) != std::string::npos) {
+	while ((pos = str.find(" ")) != std::string::npos) {	
 		this->_args.push_back(str.substr(0, pos));
 		str.erase(0, pos + 1);
 	}
@@ -38,7 +39,6 @@ Commands::Commands(std::string str) //constructor for testing purpose
 	for (std::vector<std::string>::iterator it = this->_args.begin(); it != this->_args.end(); it++)
 		std::cout << (*it) << ", ";
 	std::cout << "}" << std::endl;
-	std::cout << "message : " << this->_message;
 }
 Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server)
 {
@@ -61,7 +61,7 @@ Commands::Commands(Client *client, Server *server, std::string str) : _client(cl
 	for (std::vector<std::string>::iterator it = this->_args.begin(); it != this->_args.end(); it++)
 		std::cout << (*it) << ", ";
 	std::cout << "}" << std::endl;
-	std::cout << "message : " << this->_message;
+	std::cout << "message : " << this->_message << std::endl;
 }
 std::string					Commands::getCommand() const {
 	return this->_command;
