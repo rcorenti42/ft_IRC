@@ -25,7 +25,7 @@ bool	validPort(char* port) {
 };
 
 int main(int argc, char** argv) {
-    Server  server;
+  Server  server;
 	int		port;
     if (argc != 3)
 	{

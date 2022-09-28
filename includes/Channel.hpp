@@ -31,12 +31,13 @@ private:
 	    ClientMode(const Client &c, string m) : client(c), mode(m) {}
 	    ClientMode() : client(0, sockaddr_in()), mode("") {}
     };
-    string					_name;
-    string					_topic;
-    string                 _mode;
-    string                 _password;
-    std::map<int, ClientMode>		_clients;
+    string						_name;
+    string						_topic;
+    string                 		_mode;
+    string                 		_password;
+    std::map<int, ClientMode>	_clients;
     std::vector<Client*>		_invit;
+	std::vector<Client*>		_operators;
     typedef std::map<int, ClientMode>::iterator CliIt;
     typedef std::map<int, ClientMode>::const_iterator CliCstIt;
 public:
@@ -52,6 +53,7 @@ public:
     string     		    	getPassword() const;
     std::vector<Client>		getClients() const;
     void                	addClient(Client& client);
+	void					addOperator(Client& client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);

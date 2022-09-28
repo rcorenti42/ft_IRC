@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 13:37:40 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:28:55 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,30 @@
 void	PASS(Commands*);
 void	NICK(Commands*);
 void	USER(Commands*);
+void	INFO(Commands *);
 void	TIME(Commands*);
 void	MOTD(Commands*);
 void	LUSERS(Commands*);
 void	PING(Commands*);
 void	PONG(Commands*);
 void	MODE(Commands*);
+void	ISON(Commands *);
 void	JOIN(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
-	_listCommands["PASS"] = PASS;
-	_listCommands["NICK"] = NICK;
-	_listCommands["USER"] = USER;
-	_listCommands["TIME"] = TIME;
-	_listCommands["MOTD"] = MOTD;
-	_listCommands["LUSERS"] = LUSERS;
-	_listCommands["PING"] = PING;
-	_listCommands["PONG"] = PONG;
-	_listCommands["MODE"] = MODE;
-	_listCommands["JOIN"] = JOIN;
-	_addr = inet_ntoa(addr.sin_addr);
+	this->_listCommands["INFO"] = INFO;
+	this->_listCommands["PASS"] = PASS;
+	this->_listCommands["NICK"] = NICK;
+	this->_listCommands["USER"] = USER;
+	this->_listCommands["TIME"] = TIME;
+	this->_listCommands["MOTD"] = MOTD;
+	this->_listCommands["LUSERS"] = LUSERS;
+	this->_listCommands["PING"] = PING;
+	this->_listCommands["PONG"] = PONG;
+	this->_listCommands["MODE"] = MODE;
+	this->_listCommands["JOIN"] = JOIN;
+	this->_listCommands["ISON"] = ISON;
+	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
     close(_sock);
@@ -136,10 +140,10 @@ void    Client::receiveMessage(Server* serv) {
 	}
     _buff += buff;
 	std::cout << buff << std::endl;
-    while ((pos = _buff.find("\r\n")) != std::string::npos) {
-    	msg = _buff.substr(0, pos);
-		_buff.erase(0, pos + 2);
-		if (!msg.size())
+    while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
+    	msg = this->_buff.substr(0, pos);
+		this->_buff.erase(0, pos + 2);
+		if (msg.empty())
 			continue;
 		_commands.push_back(new Commands(this, serv, msg));
     }
@@ -154,9 +158,9 @@ void    Client::sendMessage() {
     if (!_packets.empty()) {
         for (std::vector<std::string>::iterator it = _packets.begin(); it != _packets.end(); it++)
             packet += *it + "\r\n";
-        _packets.clear();
-        if (packet.size())
-            send(_sock, packet.c_str(), packet.size(), 0);
+        this->_packets.clear();
+        if (!packet.empty())
+            send(this->_sock, packet.c_str(), packet.size(), 0);
     }
 };
 void    Client::registerClient(Commands* commands) {

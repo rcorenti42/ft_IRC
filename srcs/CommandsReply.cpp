@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/23 23:56:33               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   CommandsReply.cpp                                                        */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   CommandsReply.cpp                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/27 19:20:23 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #include "CommandsReply.hpp"
 
@@ -64,6 +64,14 @@ std::string	RPL_BANLIST(std::string channel, std::string banmask) {
 std::string	RPL_ENDOFBANLIST(std::string channel) {
 	return channel + " :End of channel ban list";
 };
+
+std::string RPL_INFO(std::string output) {
+	return output;
+}
+
+std::string RPL_ENDOFINFO(){
+	return "End of /info LIST";	
+}
 
 std::string	RPL_TIME(std::string time) {
 	return "UTK:" + time;

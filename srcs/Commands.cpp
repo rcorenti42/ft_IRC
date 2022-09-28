@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/21 03:25:10               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   Commands.cpp                                                             */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Commands.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/09/27 20:16:42 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #include "Commands.hpp"
 #include "CommandsRet.hpp"
@@ -20,11 +20,12 @@
 Commands::Commands(std::string str) //constructor for testing purpose
 {
 	size_t pos;
+	
 	if ((pos = str.find(":")) != std::string::npos) {
 		this->_message = str.substr(pos + 1);
 		str.erase(pos);
 	}
-	while ((pos = str.find(" ")) != std::string::npos) {
+	while ((pos = str.find(" ")) != std::string::npos) {	
 		this->_args.push_back(str.substr(0, pos));
 		str.erase(0, pos + 1);
 	}
@@ -38,7 +39,6 @@ Commands::Commands(std::string str) //constructor for testing purpose
 	for (std::vector<std::string>::iterator it = this->_args.begin(); it != this->_args.end(); it++)
 		std::cout << (*it) << ", ";
 	std::cout << "}" << std::endl;
-	std::cout << "message : " << this->_message;
 }
 Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server)
 {
@@ -61,7 +61,7 @@ Commands::Commands(Client *client, Server *server, std::string str) : _client(cl
 	for (std::vector<std::string>::iterator it = this->_args.begin(); it != this->_args.end(); it++)
 		std::cout << (*it) << ", ";
 	std::cout << "}" << std::endl;
-	std::cout << "message : " << this->_message;
+	std::cout << "message : " << this->_message << std::endl;
 }
 std::string					Commands::getCommand() const {
 	return this->_command;
@@ -72,11 +72,11 @@ std::string					Commands::getMessage() const {
 std::vector<std::string>	Commands::getArgs() const {
 	return this->_args;
 };
-Client*						Commands::getClient() const {
-	return this->_client;
+Client&						Commands::getClient() {
+	return *this->_client;
 };
-Server*						Commands::getServer() const {
-	return this->_server;
+Server&						Commands::getServer() {
+	return *this->_server;
 };
 std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, std::string arg3) {
 	switch (code) {
@@ -106,6 +106,10 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 367 " + this->_client->getNickname() + " " + RPL_BANLIST(arg1, arg2);
 	case 368:
 		return " 368 " + this->_client->getNickname() + " " + RPL_ENDOFBANLIST(arg1);
+	case 371:
+		return " 371 " + this->_client->getNickname() + " " + RPL_INFO(arg1);
+	case 374:
+		return " 374 " + this->_client->getNickname() + " " + RPL_ENDOFINFO();
 	case 391:
 		return " 391 " + this->_client->getNickname() + " " + RPL_TIME(arg1);
 	case 401:

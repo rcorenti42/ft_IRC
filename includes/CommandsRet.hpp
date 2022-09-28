@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 04:24:34 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/27 19:20:56 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 void	PASS(Commands* command);
 void	NICK(Commands* command);
+void	INFO(Commands* command);
 void	USER(Commands* command);
 void	TIME(Commands* command);
 void	MOTD(Commands* command);

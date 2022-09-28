@@ -32,6 +32,10 @@ void                Channel::addClient(Client& client) {
 	_clients[client.getSocket()] = elem;
 }
 
+void				Channel::addOperator(Client& client) {
+	_operators.push_back(&client);
+}
+
 void                Channel::removeClient(Client& client) {
     _clients.erase(client.getSocket());
 }
