@@ -102,6 +102,10 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 255 " + this->_client->getNickname() + " " + RPL_LUSERME(arg1);
 	case 324:
 		return " 324 " + this->_client->getNickname() + " " + RPL_CHANNELMODEIS(arg1, arg2, arg3);
+	case 331:
+		return " 331 " + this->_client->getNickname() + " " + RPL_NOTOPIC(arg1);
+	case 332:
+		return " 332 " + this->_client->getNickname() + " " + RPL_TOPIC(arg1, arg2);
 	case 367:
 		return " 367 " + this->_client->getNickname() + " " + RPL_BANLIST(arg1, arg2);
 	case 368:
@@ -132,6 +136,8 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 467 " + this->_client->getNickname() + " " + ERR_KEYSET(arg1);
 	case 472:
 		return " 472 " + this->_client->getNickname() + " " + ERR_UNKNOWNMODE(arg1);
+	case 476:
+		return " 476 " + this->_client->getNickname() + " " + ERR_BADCHANMASK(arg1);
 	case 482:
 		return " 482 " + this->_client->getNickname() + " " + ERR_CHANOPRIVSNEEDED(arg1);
 	case 501:

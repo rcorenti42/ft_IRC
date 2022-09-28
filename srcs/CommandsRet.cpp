@@ -231,7 +231,6 @@ void	MODE(Commands* command) {
 }
 
 void	JOIN(Commands* command) {
-	std::cout << "test join" << std::endl;
 	std::vector<std::string>	names;
 	std::vector<std::string>	keys;
 	int							start = 0;
@@ -259,17 +258,21 @@ void	JOIN(Commands* command) {
 		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++) {
 			if ((*it)[0] != '#' && (*it)[0] != '&')
 				command->getClient().writeMessage(command->sendRep(476, *it));
-			else if (command->getServer().getChannel(*it).getClients().empty()) {
-				command->getServer().getChannel(*it).addClient(command->getClient());
-				command->getServer().getChannel(*it).addOperator(command->getClient());
+			else {
+				Channel& channel = command->getServer().getChannel(*it);
+				if (channel.getClients().empty()) {
+					channel.addClient(command->getClient());
+					channel.addOperator(command->getClient());
+				}
+				else
+					channel.addClient(command->getClient());
+				if (channel.getTopic().empty()) {
+					command->getClient().writeMessage(command->sendRep(331, *it));
+				}
+				else
+					command->getClient().writeMessage(command->sendRep(332, *it, channel.getTopic()));
+				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
 			}
-			else
-				command->getServer().getChannel(*it).addClient(command->getClient());
-			if (command->getServer().getChannel(*it).getTopic().empty())
-				command->getClient().writeMessage(command->sendRep(331, *it));
-			else
-				command->getClient().writeMessage(command->sendRep(332, *it, command->getServer().getChannel(*it).getTopic()));
-			command->getServer().getChannel(*it).broadcastMessage(command->getClient(), "JOIN :" + *it);
 		}
 	}
 }

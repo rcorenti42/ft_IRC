@@ -35,7 +35,8 @@ private:
     string						_topic;
     string                 		_mode;
     string                 		_password;
-    std::map<int, ClientMode>	_clients;
+	std::map<int, Client*>		_clients;
+    std::map<int, ClientMode>	_clientsWhat;
     std::vector<Client*>		_invit;
 	std::vector<Client*>		_operators;
     typedef std::map<int, ClientMode>::iterator CliIt;

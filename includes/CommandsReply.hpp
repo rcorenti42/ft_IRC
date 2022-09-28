@@ -38,6 +38,10 @@ std::string	RPL_LUSERME(std::string);
 
 std::string	RPL_CHANNELMODEIS(std::string, std::string, std::string);
 
+std::string	RPL_NOTOPIC(std::string);
+
+std::string	RPL_TOPIC(std::string, std::string);
+
 std::string	RPL_BANLIST(std::string, std::string);
 
 std::string	RPL_ENDOFBANLIST(std::string);
@@ -67,6 +71,8 @@ std::string	ERR_PASSWDMISMATCH();
 std::string	ERR_KEYSET(std::string);
 
 std::string	ERR_UNKNOWNMODE(std::string);
+
+std::string	ERR_BADCHANMASK(std::string);
 
 std::string	ERR_CHANOPRIVSNEEDED(std::string);
 

@@ -57,6 +57,14 @@ std::string	RPL_CHANNELMODEIS(std::string channel, std::string mode, std::string
 	return channel + " " + mode + " " + arg;
 };
 
+std::string	RPL_NOTOPIC(std::string channel) {
+	return channel + " :No topic is set";
+};
+
+std::string	RPL_TOPIC(std::string channel, std::string topic) {
+	return channel + " :" + topic;
+};
+
 std::string	RPL_BANLIST(std::string channel, std::string banmask) {
 	return channel + " " + banmask;
 };
@@ -117,9 +125,13 @@ std::string	ERR_UNKNOWNMODE(std::string c) {
 	return c + " :is unknown mode char to me";
 };
 
+std::string	ERR_BADCHANMASK(std::string channel) {
+	return channel + " :The given channel mask was invalid";
+};
+
 std::string	ERR_CHANOPRIVSNEEDED(std::string channel) {
 	return channel + " :You're not channel operator";
-}
+};
 
 std::string	ERR_UMODEUNKNOWNFLAG() {
 	return ":Unknown MODE flag";

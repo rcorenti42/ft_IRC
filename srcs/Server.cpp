@@ -89,7 +89,8 @@ std::vector<Client*>    Server::getClients() {
     return clients;
 };
 Channel&                Server::getChannel(std::string name) {
-    return this->_channels[name];
+	Channel&	channel = this->_channels[name];
+    return channel;
 };
 std::vector<Channel*>   Server::getChannels() {
 	std::vector<Channel*> channels;
