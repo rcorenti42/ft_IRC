@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 14:51:16 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/09/28 16:30:40 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,16 @@
 class Client;
 
 class Server {
-    int                             _sock;
-    int                             _port;
     std::string                     _password;
 	std::string						_name;
 	ConnectionManager				*_connectionManager;
     time_t							_ping;
-	std::vector<pollfd>             _fds;
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
-    bool                	validPort(char* port);
     void                	acceptClient();
 public:
 	Server();
     void                	init(int port, char *password);
-    void                	setPort(int port);
     void                	setPassword(char* password);
     Client*             	getClient(std::string nickName);
     std::vector<Client*>    getClients();
