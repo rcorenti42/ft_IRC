@@ -72,11 +72,11 @@ std::string					Commands::getMessage() const {
 std::vector<std::string>	Commands::getArgs() const {
 	return this->_args;
 };
-Client*						Commands::getClient() const {
-	return this->_client;
+Client&						Commands::getClient() {
+	return *this->_client;
 };
-Server*						Commands::getServer() const {
-	return this->_server;
+Server&						Commands::getServer() {
+	return *this->_server;
 };
 std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, std::string arg3) {
 	switch (code) {

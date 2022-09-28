@@ -32,8 +32,8 @@ public:
 	std::string					getCommand() const;
 	std::string					getMessage() const;
 	std::vector<std::string>	getArgs() const;
-	Client*						getClient() const;
-	Server*						getServer() const;
+	Client&						getClient();
+	Server&						getServer();
 	std::string					sendRep(int, std::string = "", std::string = "", std::string = "");
 };
 

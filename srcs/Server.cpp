@@ -125,7 +125,7 @@ void                    Server::run() {
         std::cerr << "Poll failed" << std::endl;
         exit(1);
     }
-	if (std::time(NULL) - this->_ping > 4)
+	if (std::time(NULL) - this->_ping > 42)
 		sendPing();
     if (this->_fds[0].revents == POLLIN)
         acceptClient();

@@ -143,7 +143,7 @@ void    Client::receiveMessage(Server* serv) {
     while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
     	msg = this->_buff.substr(0, pos);
 		this->_buff.erase(0, pos + 2);
-		if (!msg.size())
+		if (msg.empty())
 			continue;
 		this->_commands.push_back(new Commands(this, serv, msg));
     }
@@ -159,7 +159,7 @@ void    Client::sendMessage() {
         for (std::vector<std::string>::iterator it = this->_packets.begin(); it != this->_packets.end(); it++)
             packet += *it + "\r\n";
         this->_packets.clear();
-        if (packet.size())
+        if (!packet.empty())
             send(this->_sock, packet.c_str(), packet.size(), 0);
     }
 };
