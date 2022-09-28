@@ -88,13 +88,11 @@ void                    Server::run() {
 		if (std::time(NULL) - _ping > 4) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
 		else _clients[fd]->receiveMessage(this);
-		/*
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			if ((*it)->getStats() == NONE)
 				erraseClient(*(*it));
 		clients_list = getClients();
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			(*it)->sendMessage();
-		*/
 	}
 };
