@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/28 16:37:45 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/09/28 16:59:36 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void                Server::acceptClient() {
 	clientFd = accept(_connectionManager->getMainSock(), (sockaddr*)&addr, &len);
 	if (clientFd  < 0) perror("accept");
 	_clients[clientFd] = new Client(clientFd, addr);
+	std::cout << clientFd << " -> " << _clients[clientFd] << std::endl;
 	_connectionManager->addClient(clientFd);
 };
 
@@ -85,7 +86,7 @@ void                    Server::run() {
 		fd = _connectionManager->waitForEvent();
 		if (std::time(NULL) - _ping > 4) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
-		_clients[fd]->receiveMessage(this);
+		else _clients[fd]->receiveMessage(this);
 		/*
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			if ((*it)->getStats() == NONE)
