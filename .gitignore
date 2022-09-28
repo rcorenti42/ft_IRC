@@ -4,3 +4,4 @@
 *.d
 *.swp
 ircserv
+**/.nfs*
