@@ -85,7 +85,7 @@ void                    Server::run() {
 
 	while(1) {
 		fd = _connectionManager->waitForEvent();
-		if (std::time(NULL) - _ping > 4) sendPing();
+		if (std::time(NULL) - _ping > 42) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
 		else _clients[fd]->receiveMessage(this);
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
