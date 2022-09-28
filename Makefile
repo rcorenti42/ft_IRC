@@ -2,7 +2,7 @@ NAME = ircserv
 
 CC = c++
 
-CCFLAG = -std=c++98 -Wall -Wextra -Werror
+CCFLAG = -std=c++98 -Wall -Wextra -Werror -g3 -fsanitize=address
 
 SOURCES = 	srcs/main.cpp \
 			srcs/Server.cpp \
@@ -10,14 +10,17 @@ SOURCES = 	srcs/main.cpp \
 			srcs/Channel.cpp \
 			srcs/Commands.cpp \
 			srcs/CommandsRet.cpp \
-			srcs/CommandsReply.cpp
+			srcs/CommandsReply.cpp \
+			srcs/ConnectionManager.cpp
+
 
 HEADERS = 	includes/Server.hpp \
 			includes/Client.hpp \
 			includes/Channel.hpp \
 			includes/Commands.hpp \
 			includes/CommandsRet.hpp \
-			includes/CommandsReply.hpp
+			includes/CommandsReply.hpp \
+			includes/ConnectionManager.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 

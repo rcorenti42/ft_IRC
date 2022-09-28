@@ -2,4 +2,6 @@
 *.gch
 .vscode
 *.d
-
+*.swp
+ircserv
+**/.nfs*
