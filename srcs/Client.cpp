@@ -131,21 +131,21 @@ void    Client::receiveMessage(Server* serv) {
 	std::string	msg;
     size_t  	bytes;
     size_t  	pos;
-    bytes = recv(_sock, buff, 1024, 0);
+    bytes = recv(this->_sock, buff, 1024, 0);
 	buff[bytes] = '\0';
     if (bytes < 1) {
 		if (bytes == 0)
-			_state = NONE;
+			this->_state = NONE;
 		return ;
 	}
-    _buff += buff;
+    this->_buff += buff;
 	std::cout << buff << std::endl;
     while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
     	msg = this->_buff.substr(0, pos);
 		this->_buff.erase(0, pos + 2);
 		if (msg.empty())
 			continue;
-		_commands.push_back(new Commands(this, serv, msg));
+		this->_commands.push_back(new Commands(this, serv, msg));
     }
     packetsHandler();
 };

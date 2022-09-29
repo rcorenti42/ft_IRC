@@ -48,8 +48,8 @@ public:
 	std::string				getPassword() const;
 	std::string				getName() const;
     void                    sendPing();
-    void                    erraseClient(Client client);
+    void                    erraseClient(Client& client);
     void                    erraseChannel(Channel channel);
+	void					display();
     void                    run();
 };
-

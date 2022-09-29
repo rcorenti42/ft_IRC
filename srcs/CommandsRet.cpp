@@ -283,15 +283,11 @@ void	JOIN(Commands* command) {
 				command->getClient().writeMessage(command->sendRep(476, *it));
 			else {
 				Channel& channel = command->getServer().getChannel(*it);
-				if (channel.getClients().empty()) {
-					channel.addClient(command->getClient());
+				if (channel.getClients().empty())
 					channel.addOperator(command->getClient());
-				}
-				else
-					channel.addClient(command->getClient());
-				if (channel.getTopic().empty()) {
+				channel.addClient(command->getClient());
+				if (channel.getTopic().empty())
 					command->getClient().writeMessage(command->sendRep(331, *it));
-				}
 				else
 					command->getClient().writeMessage(command->sendRep(332, *it, channel.getTopic()));
 				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
