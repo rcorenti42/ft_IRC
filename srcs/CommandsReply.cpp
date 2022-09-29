@@ -26,7 +26,7 @@ std::string	RPL_CREATED() {
 };
 
 std::string	RPL_MYINFO() {
-	return "irc.UTK.org 420 woisx inpstmcqaovlbkSR";
+	return "IR-C4 420 woisx inpstmcqaovlbkSR";
 };
 
 std::string	RPL_UMODEIS(std::string usermodes) {

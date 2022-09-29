@@ -136,14 +136,13 @@ void	ISON(Commands *command)
 
 void	INFO(Commands *command)
 {
-	command->getClient().writeMessage(command->sendRep(371, "            IRCSERV          "));
+	command->getClient().writeMessage(command->sendRep(371, "            IR-C4            "));
 	command->getClient().writeMessage(command->sendRep(371, "            2022             "));
 	command->getClient().writeMessage(command->sendRep(371, "Core developpers:            "));
 	command->getClient().writeMessage(command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
 	command->getClient().writeMessage(command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
 	command->getClient().writeMessage(command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "IRCSERV local time: "));
-	command->getClient().writeMessage(command->sendRep(371, "IRCSERV is best experienced with an IRC client"));
+	command->getClient().writeMessage(command->sendRep(371, "IR-C4 is best experienced with an IRC client"));
 	command->getClient().writeMessage(command->sendRep(374));
 }
 
@@ -176,18 +175,42 @@ void	PONG(Commands *command)
 }
 
 void	MOTD(Commands* command) {
-	std::string	message = "- irc.UTK.org Message of the Day -\r\n";
+	std::string	message = "- IR-C4 Message of the Day -\r\n";
 	message += "- 2042-5-4 00:42\r\n";
-	message += "- Welcome on ft_IRC Server !\r\n-\r\n-\r\n";
-	message += "-          ,---.      .`````-.  \r\n";
-	message += "-         /,--.|     /   ,-.  \\ \r\n";
-	message += "-        //_  ||    (___/  |   |\r\n";
-	message += "-       /_( )_||          .'  / \r\n";
-	message += "-      /(_ o _)|      _.-'_.-'  \r\n";
-	message += "-     / /(_,_)||_   _/_  .'     \r\n";
-	message += "-    /  `-----' || ( ' )(__..--.\r\n";
-	message += "-    `-------|||-'(_{;}_)      |\r\n";
-	message += "-            '-'   (_,_)-------'\r\n-\r\n-\r\n";
+	message += "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
+	message += "-       ,---,,-.----.\r\n";
+	message += "-    ,`--.' |\\    /  \\\r\n";
+	message += "-    |   :  :;   :    \\\r\n";
+	message += "-    :   |  '|   | .\\ :\r\n";
+	message += "-    |   :  |.   : |: |\r\n";
+	message += "-    '   '  ;|   |  \\ :\r\n";
+	message += "-    |   |  ||   : .  /\r\n";
+	message += "-    '   :  ;;   | |  \\\r\n";
+	message += "-    |   |  '|   | ;\\  \\\r\n";
+	message += "-    '   :  |:   ' | \\.'\r\n";
+	message += "-    ;   |.' :   : :-'\r\n";
+	message += "-    '---'   |   |.'\r\n";
+	message += "-            `---'\r\n";
+	message += "-        ,---,.   ,---,.\r\n";
+	message += "-      ,'  .' | ,'  .' |\r\n";
+	message += "-    ,---.'   ,---.'   ,\r\n";
+	message += "-    |   |    |   |    |\r\n";
+	message += "-    :   :  .':   :  .'\r\n";
+	message += "-    :   |.'  :   |.'\r\n";
+	message += "-    `---'    `---'     ,--,\r\n";
+	message += "-      ,----..        ,--.'|\r\n";
+	message += "-     /   /   \\    ,--,  | :\r\n";
+	message += "-    |   :     :,---.'|  : '\r\n";
+	message += "-    .   |  ;. /;   : |  | ;\r\n";
+	message += "-    .   ; /--` |   | : _' |\r\n";
+	message += "-    ;   | ;    :   : |.'  |\r\n";
+	message += "-    |   : |    |   ' '  ; :\r\n";
+	message += "-    .   | '___ \\   \\  .'. |\r\n";
+	message += "-    '   ; : .'| `---`:  | '\r\n";
+	message += "-    '   | '/  :      '  ; |\r\n";
+	message += "-    |   :    /       |  : ;\r\n";
+	message += "-     \\   \\ .'        '  ,/\r\n";
+	message += "-      `---`          '--'\r\n-\r\n-\r\n";
 	message += "- En vous connectant, vous acceptez implicitement les regles de 42Network.\r\n-\r\n";
 	message += "- In Trartiflette We Trust\r\n-\r\n";
 	message += "- UTK SoundSystem Is Here\r\n-\r\n";
