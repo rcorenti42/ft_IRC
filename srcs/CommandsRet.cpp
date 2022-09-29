@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 21:38:46 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/09/29 23:55:52 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,34 @@
 #include "Channel.hpp"
 #include <sstream>
 
-std::string	to_string(int n) {
-	std::ostringstream	ss;
+std::string to_string(int n)
+{
+	std::ostringstream ss;
 	ss << n;
 	return ss.str();
 };
 
-void	PASS(Commands* command)
+void PASS(Commands *command)
 {
 	if (command->getClient().getStats() == REGISTERED)
 		command->getClient().writeMessage(command->sendRep(462));
 	else if (*(command->getArgs().begin()) == command->getServer().getPassword())
 		command->getClient().setState(REGISTERED);
-	else 
+	else
 		command->getClient().writeMessage(command->sendRep(464));
 };
 
-void	NICK(Commands *command)
+void NICK(Commands *command)
 {
 	if (command->getArgs().empty())
 		command->getClient().writeMessage(command->sendRep(431));
-	else {
+	else
+	{
 		std::vector<Client *> clients = command->getServer().getClients();
-		for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++	)
+		for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
-			if (*(command->getArgs().begin()) == (*it)->getNickname()) {
+			if (*(command->getArgs().begin()) == (*it)->getNickname())
+			{
 				command->getClient().writeMessage(command->sendRep(433));
 				return;
 			}
@@ -52,22 +55,23 @@ void	NICK(Commands *command)
 	}
 }
 
-//add the other fields ?
-void	USER(Commands *command)
+// add the other fields ?
+void USER(Commands *command)
 {
 	if (command->getArgs().empty())
 		command->getClient().writeMessage(command->sendRep(461, command->getCommand()));
 	else if (!command->getClient().getRealname().empty())
 		command->getClient().writeMessage(command->sendRep(462));
-	else {
+	else
+	{
 		command->getClient().setUsername(*(command->getArgs().begin()));
 		if (!command->getMessage().empty())
 			command->getClient().setRealName(command->getMessage());
 	}
 };
 
-void	ISON(Commands *command)
-{	
+void ISON(Commands *command)
+{
 	if (command->getArgs().empty())
 		command->getClient().writeMessage(command->sendRep(461));
 	size_t pos;
@@ -85,56 +89,23 @@ void	ISON(Commands *command)
 	{
 		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
 		{
-			if ((*it) == (*it2)->getNickname()) {
+			if ((*it) == (*it2)->getNickname())
+			{
 				online.push_back(*it);
 				provided.erase(it);
 			}
 		}
 	}
-	std::string ret;
-	ret = "Users online: ";
+	std::string ret = "Users online: ";
 	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
 	{
-			ret += (*it);
-			ret += " ";
+		ret += (*it);
+		ret += " ";
 	}
-	std::cout << "isonret == " << ret << std::endl;
-	// if (ret != "Users online: ")
-		// ret.erase(ret.size() - 1, ret.size());
 	command->getClient().writeMessage(ret);
 }
 
-// void	ISON(Commands *command)
-// {	
-// 	if (command->getArgs().empty())
-// 		command->getClient()->writeMessage(command->sendRep(461));
-// 	std::vector<Client *> clients = command->getServer()->getClients();
-// 	std::vector<std::string> provided = command->getArgs();
-// 	std::vector<std::string> online;
-// 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
-// 	{
-// 		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
-// 		{
-// 			if ((*it) == (*it2)->getNickname()) {
-// 				online.push_back(*it);
-// 				provided.erase(it);
-// 			}
-// 		}
-// 	}
-// 	std::string ret;
-// 	ret = "Users online: ";
-// 	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
-// 	{
-// 			ret += (*it);
-// 			ret += " ";
-// 	}
-// 	if (ret != "Users online: ")
-// 		ret.erase(ret.size() - 1, ret.size());
-// 	// std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
-// 	command->getClient()->writeMessage(ret);
-// }
-
-void	INFO(Commands *command)
+void INFO(Commands *command)
 {
 	command->getClient().writeMessage(command->sendRep(371, "            IR-C4            "));
 	command->getClient().writeMessage(command->sendRep(371, "            2022             "));
@@ -146,16 +117,14 @@ void	INFO(Commands *command)
 	command->getClient().writeMessage(command->sendRep(374));
 }
 
-void	TIME(Commands *command)
+void TIME(Commands *command)
 {
-	//struct tm *readable = localtime(command->getServer()->getPing());
+	// struct tm *readable = localtime(command->getServer()->getPing());
 	std::string str = command->sendRep(391, "localtime");
 	str += " :";
-	//str += asctime(readable);
+	// str += asctime(readable);
 	command->getClient().writeMessage(str);
 }
-
-
 
 void PING(Commands *command)
 {
@@ -165,7 +134,7 @@ void PING(Commands *command)
 		command->getClient().writeMessage("PONG :" + command->getArgs()[0]);
 }
 
-void	PONG(Commands *command)
+void PONG(Commands *command)
 {
 	std::string str;
 	if (command->getArgs().empty())
@@ -174,8 +143,9 @@ void	PONG(Commands *command)
 		command->getClient().setPing(std::time(NULL));
 }
 
-void	MOTD(Commands* command) {
-	std::string	message = "- IR-C4 Message of the Day -\r\n";
+void MOTD(Commands *command)
+{
+	std::string message = "- IR-C4 Message of the Day -\r\n";
 	message += "- 2042-5-4 00:42\r\n";
 	message += "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
 	message += "-       ,---,,-.----.\r\n";
@@ -219,15 +189,18 @@ void	MOTD(Commands* command) {
 	command->getClient().writeMessage(message);
 }
 
-void	LUSERS(Commands* command) {
-	int						visibles = 0;
-	int						invisibles = 0;
-	int						operators = 0;
-	int						unknown = 0;
-	int						channels = command->getServer().getChannels().size();
-	std::vector<Client*>	clients = command->getServer().getClients();
-	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
-		if ((*it)->getStats() == CONNECTED) {
+void LUSERS(Commands *command)
+{
+	int visibles = 0;
+	int invisibles = 0;
+	int operators = 0;
+	int unknown = 0;
+	int channels = command->getServer().getChannels().size();
+	std::vector<Client *> clients = command->getServer().getClients();
+	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		if ((*it)->getStats() == CONNECTED)
+		{
 			if ((*it)->getUsermode().find('i') == std::string::npos)
 				visibles++;
 			else
@@ -248,44 +221,67 @@ void	LUSERS(Commands* command) {
 	command->getClient().writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
 }
 
-void	MODE(Commands* command) {
-	// TODO
-	command->getClient().writeMessage(command->sendRep(221, "+" + command->getClient().getUsermode() + "i"));
+void MODE(Commands *command)
+{
+	std::vector<std::string> args = command->getArgs();
+	if (args.begin()[0][0] == '#' || args.begin()[0][0] == '#')
+	{
+	}
+	else
+	{
+		if (args[1] != command->getClient().getNickname())
+		{
+			std::vector<Client *> clients = command->getServer().getClients();
+			for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
+				if ((*it)->getNickname() == args[1]) {
+					command->getClient().writeMessage(command->sendRep(502));
+					return ;
+				}
+			command->getClient().writeMessage(command->sendRep(401, args[1]));
+		}
+	}
 }
 
-void	JOIN(Commands* command) {
-	std::vector<std::string>	names;
-	std::vector<std::string>	keys;
-	int							start = 0;
-	int							end;
+void JOIN(Commands *command)
+{
+	std::vector<std::string> names;
+	std::vector<std::string> keys;
+	int start = 0;
+	int end;
 	if (command->getArgs().empty())
 		command->getClient().writeMessage(command->sendRep(461, "JOIN"));
-	else {
+	else
+	{
 		end = command->getArgs()[0].find(',');
-		while (end != -1) {
+		while (end != -1)
+		{
 			names.push_back(command->getArgs()[0].substr(start, end - start));
 			start = end + 1;
 			end = command->getArgs()[0].find(',', start);
 		}
 		names.push_back(command->getArgs()[0].substr(start));
-		if (command->getArgs().size() > 1) {
+		if (command->getArgs().size() > 1)
+		{
 			start = 0;
 			end = command->getArgs()[1].find(',');
-			while (end != -1) {
+			while (end != -1)
+			{
 				keys.push_back(command->getArgs()[1].substr(start, end - start));
 				start = end + 1;
 				end = command->getArgs()[1].find(',', start);
 			}
 			keys.push_back(command->getArgs()[1].substr(start));
 		}
-		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++) {
+		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++)
+		{
 			if ((*it)[0] != '#' && (*it)[0] != '&')
 				command->getClient().writeMessage(command->sendRep(476, *it));
 			else {
 				Channel& channel = command->getServer().getChannel(*it);
 				if (channel.getClients().empty())
 					channel.addOperator(command->getClient());
-				channel.addClient(command->getClient());
+				else
+					channel.addClient(command->getClient());
 				if (channel.getTopic().empty())
 					command->getClient().writeMessage(command->sendRep(331, *it));
 				else
