@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 	}
     server.init(port, argv[2]);
 	try {server.run();}
-	catch (ConnectionManager::ConnectException e){
+	catch (ConnectionManager::ConnectException& e){
 		std::cerr << e.what() << std::endl;
 	}
     return 0;
