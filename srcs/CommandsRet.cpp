@@ -28,17 +28,17 @@ std::string to_string(int n)
 void PASS(Commands *command)
 {
 	if (command->getClient().getStats() == REGISTERED)
-		command->getClient().writeMessage(command->sendRep(462));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(462));
 	else if (*(command->getArgs().begin()) == command->getServer().getPassword())
 		command->getClient().setState(REGISTERED);
 	else
-		command->getClient().writeMessage(command->sendRep(464));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(464));
 };
 
 void NICK(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(431));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(431));
 	else
 	{
 		std::vector<Client *> clients = command->getServer().getClients();
@@ -46,12 +46,12 @@ void NICK(Commands *command)
 		{
 			if (*(command->getArgs().begin()) == (*it)->getNickname())
 			{
-				command->getClient().writeMessage(command->sendRep(433));
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(433));
 				return;
 			}
 		}
 		command->getClient().setNickname(*(command->getArgs().begin()));
-		command->getClient().writeMessage("NICK :" + command->getClient().getNickname());
+		command->getClient().writePrefixMsg(command->getClient(), "NICK :" + command->getClient().getNickname());
 	}
 }
 
@@ -59,9 +59,9 @@ void NICK(Commands *command)
 void USER(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461, command->getCommand()));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, command->getCommand()));
 	else if (!command->getClient().getRealname().empty())
-		command->getClient().writeMessage(command->sendRep(462));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(462));
 	else
 	{
 		command->getClient().setUsername(*(command->getArgs().begin()));
@@ -73,7 +73,7 @@ void USER(Commands *command)
 void ISON(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461));
 	size_t pos;
 	std::string str = command->getMessage();
 	std::vector<Client *> clients = command->getServer().getClients();
@@ -102,19 +102,19 @@ void ISON(Commands *command)
 		ret += (*it);
 		ret += " ";
 	}
-	command->getClient().writeMessage(ret);
+	command->getClient().writePrefixMsg(command->getClient(), ret);
 }
 
 void INFO(Commands *command)
 {
-	command->getClient().writeMessage(command->sendRep(371, "            IR-C4            "));
-	command->getClient().writeMessage(command->sendRep(371, "            2022             "));
-	command->getClient().writeMessage(command->sendRep(371, "Core developpers:            "));
-	command->getClient().writeMessage(command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "IR-C4 is best experienced with an IRC client"));
-	command->getClient().writeMessage(command->sendRep(374));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "            IR-C4            "));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "            2022             "));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "Core developpers:            "));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "IR-C4 is best experienced with an IRC client"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(374));
 }
 
 void TIME(Commands *command)
@@ -123,22 +123,22 @@ void TIME(Commands *command)
 	std::string str = command->sendRep(391, "localtime");
 	str += " :";
 	// str += asctime(readable);
-	command->getClient().writeMessage(str);
+	command->getClient().writePrefixMsg(command->getClient(), str);
 }
 
 void PING(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(409));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(409));
 	else
-		command->getClient().writeMessage("PONG :" + command->getArgs()[0]);
+		command->getClient().writePrefixMsg(command->getClient(), "PONG :" + command->getArgs()[0]);
 }
 
 void PONG(Commands *command)
 {
 	std::string str;
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(409));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(409));
 	else
 		command->getClient().setPing(std::time(NULL));
 }
@@ -186,7 +186,7 @@ void MOTD(Commands *command)
 	message += "- UTK SoundSystem Is Here\r\n-\r\n";
 	message += "- Bonne discussion sur notre server !\r\n-\r\n";
 	message += "End of /MOTD command.";
-	command->getClient().writeMessage(message);
+	command->getClient().writePrefixMsg(command->getClient(), message);
 }
 
 void LUSERS(Commands *command)
@@ -211,14 +211,14 @@ void LUSERS(Commands *command)
 		else
 			unknown++;
 	}
-	command->getClient().writeMessage(command->sendRep(251, to_string(visibles), to_string(invisibles)));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(251, to_string(visibles), to_string(invisibles)));
 	if (operators)
-		command->getClient().writeMessage(command->sendRep(252, to_string(operators)));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(252, to_string(operators)));
 	if (unknown)
-		command->getClient().writeMessage(command->sendRep(253, to_string(unknown)));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(253, to_string(unknown)));
 	if (channels)
-		command->getClient().writeMessage(command->sendRep(254, to_string(channels)));
-	command->getClient().writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(254, to_string(channels)));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(255, to_string(visibles + invisibles)));
 }
 
 void MODE(Commands *command)
@@ -234,10 +234,10 @@ void MODE(Commands *command)
 			std::vector<Client *> clients = command->getServer().getClients();
 			for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
 				if ((*it)->getNickname() == args[1]) {
-					command->getClient().writeMessage(command->sendRep(502));
+					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(502));
 					return ;
 				}
-			command->getClient().writeMessage(command->sendRep(401, args[1]));
+			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(401, args[1]));
 		}
 	}
 }
@@ -249,7 +249,7 @@ void JOIN(Commands *command)
 	int start = 0;
 	int end;
 	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461, "JOIN"));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, "JOIN"));
 	else
 	{
 		end = command->getArgs()[0].find(',');
@@ -275,7 +275,7 @@ void JOIN(Commands *command)
 		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++)
 		{
 			if ((*it)[0] != '#' && (*it)[0] != '&')
-				command->getClient().writeMessage(command->sendRep(476, *it));
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(476, *it));
 			else {
 				Channel& channel = command->getServer().getChannel(*it);
 				if (channel.getClients().empty())
@@ -283,10 +283,10 @@ void JOIN(Commands *command)
 				else
 					channel.addClient(command->getClient());
 				if (channel.getTopic().empty())
-					command->getClient().writeMessage(command->sendRep(331, *it));
+					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(331, *it));
 				else
-					command->getClient().writeMessage(command->sendRep(332, *it, channel.getTopic()));
-				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
+					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(332, *it, channel.getTopic()));
+				//channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
 			}
 		}
 	}

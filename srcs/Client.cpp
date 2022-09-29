@@ -150,9 +150,14 @@ void    Client::receiveMessage(Server* serv) {
     packetsHandler();
 };
 
-void    Client::writeMessage(std::string message) {
-	_packets.push_back(":" + stateMsg() + " " + message);
+void	Client::writePrefixMsg(Client& client, std::string message) {
+	client.writeMessage(":" + stateMsg() + " " + message);
 };
+
+void    Client::writeMessage(std::string message) {
+	_packets.push_back(message);
+};
+
 void    Client::sendMessage() {
     std::string packet;
     if (!_packets.empty()) {
@@ -164,10 +169,10 @@ void    Client::sendMessage() {
     }
 };
 void    Client::registerClient(Commands* commands) {
-    writeMessage(commands->sendRep(1));
-	writeMessage(commands->sendRep(2));
-	writeMessage(commands->sendRep(3));
-	writeMessage(commands->sendRep(4));
+    writePrefixMsg(*this, commands->sendRep(1));
+	writePrefixMsg(*this, commands->sendRep(2));
+	writePrefixMsg(*this, commands->sendRep(3));
+	writePrefixMsg(*this, commands->sendRep(4));
 	LUSERS(commands);
 	MOTD(commands);
 };
