@@ -27,6 +27,7 @@ void	PONG(Commands*);
 void	MODE(Commands*);
 void	ISON(Commands *);
 void	JOIN(Commands*);
+void	PRIVMSG(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["INFO"] = INFO;
@@ -41,6 +42,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["MODE"] = MODE;
 	this->_listCommands["JOIN"] = JOIN;
 	this->_listCommands["ISON"] = ISON;
+	this->_listCommands["PRIVMSG"] = PRIVMSG;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
@@ -131,28 +133,33 @@ void    Client::receiveMessage(Server* serv) {
 	std::string	msg;
     size_t  	bytes;
     size_t  	pos;
-    bytes = recv(_sock, buff, 1024, 0);
+    bytes = recv(this->_sock, buff, 1024, 0);
 	buff[bytes] = '\0';
     if (bytes < 1) {
 		if (bytes == 0)
-			_state = NONE;
+			this->_state = NONE;
 		return ;
 	}
-    _buff += buff;
+    this->_buff += buff;
 	std::cout << buff << std::endl;
     while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
     	msg = this->_buff.substr(0, pos);
 		this->_buff.erase(0, pos + 2);
 		if (msg.empty())
 			continue;
-		_commands.push_back(new Commands(this, serv, msg));
+		this->_commands.push_back(new Commands(this, serv, msg));
     }
     packetsHandler();
 };
 
-void    Client::writeMessage(std::string message) {
-	_packets.push_back(":" + stateMsg() + " " + message);
+void	Client::writePrefixMsg(Client& client, std::string message) {
+	client.writeMessage(":" + stateMsg() + " " + message);
 };
+
+void    Client::writeMessage(std::string message) {
+	_packets.push_back(message);
+};
+
 void    Client::sendMessage() {
     std::string packet;
     if (!_packets.empty()) {
@@ -164,10 +171,10 @@ void    Client::sendMessage() {
     }
 };
 void    Client::registerClient(Commands* commands) {
-    writeMessage(commands->sendRep(1));
-	writeMessage(commands->sendRep(2));
-	writeMessage(commands->sendRep(3));
-	writeMessage(commands->sendRep(4));
+    writePrefixMsg(*this, commands->sendRep(1));
+	writePrefixMsg(*this, commands->sendRep(2));
+	writePrefixMsg(*this, commands->sendRep(3));
+	writePrefixMsg(*this, commands->sendRep(4));
 	LUSERS(commands);
 	MOTD(commands);
 };

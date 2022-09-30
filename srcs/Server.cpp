@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <stdio.h>
+#include <cstdio>
 
 Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)) {};
 
@@ -21,7 +21,7 @@ void                Server::acceptClient() {
 	socklen_t   len = sizeof(addr);
 
 	clientFd = accept(_connectionManager->getMainSock(), (sockaddr*)&addr, &len);
-	if (clientFd  < 0) perror("accept");
+	if (clientFd  < 0) std::perror("accept");
 	_clients[clientFd] = new Client(clientFd, addr);
 	std::cout << clientFd << " -> " << _clients[clientFd] << std::endl;
 	_connectionManager->addClient(clientFd);
@@ -32,6 +32,7 @@ void                Server::setPassword(char* password) {_password.assign(passwo
 void                Server::init(int port, char *pw) {
 	_connectionManager->init(port);
 	setPassword(pw);
+	display();
 };
 
 Client*             Server::getClient(std::string nickName) {
@@ -48,6 +49,7 @@ std::vector<Client*>    Server::getClients() {
 };
 Channel&                Server::getChannel(std::string name) {
 	Channel&	channel = this->_channels[name];
+	channel.setName(name);
     return channel;
 };
 std::vector<Channel*>   Server::getChannels() {
@@ -68,15 +70,26 @@ void                    Server::sendPing() {
 		if ((*it).second->getStats() == CONNECTED)
 			(*it).second->writeMessage("PING 42");
 };
-void                    Server::erraseClient(Client client) {
-	// TODO
-	client.setState(DEBUG);
+void                    Server::erraseClient(Client& client) {
+	this->_clients.erase(client.getSocket());
+	delete &client;
+	display();
 };
 void                    Server::erraseChannel(Channel channel) {
 	// TODO
 	std::cout << "Channel errased" << std::endl;
 	(void)channel;
 	return;
+};
+
+void					Server::display() {
+	std::cout << "\033[2J\033[1;1H" << std::flush;
+	std::cout << "clients: " << std::endl;
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		std::cout << (*it).second->getNickname() << std::endl;
+	std::cout << std::endl << "channels: " << std::endl;
+	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		std::cout << (*it).second.getName() << std::endl;
 };
 
 void                    Server::run() {
@@ -94,5 +107,6 @@ void                    Server::run() {
 		clients_list = getClients();
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			(*it)->sendMessage();
+		display();
 	}
 };
