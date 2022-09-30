@@ -286,7 +286,7 @@ void JOIN(Commands *command)
 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(331, *it));
 				else
 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(332, *it, channel.getTopic()));
-				//channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
+				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
 			}
 		}
 	}
