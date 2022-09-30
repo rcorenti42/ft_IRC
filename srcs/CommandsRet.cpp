@@ -292,10 +292,36 @@ void JOIN(Commands *command)
 };
 
 void	PRIVMSG(Commands* command) {
-	// TODO
-	Channel&				channel = command->getServer().getChannel(command->getArgs()[0]);
-	std::vector<Client*>	clients = channel.getClients();
-	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++)
-		if ((*it)->getNickname() != command->getClient().getNickname())
-			command->getClient().writePrefixMsg(*(*it), "PRIVMSG " + command->getArgs()[0] + " :" + command->getMessage());
+	int							start = 0;
+	int							end;
+	std::vector<std::string>	channels;
+	std::vector<std::string>	clients;
+	if (!command->getArgs().empty()) {
+		if (!command->getMessage().empty()) {
+			end = command->getArgs()[0].find(',');
+			while (end != -1) {
+				if (command->getArgs()[0].substr(start, end - start)[0] == '#' || command->getArgs()[0].substr(start, end - start)[0] == '&')
+					channels.push_back(command->getArgs()[0].substr(start, end - start));
+				else
+					clients.push_back(command->getArgs()[0].substr(start, end - start));
+				start = end + 1;
+				end = command->getArgs()[0].find(',', start);
+			}
+			if (command->getArgs()[0].substr(start)[0] == '#' || command->getArgs()[0].substr(start)[0] == '&')
+				channels.push_back(command->getArgs()[0].substr(start));
+			else
+				clients.push_back(command->getArgs()[0].substr(start));
+			for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
+				Channel&				chan = command->getServer().getChannel(*it);
+				std::vector<Client*>	cli = chan.getClients();
+				for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
+					if ((*iter)->getNickname() != command->getClient().getNickname())
+						command->getClient().writePrefixMsg(*(*iter), "PRIVMSG " + *it + " :" + command->getMessage());
+			}
+			for (std::vector<std::string>::iterator it = clients.begin(); it != clients.end(); it++)
+				command->getClient().writePrefixMsg(*command->getServer().getClient(*it), "PRIVMSG " + *it + " :" + command->getMessage());
+		} else
+			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(412));
+	} else
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(411, command->getCommand()));
 };
