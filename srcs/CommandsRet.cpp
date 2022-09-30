@@ -280,14 +280,22 @@ void JOIN(Commands *command)
 				Channel& channel = command->getServer().getChannel(*it);
 				if (channel.getClients().empty())
 					channel.addOperator(command->getClient());
-				else
-					channel.addClient(command->getClient());
+				channel.addClient(command->getClient());
 				if (channel.getTopic().empty())
 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(331, *it));
 				else
 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(332, *it, channel.getTopic()));
-				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
+				channel.broadcastMessage(command->getClient(), "JOIN :" + channel.getName());
 			}
 		}
 	}
-}
+};
+
+void	PRIVMSG(Commands* command) {
+	// TODO
+	Channel&				channel = command->getServer().getChannel(command->getArgs()[0]);
+	std::vector<Client*>	clients = channel.getClients();
+	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+		if ((*it)->getNickname() != command->getClient().getNickname())
+			command->getClient().writePrefixMsg(*(*it), "PRIVMSG " + command->getArgs()[0] + " :" + command->getMessage());
+};

@@ -52,7 +52,7 @@ public:
     string     		    	getTopic() const;
     string     		    	getMode() const;
     string     		    	getPassword() const;
-    std::vector<Client>		getClients() const;
+    std::vector<Client*>	getClients();
     void                	addClient(Client& client);
 	void					addOperator(Client& client);
     void                	removeClient(Client& client);

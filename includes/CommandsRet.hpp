@@ -20,12 +20,16 @@
 
 void	PASS(Commands* command);
 void	NICK(Commands* command);
+void	ISON(Commands* command);
 void	INFO(Commands* command);
 void	USER(Commands* command);
 void	TIME(Commands* command);
+void	PING(Commands* command);
+void	PONG(Commands* command);
 void	MOTD(Commands* command);
 void	LUSERS(Commands* command);
 void	MODE(Commands* command);
-
+void	JOIN(Commands* command);
+void	PRIVMSG(Commands* command);
 
 #endif

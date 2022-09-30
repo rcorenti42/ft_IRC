@@ -21,17 +21,17 @@ Channel::Channel(string &name, Client &creator) : _name(name) {
 
 Channel::Channel() {}
 
-std::vector<Client> Channel::getClients() const {
-    std::vector<Client> clients;
-    clients.reserve(_clientsWhat.size());
-    for (CliCstIt it = _clientsWhat.begin(); it != _clientsWhat.end(); ++it) clients.push_back(it->second.client);
-    return clients;
+std::vector<Client*>	Channel::getClients() {
+    std::vector<Client*>	clients;
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		clients.push_back(it->second);
+	return clients;
 }
 
-void                Channel::addClient(Client& client) {
-	ClientMode elem(client, "");
-	_clientsWhat[client.getSocket()] = elem;
-}
+//void                Channel::addClient(Client& client) {
+//	ClientMode elem(client, "");
+//	_clientsWhat[client.getSocket()] = elem;
+//}
 
 //std::vector<Client*>	Channel::getClients() {
 //	std::vector<Client*>	clients;
@@ -40,9 +40,9 @@ void                Channel::addClient(Client& client) {
 //	return clients;
 //}
 
-//void					Channel::addClient(Client& client) {
-//	this->_clients.insert();
-//}
+void					Channel::addClient(Client& client) {
+	this->_clients[client.getSocket()] = &client;
+}
 
 void					Channel::addOperator(Client& client) {
 	_operators.push_back(&client);
