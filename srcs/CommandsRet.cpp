@@ -325,3 +325,30 @@ void	PRIVMSG(Commands* command) {
 	} else
 		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(411, command->getCommand()));
 };
+
+void	PART(Commands* command) {
+	int							start = 0;
+	int							end;
+	std::vector<std::string>	channels;
+	if (!command->getArgs().empty()) {
+		end = command->getArgs()[0].find(',');
+		while (end != -1) {
+			channels.push_back(command->getArgs()[0].substr(start, end - start));
+			start = end + 1;
+			end = command->getArgs()[0].find(',', start);
+		}
+		channels.push_back(command->getArgs()[0].substr(start));
+		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
+			if (!command->getServer().getChannel(*it).getClients().empty()) {
+				if (command->getServer().getChannel(*it).getClientsMap().find(command->getClient().getSocket()) == command->getServer().getChannel(*it).getClientsMap().end())
+					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(442, *it));
+				else {
+					command->getServer().getChannel(*it).broadcastMessage(command->getClient(), "PART " + *it);
+					command->getServer().getChannel(*it).removeClient(command->getClient());
+				}
+			} else
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(403, *it));
+		}
+	} else
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, "PART"));
+};

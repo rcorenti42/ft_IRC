@@ -76,10 +76,7 @@ void                    Server::erraseClient(Client& client) {
 	display();
 };
 void                    Server::erraseChannel(Channel channel) {
-	// TODO
-	std::cout << "Channel errased" << std::endl;
-	(void)channel;
-	return;
+	this->_channels.erase(channel.getName());
 };
 
 void					Server::display() {
@@ -107,6 +104,9 @@ void                    Server::run() {
 		clients_list = getClients();
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			(*it)->sendMessage();
+		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
+			if (it->second.getClients().empty())
+				erraseChannel(it->second);
 		display();
 	}
 };

@@ -40,6 +40,10 @@ std::vector<Client*>	Channel::getClients() {
 //	return clients;
 //}
 
+std::map<int, Client*>	Channel::getClientsMap() {
+	return this->_clients;
+}
+
 void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }
