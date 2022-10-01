@@ -149,6 +149,8 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 476 " + this->_client->getNickname() + " " + ERR_BADCHANMASK(arg1);
 	case 482:
 		return " 482 " + this->_client->getNickname() + " " + ERR_CHANOPRIVSNEEDED(arg1);
+	case 491:
+		return " 491 " + this->_client->getNickname() + " " + ERR_NOOPERHOST();
 	case 501:
 		return " 501 " + this->_client->getNickname() + " " + ERR_UMODEUNKNOWNFLAG();
 	case 502:

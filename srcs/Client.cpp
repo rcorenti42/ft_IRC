@@ -30,6 +30,7 @@ void	JOIN(Commands*);
 void	PRIVMSG(Commands*);
 void	PART(Commands*);
 void	TOPIC(Commands*);
+void	OPER(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["INFO"] = INFO;
@@ -47,6 +48,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["PRIVMSG"] = PRIVMSG;
 	this->_listCommands["PART"] = PART;
 	this->_listCommands["TOPIC"] = TOPIC;
+	this->_listCommands["OPER"] = OPER;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
@@ -146,7 +148,7 @@ void    Client::receiveMessage(Server* serv) {
 	}
     this->_buff += buff;
 	std::cout << buff << std::endl;
-    while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
+	while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
     	msg = this->_buff.substr(0, pos);
 		this->_buff.erase(0, pos + 2);
 		if (msg.empty())

@@ -82,6 +82,8 @@ std::string	ERR_BADCHANMASK(std::string);
 
 std::string	ERR_CHANOPRIVSNEEDED(std::string);
 
+std::string	ERR_NOOPERHOST();
+
 std::string	ERR_UMODEUNKNOWNFLAG();
 
 std::string	ERR_USERSDONTMATCH();

@@ -107,13 +107,25 @@ void ISON(Commands *command)
 
 void INFO(Commands *command)
 {
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "            IR-C4            "));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "            2022             "));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "Core developpers:            "));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
-	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "IR-C4 is best experienced with an IRC client"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, " ______________________________________________"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "<                    IR-C4                     >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "<                    2022                      >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "< Core developpers:                            >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "<     rcorenti, rcorenti@student.42.fr         >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "<     lothieve, lothieve@student.42.fr         >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "<     sobouatt, sobouatt@student.42.fr         >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "< IR-C4 is best experienced with an IRC client >"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, " ----------------------------------------------"));
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                         \\"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                          \\"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                                       _ _"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                            | \\__/|  .~    ~."));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                            /oo `./      .'"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                           {o__,   \\    {"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                             / .  . )    \\"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                             `-` '-' \\    }"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                            .(   _(   )_.'"));
+    command->getClient().writePrefixMsg(command->getClient(), command->sendRep(371, "                           '---.~_ _ _|"));
 	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(374));
 }
 
@@ -367,4 +379,8 @@ void	TOPIC(Commands* command) {
 			}
 	} else
 		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, "TOPIC"));
+};
+
+void	OPER(Commands* command) {
+	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(491));
 };

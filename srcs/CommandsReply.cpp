@@ -26,7 +26,7 @@ std::string	RPL_CREATED() {
 };
 
 std::string	RPL_MYINFO() {
-	return "IR-C4 420 woisx inpstmcqaovlbkSR";
+	return "IR-C4 420 isw opsitnmlbvk";
 };
 
 std::string	RPL_UMODEIS(std::string usermodes) {
@@ -144,6 +144,10 @@ std::string	ERR_BADCHANMASK(std::string channel) {
 std::string	ERR_CHANOPRIVSNEEDED(std::string channel) {
 	return channel + " :You're not channel operator";
 };
+
+std::string	ERR_NOOPERHOST() {
+	return ":No O-lines for your host";
+}
 
 std::string	ERR_UMODEUNKNOWNFLAG() {
 	return ":Unknown MODE flag";
