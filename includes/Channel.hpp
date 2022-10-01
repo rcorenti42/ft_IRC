@@ -54,6 +54,7 @@ public:
     string     		    	getPassword() const;
     std::vector<Client*>	getClients();
 	std::map<int, Client*>	getClientsMap();
+	bool					isOperator(std::string client);
     void                	addClient(Client& client);
 	void					addOperator(Client& client);
     void                	removeClient(Client& client);

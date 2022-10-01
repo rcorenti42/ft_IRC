@@ -40,7 +40,7 @@ Commands::Commands(std::string str) //constructor for testing purpose
 		std::cout << (*it) << ", ";
 	std::cout << "}" << std::endl;
 }
-Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server)
+Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server), _packet(str)
 {
 	size_t pos;
 	if ((pos = str.find(":")) != std::string::npos) {
@@ -68,6 +68,9 @@ std::string					Commands::getCommand() const {
 };
 std::string					Commands::getMessage() const {
 	return this->_message;
+};
+std::string					Commands::getPacket() const {
+	return this->_packet;
 };
 std::vector<std::string>	Commands::getArgs() const {
 	return this->_args;
@@ -122,8 +125,14 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 		return " 403 " + this->_client->getNickname() + " " + ERR_NOSUCHCHANNEL(arg1);
 	case 409:
 		return " 409 " + this->_client->getNickname() + " " + ERR_NOORIGIN();
+	case 411:
+		return " 411 " + this->_client->getNickname() + " " + ERR_NORECIPIENT(arg1);
+	case 412:
+		return " 412 " + this->_client->getNickname() + " " + ERR_NOTEXTTOSEND();
 	case 431:
 		return " 431 " + this->_client->getNickname() + " " + ERR_NONICKNAMEGIVEN();
+	case 433:
+		return " 433 " + this->_client->getNickname() + " "+ ERR_NICKNAMEINUSE(arg1);
 	case 442:
 		return " 442 " + this->_client->getNickname() + " " + ERR_NOTONCHANNEL(arg1);
 	case 461:

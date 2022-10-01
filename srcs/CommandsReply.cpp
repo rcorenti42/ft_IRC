@@ -97,9 +97,21 @@ std::string	ERR_NOORIGIN() {
 	return ":No origin specified";
 };
 
+std::string	ERR_NORECIPIENT(std::string command) {
+	return ":No recipient given " + command;
+};
+
+std::string	ERR_NOTEXTTOSEND() {
+	return ":No origin specified";
+};
+
 std::string	ERR_NONICKNAMEGIVEN() {
 	return ":No nickname given";
 };
+
+std::string	ERR_NICKNAMEINUSE(std::string name) {
+	return name + " :Nickname is already in use";
+}
 
 std::string	ERR_NOTONCHANNEL(std::string channel) {
 	return channel + " :You're not on that channel";

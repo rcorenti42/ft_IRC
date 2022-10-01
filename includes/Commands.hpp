@@ -23,6 +23,7 @@ class Server;
 class Commands {
 	Client*						_client;
 	Server*						_server;
+	std::string					_packet;
 	std::string					_command;
 	std::string					_message;
 	std::vector<std::string>	_args;
@@ -31,6 +32,7 @@ public:
 	Commands(Client *client, Server *server, std::string str);
 	std::string					getCommand() const;
 	std::string					getMessage() const;
+	std::string					getPacket() const;
 	std::vector<std::string>	getArgs() const;
 	Client&						getClient();
 	Server&						getServer();

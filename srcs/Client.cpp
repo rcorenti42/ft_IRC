@@ -29,6 +29,7 @@ void	ISON(Commands *);
 void	JOIN(Commands*);
 void	PRIVMSG(Commands*);
 void	PART(Commands*);
+void	TOPIC(Commands*);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["INFO"] = INFO;
@@ -45,6 +46,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	this->_listCommands["ISON"] = ISON;
 	this->_listCommands["PRIVMSG"] = PRIVMSG;
 	this->_listCommands["PART"] = PART;
+	this->_listCommands["TOPIC"] = TOPIC;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {

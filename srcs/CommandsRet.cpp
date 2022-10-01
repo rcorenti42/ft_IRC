@@ -46,7 +46,7 @@ void NICK(Commands *command)
 		{
 			if (*(command->getArgs().begin()) == (*it)->getNickname())
 			{
-				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(433));
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(433, command->getArgs()[0]));
 				return;
 			}
 		}
@@ -73,7 +73,7 @@ void USER(Commands *command)
 void ISON(Commands *command)
 {
 	if (command->getArgs().empty())
-		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461));
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, command->getCommand()));
 	size_t pos;
 	std::string str = command->getMessage();
 	std::vector<Client *> clients = command->getServer().getClients();
@@ -281,9 +281,7 @@ void JOIN(Commands *command)
 				if (channel.getClients().empty())
 					channel.addOperator(command->getClient());
 				channel.addClient(command->getClient());
-				if (channel.getTopic().empty())
-					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(331, *it));
-				else
+				if (!channel.getTopic().empty())
 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(332, *it, channel.getTopic()));
 				channel.broadcastMessage(command->getClient(), "JOIN :" + channel.getName());
 			}
@@ -351,4 +349,22 @@ void	PART(Commands* command) {
 		}
 	} else
 		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, "PART"));
+};
+
+void	TOPIC(Commands* command) {
+	if (!command->getArgs().empty()) {
+		if (command->getMessage().empty())
+			if (command->getServer().getChannel(command->getArgs()[0]).getTopic().empty())
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(331, command->getArgs()[0]));
+			else
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(332, command->getArgs()[0], command->getServer().getChannel(command->getArgs()[0]).getTopic()));
+		else
+			if (!command->getServer().getChannel(command->getArgs()[0]).isOperator(command->getClient().getNickname()))
+				command->getClient().writePrefixMsg(command->getClient(), command->sendRep(482, command->getArgs()[0]));
+			else {
+				command->getServer().getChannel(command->getArgs()[0]).setTopic(command->getMessage());
+				command->getClient().writePrefixMsg(command->getClient(), command->getPacket());
+			}
+	} else
+		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(461, "TOPIC"));
 };

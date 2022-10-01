@@ -44,6 +44,14 @@ std::map<int, Client*>	Channel::getClientsMap() {
 	return this->_clients;
 }
 
+bool					Channel::isOperator(std::string client) {
+	bool	ret = false;
+	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
+		if ((*it)->getNickname() == client)
+			ret = true;
+	return ret;
+}
+
 void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }

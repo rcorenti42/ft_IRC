@@ -58,7 +58,13 @@ std::string	ERR_NOSUCHCHANNEL(std::string);
 
 std::string	ERR_NOORIGIN();
 
+std::string	ERR_NORECIPIENT(std::string);
+
+std::string	ERR_NOTEXTTOSEND();
+
 std::string	ERR_NONICKNAMEGIVEN();
+
+std::string	ERR_NICKNAMEINUSE(std::string);
 
 std::string	ERR_NOTONCHANNEL(std::string);
 

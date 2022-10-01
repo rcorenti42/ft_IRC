@@ -32,5 +32,6 @@ void	MODE(Commands* command);
 void	JOIN(Commands* command);
 void	PRIVMSG(Commands* command);
 void	PART(Commands* command);
+void	TOPIC(Commands* command);
 
 #endif
