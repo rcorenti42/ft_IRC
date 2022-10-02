@@ -32,7 +32,6 @@ void                Server::setPassword(char* password) {_password.assign(passwo
 void                Server::init(int port, char *pw) {
 	_connectionManager->init(port);
 	setPassword(pw);
-	display();
 };
 
 Client*             Server::getClient(std::string nickName) {
@@ -73,7 +72,6 @@ void                    Server::sendPing() {
 void                    Server::erraseClient(Client& client) {
 	this->_clients.erase(client.getSocket());
 	delete &client;
-	display();
 };
 void                    Server::erraseChannel(Channel channel) {
 	this->_channels.erase(channel.getName());
@@ -107,5 +105,6 @@ void                    Server::run() {
 		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 			if (it->second.getClients().empty())
 				erraseChannel(it->second);
+		display();
 	}
 };

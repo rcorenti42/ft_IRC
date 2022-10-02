@@ -50,8 +50,8 @@ void NICK(Commands *command)
 				return;
 			}
 		}
-		command->getClient().setNickname(*(command->getArgs().begin()));
-		command->getClient().writePrefixMsg(command->getClient(), "NICK :" + command->getClient().getNickname());
+		command->getClient().writePrefixMsg(command->getClient(), "NICK :" + *command->getArgs().begin());
+		command->getClient().setNickname(*command->getArgs().begin());
 	}
 }
 
