@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 19:28:55 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/02 15:04:21 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	PART(Commands*);
 void	TOPIC(Commands*);
 void	OPER(Commands*);
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	this->_listCommands["INFO"] = INFO;
 	this->_listCommands["PASS"] = PASS;
 	this->_listCommands["NICK"] = NICK;
@@ -66,8 +66,8 @@ std::string Client::getUsername() const {
 std::string	Client::getRealname() const {
 	return _realname;
 };
-std::string	Client::getUsermode() const {
-	return _userMode;
+std::string	Client::getMode() const {
+	return _mode;
 };
 std::string	Client::getAddr() const {
 	return _addr;
@@ -91,6 +91,12 @@ void		Client::setState(e_state mode) {
 void		Client::setPing(time_t ping) {
 	_ping = ping;
 };
+
+void		Client::setMode(std::string mode)
+{
+	_mode = mode;
+};
+
 std::string	Client::stateMsg() {
 	std::string	state = "";
 	if (_state == CONNECTED) {

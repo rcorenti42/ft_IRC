@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 00:57:15 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/02 15:02:59 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Client {
     std::string                 				_username;
 	std::string									_realname;
     std::string                 				_buff;
-    std::string                 				_userMode;
+    std::string                 				_mode;
     std::string                 				_channel;
 	std::string									_addr;
     std::vector<std::string>    				_packets;
@@ -58,12 +58,13 @@ public:
     std::string getNickname() const;
     std::string getUsername() const;
 	std::string	getRealname() const;
-	std::string	getUsermode() const;
+	std::string	getMode() const;
 	std::string	getAddr() const;
 	e_state		getStats() const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
 	void		setRealName(std::string realname);
+	void		setMode(std::string mode);
 	void		setPing(time_t);
 	std::string	stateMsg();
     void    	packetsHandler();

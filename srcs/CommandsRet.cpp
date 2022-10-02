@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/01 01:34:31 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/02 15:10:45 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,11 +213,11 @@ void LUSERS(Commands *command)
 	{
 		if ((*it)->getStats() == CONNECTED)
 		{
-			if ((*it)->getUsermode().find('i') == std::string::npos)
+			if ((*it)->getMode().find('i') == std::string::npos)
 				visibles++;
 			else
 				invisibles++;
-			if ((*it)->getUsermode().find('o') != std::string::npos)
+			if ((*it)->getMode().find('o') != std::string::npos)
 				operators++;
 		}
 		else
