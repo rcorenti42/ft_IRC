@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 22:28:02 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:24:12 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ std::string	RPL_LUSERCHANNELS(std::string);
 
 std::string	RPL_LUSERME(std::string);
 
-std::string	RPL_CHANNELMODEIS(std::string, std::string, std::string);
+std::string	RPL_CHANNELMODEIS(std::string, std::string);
 
 std::string	RPL_NOTOPIC(std::string);
 

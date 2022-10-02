@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/02 22:24:29 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:28:01 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,8 @@ void LUSERS(Commands *command)
 void 	clientMode(Commands *command, std::string modestring)
 {
 	std::string ret = command->getClient().getMode();
+	std::string changes;
+
 	int mode = 1;
 	size_t pos;
 
@@ -248,26 +250,49 @@ void 	clientMode(Commands *command, std::string modestring)
 	if (modestring.find_first_not_of("isw") != std::string::npos)
 		command->getClient().writePrefixMsg(command->getClient(), command->sendRep(501, command->getClient().getNickname()));
 	if (mode == 0) {
-		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) != std::string::npos)
+		changes += '-';
+		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) != std::string::npos) {
+			changes += 'i';
 			ret.erase(pos, pos + 1);
-		if (modestring.find('s') != std::string::npos && (pos = ret.find('s')) != std::string::npos)
+		}
+		if (modestring.find('s') != std::string::npos && (pos = ret.find('s')) != std::string::npos) {
+			changes += 's';
 			ret.erase(pos, pos + 1);
+		}
 	}
-	else if (mode == 1)
-	{
+	else if (mode == 1) {
+		changes += '+'; 
 		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) == std::string::npos)
 			ret += 'i';
 		if (modestring.find('s') != std::string::npos && (pos = ret.find('s')) == std::string::npos)
 			ret += 's';			
 	}
 	command->getClient().setMode(ret);
+	// command->getClient().writePrefixMsg() a ne pas oublier
 }
+
 
 void MODE(Commands *command)
 {
+	bool channelexist = false;
+	std::string climode;
 	std::vector<std::string> args = command->getArgs();
-	if (args.begin()[0][0] == '#' || args.begin()[0][0] == '#')
+	if (args.begin()[0][0] == '#' || args.begin()[0][0] == '&')
 	{
+		std::vector<Channel *> channels = command->getServer().getChannels();
+		for (std::vector<Channel *>::iterator it = channels.begin(); it < channels.end(); it++) {
+			if ((*it)->getName() == args[0])
+			{
+				channelexist = true;
+				climode = (*it)->getMode();
+			}
+		}
+		if (!channelexist)
+			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(403, args[0]));
+		else if (args.size() < 2)
+			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(324, args[0], climode));
+		// else
+			// channelMode(command, args[1]);
 	}
 	else
 	{
@@ -288,27 +313,6 @@ void MODE(Commands *command)
 	
 	}
 }
-
-// void MODE(Commands *command)
-// {
-// 	std::vector<std::string> args = command->getArgs();
-// 	if (args.begin()[0][0] == '#' || args.begin()[0][0] == '#')
-// 	{
-// 	}
-// 	else
-// 	{
-// 		if (args[1] != command->getClient().getNickname())
-// 		{
-// 			std::vector<Client *> clients = command->getServer().getClients();
-// 			for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
-// 				if ((*it)->getNickname() == args[1]) {
-// 					command->getClient().writePrefixMsg(command->getClient(), command->sendRep(502));
-// 					return ;
-// 				}
-// 			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(401, args[1]));
-// 		}
-// 	}
-// }
 
 void JOIN(Commands *command)
 {
