@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/02 15:04:21 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/02 17:30:33 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	PART(Commands*);
 void	TOPIC(Commands*);
 void	OPER(Commands*);
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _ping(std::time(NULL)) {
 	this->_listCommands["INFO"] = INFO;
 	this->_listCommands["PASS"] = PASS;
 	this->_listCommands["NICK"] = NICK;

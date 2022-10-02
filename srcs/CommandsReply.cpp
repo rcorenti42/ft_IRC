@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 19:20:23 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/02 16:26:28 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::string	RPL_CREATED() {
 };
 
 std::string	RPL_MYINFO() {
-	return "IR-C4 420 isw opsitnmlbvk";
+	return "IR-C4 420 is opsitnmlbvk";
 };
 
 std::string	RPL_UMODEIS(std::string usermodes) {

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/28 16:59:36 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/02 17:24:30 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,6 @@ void                    Server::run() {
 		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 			if (it->second.getClients().empty())
 				erraseChannel(it->second);
-		display();
+		// display();
 	}
 };
