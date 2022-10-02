@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 01:28:01 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:39:09 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,13 @@ void 	clientMode(Commands *command, std::string modestring)
 	// command->getClient().writePrefixMsg() a ne pas oublier
 }
 
+//opsitnmlbvk
+
+// void	channelMode(Commands *command, std::string modestring)
+// {
+// 	std::string ret = command->getClient().getMode();
+	
+// }
 
 void MODE(Commands *command)
 {
@@ -292,7 +299,7 @@ void MODE(Commands *command)
 		else if (args.size() < 2)
 			command->getClient().writePrefixMsg(command->getClient(), command->sendRep(324, args[0], climode));
 		// else
-			// channelMode(command, args[1]);
+		// 	channelMode(command, args[1]);
 	}
 	else
 	{

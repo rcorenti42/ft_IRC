@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/02 17:30:33 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:38:42 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void    Client::receiveMessage(Server* serv) {
 };
 
 void	Client::writePrefixMsg(Client& client, std::string message) {
-	client.writeMessage(":" + stateMsg() + " " + message);
+	client.writeMessage(":" + stateMsg() + message);
 };
 
 void    Client::writeMessage(std::string message) {
