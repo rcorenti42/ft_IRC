@@ -39,4 +39,21 @@ public:
 	std::string					sendRep(int, std::string = "", std::string = "", std::string = "");
 };
 
+void	PASS(Commands*);
+void	NICK(Commands*);
+void	USER(Commands*);
+void	INFO(Commands *);
+void	TIME(Commands*);
+void	MOTD(Commands*);
+void	LUSERS(Commands*);
+void	PING(Commands*);
+void	PONG(Commands*);
+void	MODE(Commands*);
+void	ISON(Commands *);
+void	JOIN(Commands*);
+void	PRIVMSG(Commands*);
+void	PART(Commands*);
+void	TOPIC(Commands*);
+void	OPER(Commands*);
+
 #endif

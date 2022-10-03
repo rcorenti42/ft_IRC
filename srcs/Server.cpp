@@ -105,6 +105,6 @@ void                    Server::run() {
 		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 			if (it->second.getClients().empty())
 				erraseChannel(it->second);
-		// display();
+		//display();
 	}
 };

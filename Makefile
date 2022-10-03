@@ -13,24 +13,15 @@ SOURCES = 	srcs/main.cpp \
 			srcs/CommandsReply.cpp \
 			srcs/ConnectionManager.cpp
 
-
-HEADERS = 	includes/Server.hpp \
-			includes/Client.hpp \
-			includes/Channel.hpp \
-			includes/Commands.hpp \
-			includes/CommandsRet.hpp \
-			includes/CommandsReply.hpp \
-			includes/ConnectionManager.hpp
-
 OBJECTS	= $(SOURCES:.cpp=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJECTS) $(HEADERS)
+$(NAME) : $(OBJECTS)
 	$(CC) $(CCFLAG) -I includes $(OBJECTS) -o $(NAME)
 	@echo "\033[0;92m* $(NAME) binary was created *\033[0m"
 
-%.o: %.cpp $(HEADERS)
+%.o: %.cpp
 	$(CC) $(CCFLAG) -I includes -c $< -o $@
 
 clean :
