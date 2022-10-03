@@ -52,6 +52,10 @@ bool					Channel::isOperator(std::string client) {
 	return ret;
 }
 
+bool					Channel::isClient(Client& client) {
+	return this->_clients.find(client.getSocket()) != this->_clients.end();
+}
+
 void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }

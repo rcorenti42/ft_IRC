@@ -450,3 +450,9 @@ void	TOPIC(Commands* command) {
 void	OPER(Commands* command) {
 	command->getClient().writePrefixMsg(command->getClient(), command->sendRep(491));
 };
+
+void	QUIT(Commands* command) {
+	if (!command->getMessage().empty())
+		command->getClient().setQuitMessage("QUIT :" + command->getMessage());
+	command->getClient().setState(NONE);
+};

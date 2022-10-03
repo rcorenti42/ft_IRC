@@ -47,6 +47,7 @@ class Client {
     std::string                 				_mode;
     std::string                 				_channel;
 	std::string									_addr;
+	std::string									_quitMessage;
     std::vector<std::string>    				_packets;
 	std::vector<Commands*>						_commands;
 	std::map<std::string, void(*)(Commands*)>	_listCommands;
@@ -60,10 +61,12 @@ public:
 	std::string	getRealname() const;
 	std::string	getMode() const;
 	std::string	getAddr() const;
+	std::string	getQuitMessage() const;
 	e_state		getStats() const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
 	void		setRealName(std::string realname);
+	void		setQuitMessage(std::string message);
 	void		setMode(std::string mode);
 	void		setPing(time_t);
 	std::string	stateMsg();

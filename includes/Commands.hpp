@@ -55,5 +55,6 @@ void	PRIVMSG(Commands*);
 void	PART(Commands*);
 void	TOPIC(Commands*);
 void	OPER(Commands*);
+void	QUIT(Commands*);
 
 #endif

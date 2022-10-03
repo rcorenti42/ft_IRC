@@ -12,6 +12,7 @@
 
 #include "Server.hpp"
 #include <cstdio>
+#include <algorithm>
 
 Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)) {};
 
@@ -70,6 +71,23 @@ void                    Server::sendPing() {
 			(*it).second->writeMessage("PING 42");
 };
 void                    Server::erraseClient(Client& client) {
+	std::vector<Client*>	clients;
+	std::vector<Client*>	buff;
+	std::string				message = "QUIT :" + client.getQuitMessage();
+	buff.push_back(&client);
+	for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
+		if ((*it).second.isClient(client)) {
+			(*it).second.removeClient(client);
+			clients = it->second.getClients();
+			if (!clients.empty()) {
+				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+					if (std::find(buff.begin(), buff.end(), *it) == buff.end())
+						buff.push_back(*it);
+			}
+		}
+	}
+	for (std::vector<Client*>::iterator it = buff.begin(); it != buff.end(); it++)
+		client.writePrefixMsg(*(*it), message);
 	this->_clients.erase(client.getSocket());
 	delete &client;
 };
@@ -105,6 +123,6 @@ void                    Server::run() {
 		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
 			if (it->second.getClients().empty())
 				erraseChannel(it->second);
-		//display();
+		display();
 	}
 };

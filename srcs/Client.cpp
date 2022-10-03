@@ -32,6 +32,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _ping
 	this->_listCommands["PART"] = PART;
 	this->_listCommands["TOPIC"] = TOPIC;
 	this->_listCommands["OPER"] = OPER;
+	this->_listCommands["QUIT"] = QUIT;
 	this->_addr = inet_ntoa(addr.sin_addr);
 };
 Client::~Client() {
@@ -58,6 +59,9 @@ std::string	Client::getAddr() const {
 e_state		Client::getStats() const {
 	return _state;
 };
+std::string	Client::getQuitMessage() const {
+	return this->_quitMessage.empty() ? "has quit" : this->_quitMessage;
+};
 void    Client::setNickname(std::string nickname) {
     _nickname = nickname;
 };
@@ -79,7 +83,9 @@ void		Client::setMode(std::string mode)
 {
 	_mode = mode;
 };
-
+void		Client::setQuitMessage(std::string message) {
+	this->_quitMessage = message;
+};
 std::string	Client::stateMsg() {
 	std::string	state = "";
 	if (_state == CONNECTED) {
