@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 20:16:42 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:25:14 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ Client&						Commands::getClient() {
 Server&						Commands::getServer() {
 	return *this->_server;
 };
-std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, std::string arg3) {
+std::string					Commands::sendRep(int code, std::string arg1, std::string arg2) {
 	switch (code) {
 	case 1:
 		return " 001 " + this->_client->getNickname() + " " + RPL_WELCOME(this->_client->getNickname(), this->_client->getUsername(), this->_client->getAddr());
@@ -103,7 +103,7 @@ std::string					Commands::sendRep(int code, std::string arg1, std::string arg2, 
 	case 255:
 		return " 255 " + this->_client->getNickname() + " " + RPL_LUSERME(arg1);
 	case 324:
-		return " 324 " + this->_client->getNickname() + " " + RPL_CHANNELMODEIS(arg1, arg2, arg3);
+		return " 324 " + this->_client->getNickname() + " " + RPL_CHANNELMODEIS(arg1, arg2);
 	case 331:
 		return " 331 " + this->_client->getNickname() + " " + RPL_NOTOPIC(arg1);
 	case 332:

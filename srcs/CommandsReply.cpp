@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/02 16:26:28 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:23:26 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ std::string	RPL_LUSERME(std::string clientsNbr) {
 	return ":I have " + clientsNbr + " clients and 1 servers";
 };
 
-std::string	RPL_CHANNELMODEIS(std::string channel, std::string mode, std::string arg) {
-	return channel + " " + mode + " " + arg;
+std::string	RPL_CHANNELMODEIS(std::string channel, std::string mode) {
+	return channel + " " + mode;
 };
 
 std::string	RPL_NOTOPIC(std::string channel) {

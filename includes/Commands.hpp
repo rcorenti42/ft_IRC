@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 19:55:14 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:25:46 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ public:
 	std::vector<std::string>	getArgs() const;
 	Client&						getClient();
 	Server&						getServer();
-	std::string					sendRep(int, std::string = "", std::string = "", std::string = "");
+	std::string					sendRep(int, std::string = "", std::string = "");
 };
 
 void	PASS(Commands*);
