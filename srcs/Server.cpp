@@ -6,12 +6,13 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 15:25:06 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 17:46:47 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <stdio.h>
+#include <cstdio>
+#include <algorithm>
 
 Server	*Server::_instance = 0;
 Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)) {};
@@ -53,6 +54,7 @@ std::vector<Client*>    Server::getClients() {
 };
 Channel&                Server::getChannel(std::string name) {
 	Channel&	channel = this->_channels[name];
+	channel.setName(name);
     return channel;
 };
 std::vector<Channel*>   Server::getChannels() {
@@ -73,15 +75,39 @@ void                    Server::sendPing() {
 		if ((*it).second->getStats() == CONNECTED)
 			(*it).second->writeMessage("PING 42");
 };
-void                    Server::erraseClient(Client client) {
-	// TODO
-	client.setState(DEBUG);
+void                    Server::erraseClient(Client& client) {
+	std::vector<Client*>	clients;
+	std::vector<Client*>	buff;
+	std::string				message = "QUIT :" + client.getQuitMessage();
+	buff.push_back(&client);
+	for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
+		if ((*it).second.isClient(client)) {
+			(*it).second.removeClient(client);
+			clients = it->second.getClients();
+			if (!clients.empty()) {
+				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+					if (std::find(buff.begin(), buff.end(), *it) == buff.end())
+						buff.push_back(*it);
+			}
+		}
+	}
+	for (std::vector<Client*>::iterator it = buff.begin(); it != buff.end(); it++)
+		client.writePrefixMsg(*(*it), message);
+	this->_clients.erase(client.getSocket());
+	delete &client;
 };
 void                    Server::erraseChannel(Channel channel) {
-	// TODO
-	std::cout << "Channel errased" << std::endl;
-	(void)channel;
-	return;
+	this->_channels.erase(channel.getName());
+};
+
+void					Server::display() {
+	std::cout << "\033[2J\033[1;1H" << std::flush;
+	std::cout << "clients: " << std::endl;
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		std::cout << (*it).second->getNickname() << std::endl;
+	std::cout << std::endl << "channels: " << std::endl;
+	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		std::cout << (*it).second.getName() << std::endl;
 };
 
 bool					Server::isNickTaken(std::string nick) {
@@ -106,5 +132,9 @@ void                    Server::run() {
 		clients_list = getClients();
 		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
 			(*it)->sendMessage();
+		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
+			if (it->second.getClients().empty())
+				erraseChannel(it->second);
+		display();
 	}
 };

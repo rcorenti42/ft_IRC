@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 11:30:32 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 19:04:22 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Commands::Commands(std::string str) //constructor for testing purpose
 	std::cout << "}" << std::endl;
 }
 
-Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server)
+Commands::Commands(Client *client, Server *server, std::string str) : _client(client), _server(server), _packet(str)
 {
 	size_t pos;
 	if ((pos = str.find(":")) != std::string::npos) {
@@ -65,6 +65,9 @@ std::string					Commands::getCommand() const {
 std::string					Commands::getMessage() const {
 	return this->_message;
 };
+std::string					Commands::getPacket() const {
+	return this->_packet;
+};
 std::vector<std::string>	Commands::getArgs() const {
 	return this->_args;
 };
@@ -80,5 +83,6 @@ std::string					Commands::sendRep(int code, Context &context) {
 
 Context &Commands::getContext() {
 	context.client = _client;
+	context.message = &_message;
 	return context;
 }

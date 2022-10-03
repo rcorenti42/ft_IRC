@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 16:34:51 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 17:46:24 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	MODE(Context &context, std::string *args);
 void	ISON(Context &context, std::string *args);
 void	JOIN(Context &context, std::string *args);
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
 	_listCommands["PASS"] = PASS;
 	_listCommands["NICK"] = NICK;
@@ -44,6 +44,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _user
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
+
 Client::~Client() {
     close(_sock);
 };
@@ -59,14 +60,17 @@ std::string Client::getUsername() const {
 std::string	Client::getRealname() const {
 	return _realname;
 };
-std::string	Client::getUsermode() const {
-	return _userMode;
+std::string	Client::getMode() const {
+	return _mode;
 };
 std::string	Client::getAddr() const {
 	return _addr;
 };
 e_state		Client::getStats() const {
 	return _state;
+};
+std::string	Client::getQuitMessage() const {
+	return this->_quitMessage.empty() ? "has quit" : this->_quitMessage;
 };
 void    Client::setNickname(std::string nickname) {
     _nickname = nickname;
@@ -83,6 +87,14 @@ void		Client::setState(e_state mode) {
 };
 void		Client::setPing(time_t ping) {
 	_ping = ping;
+};
+
+void		Client::setMode(std::string mode)
+{
+	_mode = mode;
+};
+void		Client::setQuitMessage(std::string message) {
+	this->_quitMessage = message;
 };
 std::string	Client::stateMsg() {
 	std::string	state = "";
@@ -133,28 +145,37 @@ void    Client::receiveMessage(Server* serv) {
 	std::string	msg;
     size_t  	bytes;
     size_t  	pos;
-    bytes = recv(_sock, buff, 1024, 0);
+    bytes = recv(this->_sock, buff, 1024, 0);
 	buff[bytes] = '\0';
     if (bytes < 1) {
 		if (bytes == 0)
-			_state = NONE;
+			this->_state = NONE;
 		return ;
 	}
-    _buff += buff;
+    this->_buff += buff;
 	std::cout << buff << std::endl;
-    while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
+	while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
     	msg = this->_buff.substr(0, pos);
 		this->_buff.erase(0, pos + 2);
 		if (msg.empty())
 			continue;
-		_commands.push_back(new Commands(this, serv, msg));
+		this->_commands.push_back(new Commands(this, serv, msg));
     }
     packetsHandler();
 };
 
-void    Client::writeMessage(std::string message) {
-	_packets.push_back(":" + stateMsg() + " " + message);
+void	Client::writePrefixMsg(Client &client, std::string message) {
+	client.writeMessage(":" + stateMsg() + message);
 };
+
+void	Client::writePrefixMsg(std::string message) {
+	writeMessage(":" + stateMsg() + message);
+};
+
+void    Client::writeMessage(std::string message) {
+	_packets.push_back(message);
+};
+
 void    Client::sendMessage() {
     std::string packet;
     if (!_packets.empty()) {
@@ -175,4 +196,4 @@ void    Client::registerClient() {
 	writeMessage(_cmdmgr->getReply(4, context));
 	LUSERS(context, 0);
 	MOTD(context, 0);
-};
+}

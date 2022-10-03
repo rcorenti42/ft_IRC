@@ -11,8 +11,7 @@
 /*   Channels.hpp                                                             */
 /* ************************************************************************** */
 
-#ifndef CHANNELS_HPP
-# define CHANNELS_HPP
+#pragma once
 
 # include <iostream>
 # include <vector>
@@ -53,6 +52,11 @@ public:
     string     		    	getMode() const;
     string     		    	getPassword() const;
     void                	addClient(Client *client);
+    std::vector<Client*>	getClients();
+	std::map<int, Client*>	getClientsMap();
+	bool					isOperator(std::string client);
+	bool					isClient(Client& client);
+    void                	addClient(Client& client);
 	void					addOperator(Client& client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);
@@ -60,4 +64,3 @@ public:
     void                	broadcastMessage(Client& client, string message);
 };
 
-#endif

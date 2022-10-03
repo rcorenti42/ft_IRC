@@ -26,16 +26,32 @@ void                Channel::addClient(Client *client) {
 	_clientsWhat[client->getSocket()] = elem;
 }
 
-//std::vector<Client*>	Channel::getClients() {
-//	std::vector<Client*>	clients;
-//	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-//		clients.push_back(it->second);
-//	return clients;
-//}
+std::vector<Client*>	Channel::getClients() {
+    std::vector<Client*>	clients;
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		clients.push_back(it->second);
+	return clients;
+}
 
-//void					Channel::addClient(Client& client) {
-//	this->_clients.insert();
-//}
+std::map<int, Client*>	Channel::getClientsMap() {
+	return this->_clients;
+}
+
+bool					Channel::isOperator(std::string client) {
+	bool	ret = false;
+	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
+		if ((*it)->getNickname() == client)
+			ret = true;
+	return ret;
+}
+
+bool					Channel::isClient(Client& client) {
+	return this->_clients.find(client.getSocket()) != this->_clients.end();
+}
+
+void					Channel::addClient(Client& client) {
+	this->_clients[client.getSocket()] = &client;
+}
 
 void					Channel::addOperator(Client& client) {
 	_operators.push_back(&client);
@@ -57,10 +73,8 @@ void                	Channel::removeInvit(Client& client) {
 }
 
 void                	Channel::broadcastMessage(Client& client, string message) {
-	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++) {
-		client.writeMessage(message);
-		std::cout << "TEST JOIN" << std::endl;
-	}
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
+		client.writePrefixMsg(*it->second, message);
 };
 
 void           			Channel::setName(string name) {_name = name;}

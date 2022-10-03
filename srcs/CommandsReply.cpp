@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 19:20:23 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:23:26 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::string	RPL_CREATED() {
 };
 
 std::string	RPL_MYINFO() {
-	return "irc.UTK.org 420 woisx inpstmcqaovlbkSR";
+	return "IR-C4 420 is opsitnmlbvk";
 };
 
 std::string	RPL_UMODEIS(std::string usermodes) {
@@ -53,8 +53,8 @@ std::string	RPL_LUSERME(std::string clientsNbr) {
 	return ":I have " + clientsNbr + " clients and 1 servers";
 };
 
-std::string	RPL_CHANNELMODEIS(std::string channel, std::string mode, std::string arg) {
-	return channel + " " + mode + " " + arg;
+std::string	RPL_CHANNELMODEIS(std::string channel, std::string mode) {
+	return channel + " " + mode;
 };
 
 std::string	RPL_NOTOPIC(std::string channel) {
@@ -97,9 +97,21 @@ std::string	ERR_NOORIGIN() {
 	return ":No origin specified";
 };
 
+std::string	ERR_NORECIPIENT(std::string command) {
+	return ":No recipient given " + command;
+};
+
+std::string	ERR_NOTEXTTOSEND() {
+	return ":No origin specified";
+};
+
 std::string	ERR_NONICKNAMEGIVEN() {
 	return ":No nickname given";
 };
+
+std::string	ERR_NICKNAMEINUSE(std::string name) {
+	return name + " :Nickname is already in use";
+}
 
 std::string	ERR_NOTONCHANNEL(std::string channel) {
 	return channel + " :You're not on that channel";
@@ -132,6 +144,10 @@ std::string	ERR_BADCHANMASK(std::string channel) {
 std::string	ERR_CHANOPRIVSNEEDED(std::string channel) {
 	return channel + " :You're not channel operator";
 };
+
+std::string	ERR_NOOPERHOST() {
+	return ":No O-lines for your host";
+}
 
 std::string	ERR_UMODEUNKNOWNFLAG() {
 	return ":Unknown MODE flag";

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 15:20:54 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 17:36:07 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ public:
 	std::string				getPassword() const;
 	std::string				getName() const;
     void                    sendPing();
-    void                    erraseClient(Client client);
+    void                    erraseClient(Client& client);
     void                    erraseChannel(Channel channel);
+	void					display();
     void                    run();
 	bool					isNickTaken(std::string nick);
 };
-

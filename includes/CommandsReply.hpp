@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/26 22:28:02 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 01:24:12 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ std::string	RPL_LUSERCHANNELS(std::string);
 
 std::string	RPL_LUSERME(std::string);
 
-std::string	RPL_CHANNELMODEIS(std::string, std::string, std::string);
+std::string	RPL_CHANNELMODEIS(std::string, std::string);
 
 std::string	RPL_NOTOPIC(std::string);
 
@@ -58,7 +58,13 @@ std::string	ERR_NOSUCHCHANNEL(std::string);
 
 std::string	ERR_NOORIGIN();
 
+std::string	ERR_NORECIPIENT(std::string);
+
+std::string	ERR_NOTEXTTOSEND();
+
 std::string	ERR_NONICKNAMEGIVEN();
+
+std::string	ERR_NICKNAMEINUSE(std::string);
 
 std::string	ERR_NOTONCHANNEL(std::string);
 
@@ -75,6 +81,8 @@ std::string	ERR_UNKNOWNMODE(std::string);
 std::string	ERR_BADCHANMASK(std::string);
 
 std::string	ERR_CHANOPRIVSNEEDED(std::string);
+
+std::string	ERR_NOOPERHOST();
 
 std::string	ERR_UMODEUNKNOWNFLAG();
 
