@@ -6,14 +6,20 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/28 16:59:36 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:25:06 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <stdio.h>
 
+Server	*Server::_instance = 0;
 Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)) {};
+
+Server				*Server::getInstance() {
+	if (!_instance) _instance =  new Server();
+	return _instance;
+}
 
 void                Server::acceptClient() {
 	int         clientFd;
@@ -21,9 +27,8 @@ void                Server::acceptClient() {
 	socklen_t   len = sizeof(addr);
 
 	clientFd = accept(_connectionManager->getMainSock(), (sockaddr*)&addr, &len);
-	if (clientFd  < 0) perror("accept");
+	if (clientFd  < 0) throw ConnectionManager::ConnectException("Accept failed");
 	_clients[clientFd] = new Client(clientFd, addr);
-	std::cout << clientFd << " -> " << _clients[clientFd] << std::endl;
 	_connectionManager->addClient(clientFd);
 };
 
@@ -78,6 +83,13 @@ void                    Server::erraseChannel(Channel channel) {
 	(void)channel;
 	return;
 };
+
+bool					Server::isNickTaken(std::string nick) {
+	for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if (it->second->getNickname() == nick)
+			return true;
+	return false;
+}
 
 void                    Server::run() {
 	std::vector<Client*>    clients_list = getClients();

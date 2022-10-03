@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 19:28:55 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 16:34:51 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,34 @@
 #include "Server.hpp"
 #include "Commands.hpp"
 
-void	PASS(Commands*);
-void	NICK(Commands*);
-void	USER(Commands*);
-void	INFO(Commands *);
-void	TIME(Commands*);
-void	MOTD(Commands*);
-void	LUSERS(Commands*);
-void	PING(Commands*);
-void	PONG(Commands*);
-void	MODE(Commands*);
-void	ISON(Commands *);
-void	JOIN(Commands*);
+void	PASS(Context &context, std::string *args);
+void	NICK(Context &context, std::string *args);
+void	USER(Context &context, std::string *args);
+void	INFO(Context &context, std::string *args);
+void	TIME(Context &context, std::string *args);
+void	MOTD(Context &context, std::string *args);
+void  LUSERS(Context &context, std::string *args);
+void	PING(Context &context, std::string *args);
+void	PONG(Context &context, std::string *args);
+void	MODE(Context &context, std::string *args);
+void	ISON(Context &context, std::string *args);
+void	JOIN(Context &context, std::string *args);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _userMode("w"), _ping(std::time(NULL)) {
-	this->_listCommands["INFO"] = INFO;
-	this->_listCommands["PASS"] = PASS;
-	this->_listCommands["NICK"] = NICK;
-	this->_listCommands["USER"] = USER;
-	this->_listCommands["TIME"] = TIME;
-	this->_listCommands["MOTD"] = MOTD;
-	this->_listCommands["LUSERS"] = LUSERS;
-	this->_listCommands["PING"] = PING;
-	this->_listCommands["PONG"] = PONG;
-	this->_listCommands["MODE"] = MODE;
-	this->_listCommands["JOIN"] = JOIN;
-	this->_listCommands["ISON"] = ISON;
-	this->_addr = inet_ntoa(addr.sin_addr);
+	_listCommands["INFO"] = INFO;
+	_listCommands["PASS"] = PASS;
+	_listCommands["NICK"] = NICK;
+	_listCommands["USER"] = USER;
+	_listCommands["TIME"] = TIME;
+	_listCommands["MOTD"] = MOTD;
+	_listCommands["LUSERS"] = LUSERS;
+	_listCommands["PING"] = PING;
+	_listCommands["PONG"] = PONG;
+	_listCommands["MODE"] = MODE;
+	_listCommands["JOIN"] = JOIN;
+	_listCommands["ISON"] = ISON;
+	_addr = inet_ntoa(addr.sin_addr);
+	_cmdmgr = CommandManager::getInstance();
 };
 Client::~Client() {
     close(_sock);
@@ -108,7 +109,7 @@ void    Client::packetsHandler() {
 				if ((*it)->getCommand() != "NICK" && (*it)->getCommand() != "USER")
 					continue ;
 			if (_listCommands.count((*it)->getCommand()))
-				_listCommands[(*it)->getCommand()](*it);
+				_listCommands[(*it)->getCommand()]((*it)->getContext(), &((*it)->getArgs())[0]);
 			commands.push_back(*it);
 		}
 		for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {
@@ -121,11 +122,12 @@ void    Client::packetsHandler() {
 			_state = CONNECTED;
 		if (_state != state) {
 			if (_state == CONNECTED)
-				registerClient(*_commands.begin());
+				registerClient();
 			packetsHandler();
 		}
     }
 };
+
 void    Client::receiveMessage(Server* serv) {
     char    	buff[1025];
 	std::string	msg;
@@ -163,11 +165,14 @@ void    Client::sendMessage() {
             send(this->_sock, packet.c_str(), packet.size(), 0);
     }
 };
-void    Client::registerClient(Commands* commands) {
-    writeMessage(commands->sendRep(1));
-	writeMessage(commands->sendRep(2));
-	writeMessage(commands->sendRep(3));
-	writeMessage(commands->sendRep(4));
-	LUSERS(commands);
-	MOTD(commands);
+void    Client::registerClient() {
+	Context context;
+
+	context.client = this;
+    writeMessage(_cmdmgr->getReply(1, context));
+	writeMessage(_cmdmgr->getReply(2, context));
+	writeMessage(_cmdmgr->getReply(3, context));
+	writeMessage(_cmdmgr->getReply(4, context));
+	LUSERS(context, 0);
+	MOTD(context, 0);
 };

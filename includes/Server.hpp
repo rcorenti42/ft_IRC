@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/28 16:30:40 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:20:54 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 class Client;
 
 class Server {
+	static Server					*_instance;
     std::string                     _password;
 	std::string						_name;
 	ConnectionManager				*_connectionManager;
@@ -37,9 +38,12 @@ class Server {
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
     void                	acceptClient();
-public:
 	Server();
-    void                	init(int port, char *password);
+public:
+	typedef std::map<int, Client *>::iterator ClientIt;
+
+	static Server			*getInstance();
+    void           	init(int port, char *password);
     void                	setPassword(char* password);
     Client*             	getClient(std::string nickName);
     std::vector<Client*>    getClients();
@@ -51,5 +55,6 @@ public:
     void                    erraseClient(Client client);
     void                    erraseChannel(Channel channel);
     void                    run();
+	bool					isNickTaken(std::string nick);
 };
 

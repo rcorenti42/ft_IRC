@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/28 16:26:57 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/03 15:09:22 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	validPort(char* port) {
 };
 
 int main(int argc, char** argv) {
-  Server  server;
+	Server	*server = Server::getInstance();
 	int		port;
     if (argc != 3)
 	{
@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
 		std::cerr << "Invalid port" << std::endl;
 		exit(1);
 	}
-    server.init(port, argv[2]);
-	try {server.run();}
+    server->init(port, argv[2]);
+	try {server->run();}
 	catch (ConnectionManager::ConnectException e){
 		std::cerr << e.what() << std::endl;
 	}

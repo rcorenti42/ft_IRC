@@ -6,28 +6,29 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/23 00:57:15 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 16:34:30 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 
-#ifndef CLIENT_HPP
-# define CLIENT_HPP
-
-# include <iostream>
-# include <ctime>
-# include <vector>
-# include <algorithm>
-# include <map>
-# include <netinet/in.h>
-# include <sys/socket.h>
-# include <arpa/inet.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <unistd.h>
+#include <iostream>
+#include <ctime>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "CommandManager.hpp"
 
 class Commands;
 class Server;
+class CommandManager;
+struct Context;
 
 enum e_state {
     CONNECTED,
@@ -36,6 +37,8 @@ enum e_state {
     NONE,
 	DEBUG
 };
+
+typedef void (*t_command)(Context &, std::string *);
 
 class Client {
     e_state                     				_state;
@@ -49,8 +52,9 @@ class Client {
 	std::string									_addr;
     std::vector<std::string>    				_packets;
 	std::vector<Commands*>						_commands;
-	std::map<std::string, void(*)(Commands*)>	_listCommands;
+	std::map<std::string, t_command>	_listCommands;
     time_t                      				_ping;
+	CommandManager								*_cmdmgr;
 public:
     Client(int, sockaddr_in);
     ~Client();
@@ -70,8 +74,6 @@ public:
     void    	receiveMessage(Server* serv);
     void    	writeMessage(std::string message);
     void    	sendMessage();
-    void    	registerClient(Commands* commands);
+    void    	registerClient();
 	void		setState(e_state mode);
 };
-
-#endif

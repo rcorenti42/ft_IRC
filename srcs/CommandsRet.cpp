@@ -6,17 +6,11 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/09/27 21:38:46 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/03 16:40:16 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "time.h"
 #include "CommandsRet.hpp"
-#include "Commands.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include <sstream>
 
 std::string	to_string(int n) {
 	std::ostringstream	ss;
@@ -24,55 +18,56 @@ std::string	to_string(int n) {
 	return ss.str();
 };
 
-void	PASS(Commands* command)
+void	PASS(Context &context, std::string *args)
 {
-	if (command->getClient().getStats() == REGISTERED)
-		command->getClient().writeMessage(command->sendRep(462));
-	else if (*(command->getArgs().begin()) == command->getServer().getPassword())
-		command->getClient().setState(REGISTERED);
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
+	if (context.client->getStats() == REGISTERED)
+		context.client->writeMessage(cmdmgr->getReply(462, context));
+	else if (*args == Server::getInstance()->getPassword())
+		context.client->setState(REGISTERED);
 	else 
-		command->getClient().writeMessage(command->sendRep(464));
+		context.client->writeMessage(cmdmgr->getReply(464, context));
 };
 
-void	NICK(Commands *command)
+void	NICK(Context &context, std::string *args)
 {
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(431));
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
+	if (!args || args->empty())
+		context.client->writeMessage(cmdmgr->getReply(431, context));
+	else if (Server::getInstance()->isNickTaken(*args)) 
+		context.client->writeMessage(cmdmgr->getReply(433, context));
 	else {
-		std::vector<Client *> clients = command->getServer().getClients();
-		for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++	)
-		{
-			if (*(command->getArgs().begin()) == (*it)->getNickname()) {
-				command->getClient().writeMessage(command->sendRep(433));
-				return;
-			}
-		}
-		command->getClient().setNickname(*(command->getArgs().begin()));
-		command->getClient().writeMessage("NICK :" + command->getClient().getNickname());
+		context.client->setNickname(*args);
+		context.client->writeMessage("NICK :" + context.client->getNickname());
 	}
 }
 
-//add the other fields ?
-void	USER(Commands *command)
+void	USER(Context &context, std::string *args) 
 {
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461, command->getCommand()));
-	else if (!command->getClient().getRealname().empty())
-		command->getClient().writeMessage(command->sendRep(462));
+	(void) args;
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
+	if (!args || args->empty())
+		context.client->writeMessage(cmdmgr->getReply(461, context));
+	else if (!context.client->getRealname().empty())
+		context.client->writeMessage(cmdmgr->getReply(462, context));
 	else {
-		command->getClient().setUsername(*(command->getArgs().begin()));
-		if (!command->getMessage().empty())
-			command->getClient().setRealName(command->getMessage());
+		context.client->setUsername(*args);
+		if (!context.message && context.message->empty())
+			context.client->setRealName(*context.message);
 	}
 };
 
-void	ISON(Commands *command)
-{	
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461));
+void	ISON(Context &context, std::string *args) {
 	size_t pos;
-	std::string str = command->getMessage();
-	std::vector<Client *> clients = command->getServer().getClients();
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
+	if (!args || args->empty())
+		context.client->writeMessage(cmdmgr->getReply(461, context));
+	std::string str = *context.message;
+	std::vector<Client *> clients = Server::getInstance()->getClients();
 	std::vector<std::string> provided;
 	std::vector<std::string> online;
 	while ((pos = str.find(" ")) != std::string::npos)
@@ -101,81 +96,74 @@ void	ISON(Commands *command)
 	std::cout << "isonret == " << ret << std::endl;
 	// if (ret != "Users online: ")
 		// ret.erase(ret.size() - 1, ret.size());
-	command->getClient().writeMessage(ret);
+	context.client->writeMessage(ret);
 }
 
-// void	ISON(Commands *command)
-// {	
-// 	if (command->getArgs().empty())
-// 		command->getClient()->writeMessage(command->sendRep(461));
-// 	std::vector<Client *> clients = command->getServer()->getClients();
-// 	std::vector<std::string> provided = command->getArgs();
-// 	std::vector<std::string> online;
-// 	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
-// 	{
-// 		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
-// 		{
-// 			if ((*it) == (*it2)->getNickname()) {
-// 				online.push_back(*it);
-// 				provided.erase(it);
-// 			}
-// 		}
-// 	}
-// 	std::string ret;
-// 	ret = "Users online: ";
-// 	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
-// 	{
-// 			ret += (*it);
-// 			ret += " ";
-// 	}
-// 	if (ret != "Users online: ")
-// 		ret.erase(ret.size() - 1, ret.size());
-// 	// std::cout << "ISON RET:" << ret << std::endl; //enlever l'espace en plus a la fin
-// 	command->getClient()->writeMessage(ret);
-// }
-
-void	INFO(Commands *command)
+void	INFO(Context &context, std::string *args)
 {
-	command->getClient().writeMessage(command->sendRep(371, "            IRCSERV          "));
-	command->getClient().writeMessage(command->sendRep(371, "            2022             "));
-	command->getClient().writeMessage(command->sendRep(371, "Core developpers:            "));
-	command->getClient().writeMessage(command->sendRep(371, "    rcorenti, rcorenti@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "    lothieve, lothieve@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "    sobouatt, sobouatt@student.42.fr"));
-	command->getClient().writeMessage(command->sendRep(371, "IRCSERV local time: "));
-	command->getClient().writeMessage(command->sendRep(371, "IRCSERV is best experienced with an IRC client"));
-	command->getClient().writeMessage(command->sendRep(374));
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	*context.info = std::string("");
+	*context.info +=	"            IRCSERV                 \n";
+	*context.info +=	"             2022                   \n";
+	*context.info +=	"Core developpers:                   \n";
+	*context.info +=	"    rcorenti, rcorenti@student.42.fr\n";
+	*context.info +=	"    lothieve, lothieve@student.42.fr\n";
+	*context.info +=	"    sobouatt, sobouatt@student.42.fr\n";
+	*context.info +=	"IRCSERV local time:                 \n";
+	*context.info +=	"IRCSERV is best experienced with an IRC client";
+
+
+	/*
+	context.client->writeMessage(cmdmgr->getReply(371, "            IRCSERV          ", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "            2022             ", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "Core developpers:            ", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "    rcorenti, rcorenti@student.42.fr", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "    lothieve, lothieve@student.42.fr", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "    sobouatt, sobouatt@student.42.fr", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "IRCSERV local time: ", context));
+	context.client->writeMessage(cmdmgr->getReply(371, "IRCSERV is best experienced with an IRC client", context));
+	*/
+	context.client->writeMessage(cmdmgr->getReply(371, context));
+	context.client->writeMessage(cmdmgr->getReply(374, context));
+	(void) args;
 }
 
-void	TIME(Commands *command)
+void	TIME(Context &context, std::string *args)
 {
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
 	//struct tm *readable = localtime(command->getServer()->getPing());
-	std::string str = command->sendRep(391, "localtime");
+	std::string str = cmdmgr->getReply(391, context);
 	str += " :";
 	//str += asctime(readable);
-	command->getClient().writeMessage(str);
+	context.client->writeMessage(str);
+	(void) args;
 }
 
 
 
-void PING(Commands *command)
+void	PING(Context &context, std::string *args)
 {
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(409));
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
+	if (!args || args->empty())
+		context.client->writeMessage(cmdmgr->getReply(409, context));
 	else
-		command->getClient().writeMessage("PONG :" + command->getArgs()[0]);
+		context.client->writeMessage("PONG :" + *args);
 }
 
-void	PONG(Commands *command)
+void	PONG(Context &context, std::string *args)
 {
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
 	std::string str;
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(409));
+	if (!args || args->empty())
+		context.client->writeMessage(cmdmgr->getReply(409, context));
 	else
-		command->getClient().setPing(std::time(NULL));
+		context.client->setPing(std::time(NULL));
 }
 
-void	MOTD(Commands* command) {
+void	MOTD(Context &context, std::string *args) {
 	std::string	message = "- irc.UTK.org Message of the Day -\r\n";
 	message += "- 2042-5-4 00:42\r\n";
 	message += "- Welcome on ft_IRC Server !\r\n-\r\n-\r\n";
@@ -193,16 +181,19 @@ void	MOTD(Commands* command) {
 	message += "- UTK SoundSystem Is Here\r\n-\r\n";
 	message += "- Bonne discussion sur notre server !\r\n-\r\n";
 	message += "End of /MOTD command.";
-	command->getClient().writeMessage(message);
+	context.client->writeMessage(message);
+	(void) args;
 }
 
-void	LUSERS(Commands* command) {
+void  LUSERS(Context &context, std::string *args) {
+	CommandManager *cmdmgr = CommandManager::getInstance();
+
 	int						visibles = 0;
 	int						invisibles = 0;
 	int						operators = 0;
 	int						unknown = 0;
-	int						channels = command->getServer().getChannels().size();
-	std::vector<Client*>	clients = command->getServer().getClients();
+	int						channels = Server::getInstance()->getChannels().size();
+	std::vector<Client*>	clients = Server::getInstance()->getClients();
 	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
 		if ((*it)->getStats() == CONNECTED) {
 			if ((*it)->getUsermode().find('i') == std::string::npos)
@@ -215,64 +206,25 @@ void	LUSERS(Commands* command) {
 		else
 			unknown++;
 	}
-	command->getClient().writeMessage(command->sendRep(251, to_string(visibles), to_string(invisibles)));
+	context.client->writeMessage(cmdmgr->getReply(251, context));
 	if (operators)
-		command->getClient().writeMessage(command->sendRep(252, to_string(operators)));
+		context.client->writeMessage(cmdmgr->getReply(252, context));
 	if (unknown)
-		command->getClient().writeMessage(command->sendRep(253, to_string(unknown)));
+		context.client->writeMessage(cmdmgr->getReply(253, context));
 	if (channels)
-		command->getClient().writeMessage(command->sendRep(254, to_string(channels)));
-	command->getClient().writeMessage(command->sendRep(255, to_string(visibles + invisibles)));
+		context.client->writeMessage(cmdmgr->getReply(254, context));
+	context.client->writeMessage(cmdmgr->getReply(255, context));
+	(void)args;
 }
 
-void	MODE(Commands* command) {
+void	MODE(Context &context, std::string *args) {
+	CommandManager *cmdmgr = CommandManager::getInstance();
 	// TODO
-	command->getClient().writeMessage(command->sendRep(221, "+" + command->getClient().getUsermode() + "i"));
+	context.client->writeMessage(cmdmgr->getReply(221, context));
+	(void) args;
 }
 
-void	JOIN(Commands* command) {
-	std::vector<std::string>	names;
-	std::vector<std::string>	keys;
-	int							start = 0;
-	int							end;
-	if (command->getArgs().empty())
-		command->getClient().writeMessage(command->sendRep(461, "JOIN"));
-	else {
-		end = command->getArgs()[0].find(',');
-		while (end != -1) {
-			names.push_back(command->getArgs()[0].substr(start, end - start));
-			start = end + 1;
-			end = command->getArgs()[0].find(',', start);
-		}
-		names.push_back(command->getArgs()[0].substr(start));
-		if (command->getArgs().size() > 1) {
-			start = 0;
-			end = command->getArgs()[1].find(',');
-			while (end != -1) {
-				keys.push_back(command->getArgs()[1].substr(start, end - start));
-				start = end + 1;
-				end = command->getArgs()[1].find(',', start);
-			}
-			keys.push_back(command->getArgs()[1].substr(start));
-		}
-		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++) {
-			if ((*it)[0] != '#' && (*it)[0] != '&')
-				command->getClient().writeMessage(command->sendRep(476, *it));
-			else {
-				Channel& channel = command->getServer().getChannel(*it);
-				if (channel.getClients().empty()) {
-					channel.addClient(command->getClient());
-					channel.addOperator(command->getClient());
-				}
-				else
-					channel.addClient(command->getClient());
-				if (channel.getTopic().empty()) {
-					command->getClient().writeMessage(command->sendRep(331, *it));
-				}
-				else
-					command->getClient().writeMessage(command->sendRep(332, *it, channel.getTopic()));
-				channel.broadcastMessage(command->getClient(), "JOIN :" + *it);
-			}
-		}
-	}
+void	JOIN(Context &context, std::string *args) {
+	(void) context;
+	(void) args;
 }

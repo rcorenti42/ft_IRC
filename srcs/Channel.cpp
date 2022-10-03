@@ -14,23 +14,16 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 
-Channel::Channel(string &name, Client &creator) : _name(name) {
+Channel::Channel(string &name, Client *creator) : _name(name) {
 	ClientMode elem(creator, "");
-	_clientsWhat[creator.getSocket()] = elem;
+	_clientsWhat[creator->getSocket()] = elem;
 }
 
 Channel::Channel() {}
 
-std::vector<Client> Channel::getClients() const {
-    std::vector<Client> clients;
-    clients.reserve(_clientsWhat.size());
-    for (CliCstIt it = _clientsWhat.begin(); it != _clientsWhat.end(); ++it) clients.push_back(it->second.client);
-    return clients;
-}
-
-void                Channel::addClient(Client& client) {
+void                Channel::addClient(Client *client) {
 	ClientMode elem(client, "");
-	_clientsWhat[client.getSocket()] = elem;
+	_clientsWhat[client->getSocket()] = elem;
 }
 
 //std::vector<Client*>	Channel::getClients() {
