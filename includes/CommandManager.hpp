@@ -42,7 +42,7 @@ struct Context {
 class CommandManager {
 private:
 	static CommandManager *_instance;
-	string replies[1000]; 
+	string replies[1000];
 
 	CommandManager();
 public:
