@@ -183,7 +183,7 @@ void	Client::writePrefixMsg(Client& client, std::string message) {
 void	Client::writePrefixMsg(int code, std::string message) {
 	std::stringstream	ss;
 	ss << code;
-	writeMessage(":" + stateMsg() + ss.str() + this->_nickname + message);
+	writeMessage(":" + stateMsg() + ss.str() + " " + this->_nickname + message);
 };
 
 void	Client::writePrefixMsg(int code, Client &client, std::string message) {

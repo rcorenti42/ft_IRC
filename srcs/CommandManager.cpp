@@ -77,7 +77,7 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<info>", *context.info);
 	string_replace(command, "<command>", *context.args);
 	string_replace(command, "<char>", context.ch);
-	return command;
+	return " " + command;
 }
 
 CommandManager *CommandManager::getInstance() {
