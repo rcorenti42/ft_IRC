@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 11:37:40 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 12:18:28 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,22 +251,16 @@ void 	clientMode(Context &context, std::string modestring)
 void MODE(Context &context, std::string *args)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
-	bool channelexist = false;
 	context.info = args;
-	context.channelname = *args;
 	if ((*args)[0] == '#' || (*args)[0] == '&')
 	{
-		std::vector<Channel *> channels = Server::getInstance()->getChannels();
-		for (std::vector<Channel *>::iterator it = channels.begin(); it < channels.end(); it++) {
-			if ((*it)->getName() == *args)
-			{
-				channelexist = true;
-				context.channelmode = (*it)->getMode();
-			}
-		}
-		if (!channelexist)
+		try {context.channel = &Server::getInstance()->findChannel(*args);}
+		catch (Server::ChannelNotFoundException &e)
+		{
 			context.client->writePrefixMsg(cmdmgr->getReply(403, context));
-		else if (args[1].empty() || args[2].empty())
+			return ;
+		}
+		if (args[1].empty() || args[2].empty())
 			context.client->writePrefixMsg(cmdmgr->getReply(324, context));
 		// else
 		// 	channelMode(command, args[1]);
@@ -334,7 +328,6 @@ void JOIN(Context &context, std::string *args)
 				if (channel.getClients().empty())
 					channel.addOperator(*context.client);
 				channel.addClient(*context.client);
-				context.topic = channel.getTopic();
 				if (!channel.getTopic().empty())
 					context.client->writePrefixMsg(cmdmgr->getReply(332, context));
 				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());

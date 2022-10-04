@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 11:14:33 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 12:14:28 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,4 +170,16 @@ size_t					Server::getUnknbr() const
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
 		if ((*it).second->getStats() != CONNECTED) ++count;
 	return count;
+}
+
+Channel					&Server::findChannel(std::string name) {
+	ChanIt it = _channels.find(name);
+	if (it == _channels.end()) throw ChannelNotFoundException();
+	return it->second;
+}
+
+Client					&Server::findClient(std::string name) {
+	for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if (it->second->getNickname() == name) return *it->second;
+	throw ClientNotFoundException();
 }

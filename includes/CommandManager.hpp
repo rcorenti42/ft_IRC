@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:22 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 11:19:50 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:47:55 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ struct Context {
 	string	*info;
 	string	*message;
 	string	*args;
-	string	nbnoinvisibles;
-	string	nbinvisibles;
-	string	nbuoperators;
-	string	nbunknown;
-	string	nbchannels;
-	string	nbclients;
-	string	channelname;
-	string	channelmode;
-	string	topic;
-	string	ch;
 };
 
 class CommandManager {
