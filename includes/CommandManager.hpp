@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:22 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 11:47:55 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:25:57 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ private:
 	CommandManager();
 public:
 
-	static CommandManager *getInstance();
-	string getReply(int code, Context context);
+	static	CommandManager *getInstance();
+	string	getReply(int code, Context context);
+	void	sendReply(int code, Context context);
 };
