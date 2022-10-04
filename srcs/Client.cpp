@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 17:46:24 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 13:39:41 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,7 @@ void    Client::registerClient() {
 	Context context;
 
 	context.client = this;
+	context.channel = 0;
     writePrefixMsg(1, _cmdmgr->getReply(1, context));
 	writePrefixMsg(2, _cmdmgr->getReply(2, context));
 	writePrefixMsg(3, _cmdmgr->getReply(3, context));

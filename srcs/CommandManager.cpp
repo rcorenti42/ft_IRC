@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 11:48:39 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 13:39:28 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,12 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<nbunknown>", serv->getUnknbr());
 	string_replace(command, "<nbchannels>", serv->getChanNbr());
 	string_replace(command, "<nbclients>", serv->getUsrNbr());
-	string_replace(command, "<channel>", context.channel->getName());
-	string_replace(command, "<channel_mode>", context.channel->getMode());
-	string_replace(command, "<topic>", context.channel->getTopic());
+	if (context.channel)
+	{
+		string_replace(command, "<channel>", context.channel->getName());
+		string_replace(command, "<channel_mode>", context.channel->getMode());
+		string_replace(command, "<topic>", context.channel->getTopic());
+	}
 	string_replace(command, "<info>", *context.info);
 	string_replace(command, "<command>", *context.args);
 	return " " + command;
