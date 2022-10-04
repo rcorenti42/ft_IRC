@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 12:18:28 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:03:56 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,33 +68,20 @@ void	ISON(Context &context, std::string *args) {
 	if (!args || args->empty())
 		context.client->writePrefixMsg(cmdmgr->getReply(461, context));
 	std::string str = *context.message;
-	std::vector<Client *> clients = Server::getInstance()->getClients();
-	std::vector<std::string> provided;
-	std::vector<std::string> online;
-	while ((pos = str.find(" ")) != std::string::npos)
+	std::string rep = "Users online:";
+	do
 	{
-		provided.push_back(str.substr(0, pos));
+		pos = str.find(" ");
+		try {
+			Client &cl = Server::getInstance()->findClient(str.substr(0, pos));
+			rep += " ";
+			rep += cl.getNickname();
+		}
+		catch (Server::ClientNotFoundException &e) {}
 		str.erase(0, pos + 1);
 	}
-	provided.push_back(str);
-	for (std::vector<std::string>::iterator it = provided.begin(); it < provided.end(); it++)
-	{
-		for (std::vector<Client *>::iterator it2 = clients.begin(); it2 < clients.end(); it2++)
-		{
-			if ((*it) == (*it2)->getNickname())
-			{
-				online.push_back(*it);
-				provided.erase(it);
-			}
-		}
-	}
-	std::string ret = "Users online: ";
-	for (std::vector<std::string>::iterator it = online.begin(); it < online.end(); it++)
-	{
-		ret += (*it);
-		ret += " ";
-	}
-	context.client->writePrefixMsg(ret);
+	while (pos != std::string::npos);
+	context.client->writePrefixMsg(rep);
 }
 
 void	INFO(Context &context, std::string *args)
