@@ -88,8 +88,10 @@ string CommandManager::getReply(int code, Context context)
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());
 	}
-	string_replace(command, "<info>", *context.info);
-	string_replace(command, "<command>", *context.args);
+	if (context.info)
+		string_replace(command, "<info>", *context.info);
+	if (context.args)
+		string_replace(command, "<command>", *context.args);
 	return " " + command;
 }
 

@@ -100,28 +100,29 @@ void	ISON(Context &context, std::string *args) {
 void	INFO(Context &context, std::string *args)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
-	*context.info = std::string("");
-	*context.info += " ______________________________________________ ";
-	*context.info += "<                    IR-C4                     >";
-	*context.info += "<                    2022                      >";
-	*context.info += "< Core developpers:                            >";
-	*context.info += "<     rcorenti, rcorenti@student.42.fr         >";
-	*context.info += "<     lothieve, lothieve@student.42.fr         >";
-	*context.info += "<     sobouatt, sobouatt@student.42.fr         >";
-	*context.info += "< IR-C4 is best experienced with an IRC client >";
-	*context.info += " ---------------------------------------------- ";
-	*context.info += "                         \\                     ";
-	*context.info += "                          \\                    ";
-	*context.info += "                                       _ _      ";
-	*context.info += "                            | \\__/|  .~    ~.  ";
-	*context.info += "                            /oo `./      .'     ";
-	*context.info += "                           {o__,   \\    {      ";
-	*context.info += "                             / .  . )    \\     ";
-	*context.info += "                             `-` '-' \\    }    ";
-	*context.info += "                            .(   _(   )_.'      ";
-	*context.info += "                           '---.~_ _ _|         ";
+	context.info = new std::string("");
+	*context.info += " ______________________________________________ \r\n";
+	*context.info += "<                    IR-C4                     >\r\n";
+	*context.info += "<                    2022                      >\r\n";
+	*context.info += "< Core developpers:                            >\r\n";
+	*context.info += "<     rcorenti, rcorenti@student.42.fr         >\r\n";
+	*context.info += "<     lothieve, lothieve@student.42.fr         >\r\n";
+	*context.info += "<     sobouatt, sobouatt@student.42.fr         >\r\n";
+	*context.info += "< IR-C4 is best experienced with an IRC client >\r\n";
+	*context.info += " ---------------------------------------------- \r\n";
+	*context.info += "                         \\                     \r\n";
+	*context.info += "                          \\                    \r\n";
+	*context.info += "                                       _ _      \r\n";
+	*context.info += "                            | \\__/|  .~    ~.  \r\n";
+	*context.info += "                            /oo `./      .'     \r\n";
+	*context.info += "                           {o__,   \\    {      \r\n";
+	*context.info += "                             / .  . )    \\     \r\n";
+	*context.info += "                             `-` '-' \\    }    \r\n";
+	*context.info += "                            .(   _(   )_.'      \r\n";
+	*context.info += "                           '---.~_ _ _|         \r\n";
 	context.client->writePrefixMsg(cmdmgr->getReply(371, context));
 	context.client->writePrefixMsg(cmdmgr->getReply(374, context));
+	delete context.info;
 	(void) args;
 }
 
