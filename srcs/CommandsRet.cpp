@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 19:00:17 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:37:40 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void	PASS(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	if (context.client->getStats() == REGISTERED)
-		context.client->writePrefixMsg(462, cmdmgr->getReply(462, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(462, context));
 	else if (*args == Server::getInstance()->getPassword())
 		context.client->setState(REGISTERED);
 	else 
-		context.client->writePrefixMsg(464, cmdmgr->getReply(464, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(464, context));
 };
 
 void	NICK(Context &context, std::string *args)
@@ -36,9 +36,9 @@ void	NICK(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	context.args = args;
 	if (!args || args->empty())
-		context.client->writePrefixMsg(431, cmdmgr->getReply(431, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(431, context));
 	else if (Server::getInstance()->isNickTaken(*args)) 
-		context.client->writePrefixMsg(433, cmdmgr->getReply(433, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(433, context));
 	else {
 		context.client->setNickname(*args);
 		context.client->writePrefixMsg("NICK :" + context.client->getNickname());
@@ -51,9 +51,9 @@ void	USER(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	if (!args || args->empty())
-		context.client->writePrefixMsg(461, cmdmgr->getReply(461, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(461, context));
 	else if (!context.client->getRealname().empty())
-		context.client->writePrefixMsg(462, cmdmgr->getReply(462, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(462, context));
 	else {
 		context.client->setUsername(*args);
 		if (!context.message || context.message->empty())
@@ -66,7 +66,7 @@ void	ISON(Context &context, std::string *args) {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	if (!args || args->empty())
-		context.client->writePrefixMsg(461, cmdmgr->getReply(461, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(461, context));
 	std::string str = *context.message;
 	std::vector<Client *> clients = Server::getInstance()->getClients();
 	std::vector<std::string> provided;
@@ -120,8 +120,8 @@ void	INFO(Context &context, std::string *args)
 	*context.info += "                             `-` '-' \\    }    ";
 	*context.info += "                            .(   _(   )_.'      ";
 	*context.info += "                           '---.~_ _ _|         ";
-	context.client->writePrefixMsg(371, cmdmgr->getReply(371, context));
-	context.client->writePrefixMsg(374, cmdmgr->getReply(374, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(371, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(374, context));
 	(void) args;
 }
 
@@ -130,7 +130,7 @@ void	PING(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	if (!args || args->empty())
-		context.client->writePrefixMsg(409, cmdmgr->getReply(409, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(409, context));
 	else
 		context.client->writePrefixMsg("PONG :" + *args);
 }
@@ -141,7 +141,7 @@ void	PONG(Context &context, std::string *args)
 
 	std::string str;
 	if (!args || args->empty())
-		context.client->writePrefixMsg(409, cmdmgr->getReply(409, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(409, context));
 	else
 		context.client->setPing(std::time(NULL));
 }
@@ -195,38 +195,11 @@ void	MOTD(Context &context, std::string *args) {
 void  LUSERS(Context &context, std::string *args) {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
-	int						visibles = 0;
-	int						invisibles = 0;
-	int						operators = 0;
-	int						unknown = 0;
-	int						channels = Server::getInstance()->getChannels().size();
-	std::vector<Client*>	clients = Server::getInstance()->getClients();
-	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
-		if ((*it)->getStats() == CONNECTED) {
-			if ((*it)->getMode().find('i') == std::string::npos)
-				visibles++;
-			else
-				invisibles++;
-			if ((*it)->getMode().find('o') != std::string::npos)
-				operators++;
-		}
-		else
-			unknown++;
-	}
-	context.nbnoinvisibles = to_string(visibles);
-	context.nbinvisibles = to_string(invisibles);
-	context.nbuoperators = to_string(operators);
-	context.nbunknown = to_string(unknown);
-	context.nbchannels = to_string(channels);
-	context.nbclients = to_string(visibles + invisibles);
-	context.client->writePrefixMsg(251, cmdmgr->getReply(251, context));
-	if (operators)
-		context.client->writePrefixMsg(252, cmdmgr->getReply(252, context));
-	if (unknown)
-		context.client->writePrefixMsg(253, cmdmgr->getReply(253, context));
-	if (channels)
-		context.client->writePrefixMsg(254, cmdmgr->getReply(254, context));
-	context.client->writePrefixMsg(255, cmdmgr->getReply(255, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(251, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(252, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(253, context));
+	context.client->writePrefixMsg(cmdmgr->getReply(254, context));
+	context.client->writeMessage(cmdmgr->getReply(255, context));
 	(void)args;
 }
 
@@ -246,7 +219,7 @@ void 	clientMode(Context &context, std::string modestring)
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
 	if (modestring.find_first_not_of("isw") != std::string::npos)
-		context.client->writePrefixMsg(501, cmdmgr->getReply(501, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(501, context));
 	if (mode == 0) {
 		changes += '-';
 		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) != std::string::npos) {
@@ -294,9 +267,9 @@ void MODE(Context &context, std::string *args)
 			}
 		}
 		if (!channelexist)
-			context.client->writePrefixMsg(403, cmdmgr->getReply(403, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(403, context));
 		else if (args[1].empty() || args[2].empty())
-			context.client->writePrefixMsg(324, cmdmgr->getReply(324, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(324, context));
 		// else
 		// 	channelMode(command, args[1]);
 	}
@@ -307,14 +280,14 @@ void MODE(Context &context, std::string *args)
 			std::vector<Client *> clients = Server::getInstance()->getClients();
 			for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
 				if ((*it)->getNickname() == args[0]) {
-					context.client->writePrefixMsg(502, cmdmgr->getReply(502, context));
+					context.client->writePrefixMsg(cmdmgr->getReply(502, context));
 					return ;
 				}
 			++context.info;
-			context.client->writePrefixMsg(401, cmdmgr->getReply(401, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(401, context));
 		}
 		else if (args[1].empty() || args[2].empty())
-			context.client->writePrefixMsg(221, cmdmgr->getReply(221, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(221, context));
 		else
 			clientMode(context, args[1]);
 	
@@ -329,7 +302,7 @@ void JOIN(Context &context, std::string *args)
 	int start = 0;
 	int end;
 	if (!args || args->empty())
-		context.client->writePrefixMsg(461, cmdmgr->getReply(461, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(461, context));
 	else
 	{
 		end = args->find(',');
@@ -356,7 +329,7 @@ void JOIN(Context &context, std::string *args)
 		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++)
 		{
 			if ((*it)[0] != '#' && (*it)[0] != '&')
-				context.client->writePrefixMsg(476, *context.client, cmdmgr->getReply(476, context));
+				context.client->writePrefixMsg(*context.client, cmdmgr->getReply(476, context));
 			else {
 				Channel& channel = Server::getInstance()->getChannel(*it);
 				context.channel = &channel;
@@ -365,7 +338,7 @@ void JOIN(Context &context, std::string *args)
 				channel.addClient(*context.client);
 				context.topic = channel.getTopic();
 				if (!channel.getTopic().empty())
-					context.client->writePrefixMsg(322, cmdmgr->getReply(332, context));
+					context.client->writePrefixMsg(cmdmgr->getReply(332, context));
 				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
 			}
 		}
@@ -379,11 +352,11 @@ void	PRIVMSG(Context &context, std::string *args) {
 	std::vector<std::string>	channels;
 	std::vector<std::string>	clients;
 	if (!args || args->empty()) {
-		context.client->writePrefixMsg(411, cmdmgr->getReply(411, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(411, context));
 		return ;
 	}
 	if (!context.message || context.message->empty()) {
-		context.client->writePrefixMsg(412, cmdmgr->getReply(412, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(412, context));
 		return ;
 	}
 	end = args->find(',');
@@ -416,7 +389,7 @@ void	PART(Context &context, std::string *args) {
 	int							end;
 	std::vector<std::string>	channels;
 	if (!args || args->empty()) {
-		context.client->writePrefixMsg(403, cmdmgr->getReply(403, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(403, context));
 		return ;
 	}
 		end = args->find(',');
@@ -429,30 +402,30 @@ void	PART(Context &context, std::string *args) {
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
 			if (!Server::getInstance()->getChannel(*it).getClients().empty()) {
 				if (Server::getInstance()->getChannel(*it).getClientsMap().find(context.client->getSocket()) == Server::getInstance()->getChannel(*it).getClientsMap().end())
-					context.client->writePrefixMsg(403, cmdmgr->getReply(403, context));
+					context.client->writePrefixMsg(cmdmgr->getReply(403, context));
 				else {
 					Server::getInstance()->getChannel(*it).broadcastMessage(*context.client, "PART " + *it);
 					Server::getInstance()->getChannel(*it).removeClient(*context.client);
 				}
 			}
-			else context.client->writePrefixMsg(403, cmdmgr->getReply(403, context));
+			else context.client->writePrefixMsg(cmdmgr->getReply(403, context));
 		}
 };
 
 void	TOPIC(Context &context, std::string *args) {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	if (!args || args->empty()) {
-		context.client->writePrefixMsg(403, cmdmgr->getReply(403, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(403, context));
 		return ;
 	}
 	if (!context.message || context.message->empty()) {
 		if (Server::getInstance()->getChannel(*args).getTopic().empty())
-			context.client->writePrefixMsg(331, cmdmgr->getReply(331, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(331, context));
 		else
-			context.client->writePrefixMsg(332, cmdmgr->getReply(332, context));
+			context.client->writePrefixMsg(cmdmgr->getReply(332, context));
 	}
 	else if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname()))
-		context.client->writePrefixMsg(482, cmdmgr->getReply(482, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(482, context));
 	else {
 		Server::getInstance()->getChannel(*args).setTopic(*context.message);
 		context.client->writePrefixMsg(/*command->getPacket()*/ "zbeb zbeb");
@@ -461,7 +434,7 @@ void	TOPIC(Context &context, std::string *args) {
 
 void	OPER(Context &context, std::string *args) {
 		CommandManager *cmdmgr = CommandManager::getInstance();
-		context.client->writePrefixMsg(491, cmdmgr->getReply(491, context));
+		context.client->writePrefixMsg(cmdmgr->getReply(491, context));
 		(void) args;
 };
 
