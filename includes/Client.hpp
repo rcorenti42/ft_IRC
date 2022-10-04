@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 17:45:42 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 13:41:43 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class Client {
 	std::string									_quitMessage;
     std::vector<std::string>    				_packets;
 	std::vector<Commands*>						_commands;
-	std::map<std::string, t_command>	_listCommands;
+	std::map<std::string, t_command>			_listCommands;
     time_t                      				_ping;
 	CommandManager								*_cmdmgr;
 public:

@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 13:39:28 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 14:43:32 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,3 +99,8 @@ CommandManager *CommandManager::getInstance() {
 	if (!_instance) _instance = new CommandManager();
 	return _instance;
 }
+
+void CommandManager::sendReply(int code, Context context) {
+	context.client->writePrefixMsg(code, getReply(code, context));
+}
+
