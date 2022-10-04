@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 13:39:41 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:05:32 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ std::string	Client::stateMsg() {
 	}
 	return state + " ";
 };
+
 void    Client::packetsHandler() {
 	std::vector<Commands*>	commands;
 	e_state					state = _state;
@@ -129,7 +130,10 @@ void    Client::packetsHandler() {
 				if ((*it)->getCommand() != "NICK" && (*it)->getCommand() != "USER")
 					continue ;
 			if (_listCommands.count((*it)->getCommand()))
+			{
+				(*it)->getArgs().push_back("wndkbw");
 				_listCommands[(*it)->getCommand()]((*it)->getContext(), &((*it)->getArgs())[0]);
+			}
 			commands.push_back(*it);
 		}
 		for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {

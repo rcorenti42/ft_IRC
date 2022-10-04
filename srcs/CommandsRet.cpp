@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 14:41:31 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:04:30 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,44 +281,45 @@ void JOIN(Context &context, std::string *args)
 	int start = 0;
 	int end;
 	if (!args || args->empty())
-		cmdmgr->sendReply(461, context);
-	else
 	{
+		cmdmgr->sendReply(461, context);
+		return ;
+	}
+	end = args->find(',');
+	while (end != -1)
+	{
+		names.push_back(args->substr(start, end - start));
+		start = end + 1;
+		end = args->find(',', start);
+	}
+	names.push_back(args->substr(start));
+	std::cout << *args << std::endl;
+	if (!args[1].empty())
+	{
+		++args;
+		start = 0;
 		end = args->find(',');
 		while (end != -1)
 		{
-			names.push_back(args->substr(start, end - start));
+			keys.push_back(args->substr(start, end - start));
 			start = end + 1;
 			end = args->find(',', start);
 		}
-		names.push_back(args->substr(start));
-		if (!args[1].empty())
-		{
-			++args;
-			start = 0;
-			end = args->find(',');
-			while (end != -1)
-			{
-				keys.push_back(args->substr(start, end - start));
-				start = end + 1;
-				end = args->find(',', start);
-			}
-			keys.push_back(args->substr(start));
-		}
-		for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++)
-		{
-			if ((*it)[0] != '#' && (*it)[0] != '&')
-				context.client->writePrefixMsg(*context.client, cmdmgr->getReply(476, context));
-			else {
-				Channel& channel = Server::getInstance()->getChannel(*it);
-				context.channel = &channel;
-				if (channel.getClients().empty())
-					channel.addOperator(*context.client);
-				channel.addClient(*context.client);
-				if (!channel.getTopic().empty())
-					cmdmgr->sendReply(332, context);
-				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
-			}
+		keys.push_back(args->substr(start));
+	}
+	for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); it++)
+	{
+		if ((*it)[0] != '#' && (*it)[0] != '&')
+			context.client->writePrefixMsg(*context.client, cmdmgr->getReply(476, context));
+		else {
+			Channel& channel = Server::getInstance()->getChannel(*it);
+			context.channel = &channel;
+			if (channel.getClients().empty())
+				channel.addOperator(*context.client);
+			channel.addClient(*context.client);
+			if (!channel.getTopic().empty())
+				cmdmgr->sendReply(332, context);
+			channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
 		}
 	}
 };

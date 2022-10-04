@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 17:36:55 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:07:05 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ public:
 	std::string					getCommand() const;
 	std::string					getMessage() const;
 	std::string					getPacket() const;
-	std::vector<std::string>	getArgs() const;
+	std::vector<std::string>	&getArgs();
 	Client&						getClient();
 	Server&						getServer();
 	//std::string					sendRep(int, Context &);

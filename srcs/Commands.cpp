@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 19:04:22 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:07:45 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ std::string					Commands::getMessage() const {
 std::string					Commands::getPacket() const {
 	return this->_packet;
 };
-std::vector<std::string>	Commands::getArgs() const {
+std::vector<std::string>	&Commands::getArgs() {
 	return this->_args;
 };
 Client&						Commands::getClient() {
