@@ -24,6 +24,17 @@ struct Context {
 	Channel	*channel;
 	string	*info;
 	string	*message;
+	string	*args;
+	string	nbnoinvisibles;
+	string	nbinvisibles;
+	string	nbuoperators;
+	string	nbunknown;
+	string	nbchannels;
+	string	nbclients;
+	string	channelname;
+	string	channelmode;
+	string	topic;
+	string	ch;
 };
 
 class CommandManager {

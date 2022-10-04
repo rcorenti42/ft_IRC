@@ -34,8 +34,7 @@ enum e_state {
     CONNECTED,
     CHECKPASS,
     REGISTERED,
-    NONE,
-	DEBUG
+    NONE
 };
 
 typedef void (*t_command)(Context &, std::string *);

@@ -14,11 +14,11 @@
 #include "CommandsReply.hpp"
 
 std::string	RPL_WELCOME(std::string nick, std::string user, std::string addr) {
-	return ":Welcome to the Internet Relay Network " + nick + "!" + user + "@" + addr;
+	return ":Welcome to the IR-C4 Network, " + nick + "!" + user + "@" + addr;
 };
 
 std::string	RPL_YOURHOST() {
-	return ":Your host is UTK, running version 420";
+	return ":Your host is irc.ir-c4.org, running version 420";
 };
 
 std::string	RPL_CREATED() {

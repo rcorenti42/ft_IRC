@@ -19,21 +19,24 @@ void	PASS(Context &context, std::string *args);
 void	NICK(Context &context, std::string *args);
 void	USER(Context &context, std::string *args);
 void	INFO(Context &context, std::string *args);
-void	TIME(Context &context, std::string *args);
 void	MOTD(Context &context, std::string *args);
-void  LUSERS(Context &context, std::string *args);
+void	LUSERS(Context &context, std::string *args);
 void	PING(Context &context, std::string *args);
 void	PONG(Context &context, std::string *args);
 void	MODE(Context &context, std::string *args);
 void	ISON(Context &context, std::string *args);
 void	JOIN(Context &context, std::string *args);
+void	PRIVMSG(Context &context, std::string *args);
+void	PART(Context &context, std::string *args);
+void	TOPIC(Context &context, std::string *args);
+void	QUIT(Context &context, std::string *args);
+void	OPER(Context &context, std::string *args);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
 	_listCommands["PASS"] = PASS;
 	_listCommands["NICK"] = NICK;
 	_listCommands["USER"] = USER;
-	_listCommands["TIME"] = TIME;
 	_listCommands["MOTD"] = MOTD;
 	_listCommands["LUSERS"] = LUSERS;
 	_listCommands["PING"] = PING;
@@ -41,6 +44,11 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode
 	_listCommands["MODE"] = MODE;
 	_listCommands["JOIN"] = JOIN;
 	_listCommands["ISON"] = ISON;
+	_listCommands["PRIVMSG"] = PRIVMSG;
+	_listCommands["PART"] = PART;
+	_listCommands["TOPIC"] = TOPIC;
+	_listCommands["QUIT"] = QUIT;
+	_listCommands["OPER"] = OPER;
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -106,7 +114,7 @@ std::string	Client::stateMsg() {
 			state += "@" + _addr;
 		}
 	}
-	return state;
+	return state + " ";
 };
 void    Client::packetsHandler() {
 	std::vector<Commands*>	commands;
