@@ -117,7 +117,7 @@ void	PING(Context &context, std::string *args)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
-	if (!args || args->empty())
+	if (args->empty())
 		cmdmgr->sendReply(409, context);
 	else
 		context.client->writePrefixMsg("PONG :" + *args);
@@ -128,14 +128,16 @@ void	PONG(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	std::string str;
-	if (!args || args->empty())
+	if (args->empty())
 		cmdmgr->sendReply(409, context);
 	else
 		context.client->setPing(std::time(NULL));
 }
 
 void	MOTD(Context &context, std::string *args) {
-	std::string message = "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
+	std::string	message = " - IR-C4 Message of the Day -\r\n";
+	message += "- 2042-5-4 00:42\r\n";
+	message += "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
 	message += "-       ,---,,-.----.\r\n";
 	message += "-    ,`--.' |\\    /  \\\r\n";
 	message += "-    |   :  :;   :    \\\r\n";
@@ -185,7 +187,7 @@ void  LUSERS(Context &context, std::string *args) {
 	cmdmgr->sendReply(252, context);
 	cmdmgr->sendReply(253, context);
 	cmdmgr->sendReply(254, context);
-	context.client->writeMessage(cmdmgr->getReply(255, context));
+	cmdmgr->sendReply(255, context);
 	(void)args;
 }
 

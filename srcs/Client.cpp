@@ -177,11 +177,11 @@ void    Client::receiveMessage(Server* serv) {
 };
 
 void	Client::writePrefixMsg(std::string message) {
-	writeMessage(":" + stateMsg() + this->_nickname + message);
+	writeMessage(":" + stateMsg() + message);
 };
 
 void	Client::writePrefixMsg(Client& client, std::string message) {
-	client.writeMessage(":" + stateMsg() + this->_nickname + message);
+	client.writeMessage(":" + stateMsg() + message);
 };
 
 void	Client::writePrefixMsg(int code, std::string message) {
@@ -189,10 +189,8 @@ void	Client::writePrefixMsg(int code, std::string message) {
 	std::string			str;
 	ss << code;
 	str = ss.str();
-	if (str.length() == 2)
-		str = "0" + str;
-	if (str.length() == 1)
-		str = "00" + str;
+	if (str.length() < 3)
+		str = str.length() == 2 ? "0" : "00" + str;
 	writeMessage(":" + stateMsg() + str + " " + this->_nickname + message);
 };
 

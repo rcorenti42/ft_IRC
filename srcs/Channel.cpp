@@ -74,7 +74,7 @@ void                	Channel::removeInvit(Client& client) {
 
 void                	Channel::broadcastMessage(Client& client, string message) {
 	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); it++)
-		client.writePrefixMsg(*it->second, message);
+		client.writePrefixMsg(*it->second, " " + message);
 };
 
 void           			Channel::setName(string name) {_name = name;}
