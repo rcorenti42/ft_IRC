@@ -84,5 +84,8 @@ Server&						Commands::getServer() {
 Context &Commands::getContext() {
 	context.client = _client;
 	context.message = &_message;
+	context.channel = NULL;
+	context.info = NULL;
+	context.args = NULL;
 	return context;
 }
