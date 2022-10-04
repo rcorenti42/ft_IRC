@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 11:16:45 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 12:08:54 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,16 @@ class Server {
 public:
 	typedef std::map<int, Client *>::iterator ClientIt;
 	typedef std::map<int, Client *>::const_iterator ConstClientIt;
+	typedef std::map<std::string, Channel>::iterator ChanIt;
+	typedef std::map<std::string, Channel>::const_iterator ConstChanIt;
+
+	class ChannelNotFoundException : std::exception {
+		const char *what() const throw() {return NULL;}
+	};
+
+	class ClientNotFoundException : std::exception {
+		const char *what() const throw() {return NULL;}
+	};
 
 	static Server			*getInstance();
     void           	init(int port, char *password);
@@ -65,4 +75,6 @@ public:
 	size_t					getChanNbr() const;
 	size_t					getOPNbr() const;
 	size_t					getUnknbr() const;
+	Channel					&findChannel(std::string name);
+	Client					&findClient(std::string name);
 };
