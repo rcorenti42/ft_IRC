@@ -10,18 +10,8 @@ SOURCES = 	srcs/main.cpp \
 			srcs/Channel.cpp \
 			srcs/Commands.cpp \
 			srcs/CommandsRet.cpp \
-			srcs/CommandsReply.cpp \
 			srcs/ConnectionManager.cpp \
 			srcs/CommandManager.cpp
-
-HEADERS = 	includes/Server.hpp \
-			includes/Client.hpp \
-			includes/Channel.hpp \
-			includes/Commands.hpp \
-			includes/CommandsRet.hpp \
-			includes/CommandsReply.hpp \
-			includes/ConnectionManager.hpp \
-			includes/CommandManager.hpp
 
 OBJECTS	= $(SOURCES:.cpp=.o)
 

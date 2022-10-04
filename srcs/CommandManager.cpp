@@ -14,16 +14,16 @@
 CommandManager *CommandManager::_instance = 0;
 
 CommandManager::CommandManager() {
-	replies[1] = "Welcome to the <network> Network <nickname>";
-	replies[2] = "Your host is <servername>, running version <version>";
-	replies[3] = "This server was created <datetime>";
+	replies[1] = ":Welcome to the <network> Network <nickname>";
+	replies[2] = ":Your host is <servername>, running version <version>";
+	replies[3] = ":This server was created <datetime>";
 	replies[4] = "<servername> <version> <umodes> <cmodes>";
 	replies[221] = "<user_mode>";
-	replies[251] = "There are <nbnoinvisibles> users and <nbinvisibles> invisible on <nbservers> servers";
+	replies[251] = ":There are <nbnoinvisibles> users and <nbinvisibles> invisible on <nbservers> servers";
 	replies[252] =	"<nbuoperators> : operators online";
 	replies[253] =	"<nbunknown> : unknown connections";
 	replies[254] = "<nbchannels> : channels formed";
-	replies[255] = "I have <nbclients> clients and 1 servers";
+	replies[255] = ":I have <nbclients> clients and 1 servers";
 	replies[324] = "<channel> <channel_mode>";
 	replies[331] = "<channel> : No topic is set";
 	replies[332] = "<channel> : <topic>";
@@ -33,17 +33,17 @@ CommandManager::CommandManager() {
 	replies[374] = "End of /info list";
 	replies[401] = "<nickname> : No such nick";
 	replies[403] = "<info> : No such channel";
-	replies[409] = "No origin specified";
-	replies[431] = "No nickname given";
+	replies[409] = ":No origin specified";
+	replies[431] = ":No nickname given";
 	replies[442] = "<channel> : You're not on that channel";
 	replies[461] = "<command> : Not enough parameters";
-	replies[464] = "Password incorrect";
+	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> : Channel key already set";
 	replies[472] = "<info> : Is unknown mod char to me";
 	replies[476] = "<channel> : The given channel mask was invalid";
 	replies[482] = "<channel> : You're not a channel operator";
-	replies[501] = "Unknown mode flag";
-	replies[502] = "Can't change mode for other users";
+	replies[501] = ":Unknown MODE flag";
+	replies[502] = ":Can't change mode for other users";
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)
