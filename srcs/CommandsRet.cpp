@@ -40,8 +40,8 @@ void	NICK(Context &context, std::string *args)
 	else if (Server::getInstance()->isNickTaken(*args)) 
 		context.client->writePrefixMsg(cmdmgr->getReply(433, context));
 	else {
+		context.client->writePrefixMsg("NICK :" + *args);
 		context.client->setNickname(*args);
-		context.client->writePrefixMsg("NICK :" + context.client->getNickname());
 	}
 }
 
@@ -147,9 +147,7 @@ void	PONG(Context &context, std::string *args)
 }
 
 void	MOTD(Context &context, std::string *args) {
-	std::string message = "- IR-C4 Message of the Day -\r\n";
-	message += "- 2042-5-4 00:42\r\n";
-	message += "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
+	std::string message = "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
 	message += "-       ,---,,-.----.\r\n";
 	message += "-    ,`--.' |\\    /  \\\r\n";
 	message += "-    |   :  :;   :    \\\r\n";

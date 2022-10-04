@@ -182,7 +182,13 @@ void	Client::writePrefixMsg(Client& client, std::string message) {
 
 void	Client::writePrefixMsg(int code, std::string message) {
 	std::stringstream	ss;
+	std::string			str;
 	ss << code;
+	str = ss.str();
+	if (str.length() == 2)
+		str = "0" + str;
+	if (str.length() == 1)
+		str = "00" + str;
 	writeMessage(":" + stateMsg() + ss.str() + " " + this->_nickname + message);
 };
 
