@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 11:19:09 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:48:39 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ CommandManager::CommandManager() {
 	replies[371] = "<info>";
 	replies[374] = "End of /info list";
 	replies[401] = "<nickname> : No such nick";
-	replies[403] = "<channel> : No such channel";
+	replies[403] = "<info> : No such channel";
 	replies[409] = "No origin specified";
 	replies[431] = "No nickname given";
 	replies[442] = "<channel> : You're not on that channel";
 	replies[461] = "<command> : Not enough parameters";
 	replies[464] = "Password incorrect";
 	replies[467] = "<channel> : Channel key already set";
-	replies[472] = "<char> : Is unknown mod char to me";
+	replies[472] = "<info> : Is unknown mod char to me";
 	replies[476] = "<channel> : The given channel mask was invalid";
 	replies[482] = "<channel> : You're not a channel operator";
 	replies[501] = "Unknown mode flag";
@@ -82,12 +82,11 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<nbunknown>", serv->getUnknbr());
 	string_replace(command, "<nbchannels>", serv->getChanNbr());
 	string_replace(command, "<nbclients>", serv->getUsrNbr());
-	string_replace(command, "<channel>", context.channelname);
-	string_replace(command, "<channel_mode>", context.channelmode);
-	string_replace(command, "<topic>", context.topic);
+	string_replace(command, "<channel>", context.channel->getName());
+	string_replace(command, "<channel_mode>", context.channel->getMode());
+	string_replace(command, "<topic>", context.channel->getTopic());
 	string_replace(command, "<info>", *context.info);
 	string_replace(command, "<command>", *context.args);
-	string_replace(command, "<char>", context.ch);
 	return " " + command;
 }
 

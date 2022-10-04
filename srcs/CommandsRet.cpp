@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 11:37:40 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:47:43 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,6 @@ void MODE(Context &context, std::string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	bool channelexist = false;
 	context.info = args;
-	context.channelname = *args;
 	if ((*args)[0] == '#' || (*args)[0] == '&')
 	{
 		std::vector<Channel *> channels = Server::getInstance()->getChannels();
@@ -263,7 +262,7 @@ void MODE(Context &context, std::string *args)
 			if ((*it)->getName() == *args)
 			{
 				channelexist = true;
-				context.channelmode = (*it)->getMode();
+				context.channel = *it;
 			}
 		}
 		if (!channelexist)
@@ -336,7 +335,6 @@ void JOIN(Context &context, std::string *args)
 				if (channel.getClients().empty())
 					channel.addOperator(*context.client);
 				channel.addClient(*context.client);
-				context.topic = channel.getTopic();
 				if (!channel.getTopic().empty())
 					context.client->writePrefixMsg(cmdmgr->getReply(332, context));
 				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
