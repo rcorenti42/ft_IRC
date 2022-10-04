@@ -40,7 +40,7 @@ public:
 	std::vector<std::string>	getArgs() const;
 	Client&						getClient();
 	Server&						getServer();
-	std::string					sendRep(int, Context &);
+	//std::string					sendRep(int, Context &);
 	Context						&getContext();
 };
 

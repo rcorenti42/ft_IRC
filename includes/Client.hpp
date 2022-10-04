@@ -75,8 +75,10 @@ public:
 	std::string	stateMsg();
     void    	packetsHandler();
     void    	receiveMessage(Server* serv);
-	void    	writePrefixMsg(Client &client, std::string message);
-	void    	writePrefixMsg(std::string message);
+	void    	writePrefixMsg(int code, Client &client, std::string message);
+	void    	writePrefixMsg(int code, std::string message);
+	void		writePrefixMsg(Client& client, std::string message);
+	void		writePrefixMsg(std::string message);
     void    	writeMessage(std::string message);
     void    	sendMessage();
     void    	registerClient();

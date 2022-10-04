@@ -77,9 +77,9 @@ Client&						Commands::getClient() {
 Server&						Commands::getServer() {
 	return *this->_server;
 };
-std::string					Commands::sendRep(int code, Context &context) {
-	return CommandManager::getInstance()->getReply(code, context);
-};
+//std::string					Commands::sendRep(int code, Context &context) {
+//	return code + " " + context.client->getNickname() + " " + CommandManager::getInstance()->getReply(code, context);
+//};
 
 Context &Commands::getContext() {
 	context.client = _client;

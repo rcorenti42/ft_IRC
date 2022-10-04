@@ -172,12 +172,22 @@ void    Client::receiveMessage(Server* serv) {
     packetsHandler();
 };
 
-void	Client::writePrefixMsg(Client &client, std::string message) {
-	client.writeMessage(":" + stateMsg() + message);
+void	Client::writePrefixMsg(std::string message) {
+	writeMessage(":" + stateMsg() + this->_nickname + message);
 };
 
-void	Client::writePrefixMsg(std::string message) {
-	writeMessage(":" + stateMsg() + message);
+void	Client::writePrefixMsg(Client& client, std::string message) {
+	client.writeMessage(":" + stateMsg() + this->_nickname + message);
+};
+
+void	Client::writePrefixMsg(int code, std::string message) {
+	std::stringstream	ss;
+	ss << code;
+	writeMessage(":" + stateMsg() + ss.str() + this->_nickname + message);
+};
+
+void	Client::writePrefixMsg(int code, Client &client, std::string message) {
+	client.writePrefixMsg(code, message);
 };
 
 void    Client::writeMessage(std::string message) {
@@ -194,14 +204,15 @@ void    Client::sendMessage() {
             send(this->_sock, packet.c_str(), packet.size(), 0);
     }
 };
+
 void    Client::registerClient() {
 	Context context;
 
 	context.client = this;
-    writeMessage(_cmdmgr->getReply(1, context));
-	writeMessage(_cmdmgr->getReply(2, context));
-	writeMessage(_cmdmgr->getReply(3, context));
-	writeMessage(_cmdmgr->getReply(4, context));
+    writePrefixMsg(1, _cmdmgr->getReply(1, context));
+	writePrefixMsg(2, _cmdmgr->getReply(2, context));
+	writePrefixMsg(3, _cmdmgr->getReply(3, context));
+	writePrefixMsg(4, _cmdmgr->getReply(4, context));
 	LUSERS(context, 0);
 	MOTD(context, 0);
 }
