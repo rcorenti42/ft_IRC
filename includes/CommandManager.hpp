@@ -6,13 +6,15 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:22 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/03 16:30:26 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:19:50 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <string>
 #include "Client.hpp"
+#include <sstream>
+#include "Server.hpp"
 
 using std::string;
 class Channel;

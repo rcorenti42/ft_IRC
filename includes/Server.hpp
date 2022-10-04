@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 17:36:07 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:16:45 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "ConnectionManager.hpp"
 
 class Client;
+class Channel;
 
 class Server {
 	static Server					*_instance;
@@ -41,6 +42,7 @@ class Server {
 	Server();
 public:
 	typedef std::map<int, Client *>::iterator ClientIt;
+	typedef std::map<int, Client *>::const_iterator ConstClientIt;
 
 	static Server			*getInstance();
     void           	init(int port, char *password);
@@ -57,4 +59,10 @@ public:
 	void					display();
     void                    run();
 	bool					isNickTaken(std::string nick);
+	size_t					getUsrNbr() const;
+	size_t					getInvisNbr() const;
+	size_t					getVisibleNbr() const;
+	size_t					getChanNbr() const;
+	size_t					getOPNbr() const;
+	size_t					getUnknbr() const;
 };

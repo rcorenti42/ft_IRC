@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/03 17:46:47 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:14:33 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,3 +138,36 @@ void                    Server::run() {
 		display();
 	}
 };
+
+size_t					Server::getUsrNbr() const {return _clients.size();}
+size_t					Server::getChanNbr() const {return _channels.size();}
+size_t					Server::getInvisNbr() const
+{
+	size_t count = 0;
+	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') != std::string::npos) ++count;
+	return count;
+}
+size_t					Server::getVisibleNbr() const
+{
+	size_t count = 0;
+	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') == std::string::npos) ++count;
+	return count;
+}
+
+size_t					Server::getOPNbr() const
+{
+	size_t count = 0;
+	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('o') != std::string::npos) ++count;
+	return count;
+}
+
+size_t					Server::getUnknbr() const
+{
+	size_t count = 0;
+	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if ((*it).second->getStats() != CONNECTED) ++count;
+	return count;
+}

@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/03 16:26:39 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:19:09 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,19 @@ static void	string_replace(string &str, const string &substr, const string &repl
 	str.replace(pos, substr.length(), repl);
 }
 
+static void	string_replace(string &str, const string &substr, size_t repl)
+{
+	std::ostringstream ss;
+	ss << repl;
+
+	size_t pos = str.find(substr);
+	if (pos == string::npos) return;
+	str.replace(pos, substr.length(), ss.str());
+}
+
 string CommandManager::getReply(int code, Context context)
 {
+	Server *serv = Server::getInstance();
 	string command = replies[code];
 	string_replace(command, "<network>", "IR-C4");
 	string_replace(command, "<nickname>", context.client->getNickname());
@@ -64,13 +75,13 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<umodes>", "is");
 	string_replace(command, "<cmodes>", "opsitnmlbvk");
 	string_replace(command, "<user_mode>", context.client->getMode());
-	string_replace(command, "<nbnoinvisibles>", context.nbnoinvisibles);
-	string_replace(command, "<nbinvisibles>", context.nbinvisibles);
+	string_replace(command, "<nbnoinvisibles>", serv->getVisibleNbr());
+	string_replace(command, "<nbinvisibles>", serv->getInvisNbr());
 	string_replace(command, "<nbservers>", "1");
-	string_replace(command, "<nbuoperators>", context.nbuoperators);
-	string_replace(command, "<nbunknown>", context.nbunknown);
-	string_replace(command, "<nbchannels>", context.nbchannels);
-	string_replace(command, "<nbclients>", context.nbclients);
+	string_replace(command, "<nbuoperators>", serv->getOPNbr());
+	string_replace(command, "<nbunknown>", serv->getUnknbr());
+	string_replace(command, "<nbchannels>", serv->getChanNbr());
+	string_replace(command, "<nbclients>", serv->getUsrNbr());
 	string_replace(command, "<channel>", context.channelname);
 	string_replace(command, "<channel_mode>", context.channelmode);
 	string_replace(command, "<topic>", context.topic);
