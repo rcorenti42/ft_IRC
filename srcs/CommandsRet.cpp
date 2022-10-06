@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 15:04:30 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 12:58:18 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,7 +441,7 @@ void	TOPIC(Context &context, std::string *args) {
 		cmdmgr->sendReply(482, context);
 	else {
 		Server::getInstance()->getChannel(*args).setTopic(*context.message);
-		context.client->writePrefixMsg(*context.args);
+		context.client->writePrefixMsg(*context.message);
 	}
 };
 

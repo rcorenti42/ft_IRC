@@ -14,7 +14,7 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 
-Channel::Channel(string &name, Client *creator) : _name(name) {
+Channel::Channel(string &name, Client *creator) : _name(name), _topic("") {
 	ClientMode elem(creator, "");
 	_clientsWhat[creator->getSocket()] = elem;
 }
@@ -53,6 +53,8 @@ bool					Channel::isOperator(string client) {
 	return ret;
 }
 
+bool					Channel::isEmpty() const {return _clients.empty();}
+
 bool					Channel::isClient(Client& client) {
 	return this->_clients.find(client.getSocket()) != this->_clients.end();
 }
@@ -61,18 +63,9 @@ void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }
 
-void					Channel::addOperator(Client& client) {
-	_operators.push_back(&client);
-}
-
-void                	Channel::removeClient(Client& client) {
-    _clients.erase(client.getSocket());
-}
-
-void                	Channel::addInvit(Client& client) {
-    _invit.push_back(&client);
-}
-
+void					Channel::addOperator(Client& client) {_operators.push_back(&client);}
+void                	Channel::removeClient(Client& client) {_clients.erase(client.getSocket());}
+void                	Channel::addInvit(Client& client) {_invit.push_back(&client);}
 void                	Channel::removeInvit(Client& client) {
     std::vector<Client*>::iterator it = std::find(_invit.begin(), _invit.end(), &client);
     if (it != _invit.end()) {
@@ -85,11 +78,11 @@ void                	Channel::broadcastMessage(Client& client, string message) {
 		client.writePrefixMsg(*it->second, " " + message);
 };
 
-void           			Channel::setName(string name) {_name = name;}
-void           			Channel::setTopic(string topic) {_topic = topic;}
-void           			Channel::setMode(string mode) {_mode = mode;}
+void           			Channel::setName(string &name) {_name = name;}
+void           			Channel::setTopic(string &topic) {_topic = topic;}
+void           			Channel::setMode(string &mode) {_mode = mode;}
 void           			Channel::setPassword(string password) {_password = password;}
-string         			Channel::getName() const {return _name;}
-string         			Channel::getTopic() const {return _topic;}
-string         			Channel::getMode() const {return _mode;}
-string         			Channel::getPassword() const {return _password;}
+const string         			&Channel::getName() const {return _name;}
+const string         			&Channel::getTopic() const {return _topic;}
+const string         			&Channel::getMode() const {return _mode;}
+const string         			&Channel::getPassword() const {return _password;}

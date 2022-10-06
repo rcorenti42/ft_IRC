@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 12:08:54 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/05 13:36:03 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ public:
     void                    erraseChannel(Channel channel);
 	void					display();
     void                    run();
+	void					pruneClients();
 	bool					isNickTaken(std::string nick);
 	size_t					getUsrNbr() const;
 	size_t					getInvisNbr() const;
