@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 14:17:45 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 23:19:29 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,6 @@ void 	clientMode(Context &context, std::string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string ret = context.client->getMode();
-	std::string changes;
 
 	int mode = 1;
 	size_t pos;
@@ -209,34 +208,54 @@ void 	clientMode(Context &context, std::string modestring)
 	if (modestring.find_first_not_of("isw") != std::string::npos)
 		cmdmgr->sendReply(501, context);
 	if (mode == 0) {
-		changes += '-';
 		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) != std::string::npos) {
-			changes += 'i';
 			ret.erase(pos, pos + 1);
 		}
 		if (modestring.find('s') != std::string::npos && (pos = ret.find('s')) != std::string::npos) {
-			changes += 's';
 			ret.erase(pos, pos + 1);
 		}
 	}
 	else if (mode == 1) {
-		changes += '+'; 
 		if (modestring.find('i') != std::string::npos && (pos = ret.find('i')) == std::string::npos)
 			ret += 'i';
 		if (modestring.find('s') != std::string::npos && (pos = ret.find('s')) == std::string::npos)
 			ret += 's';			
 	}
 	context.client->setMode(ret);
-	// command->getClient().writePrefixMsg() a ne pas oublier
+	cmdmgr->sendReply(221, context);
 }
 
-//opsitnmlbvk
-
-// void	channelMode(Commands *command, std::string modestring)
-// {
-// 	std::string ret = command->getClient().getMode();
+void	channelMode(Context &context, std::string modestring)
+{
+	std::string ret = context.channel->getMode();
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	std::string flgs = "opsitnmlbv";
+	size_t pos;
+	int mode = 1;
 	
-// }
+	if (modestring[0] == '-') {
+		mode = 0;
+		modestring.erase(0, 1);
+	}
+	else if (modestring[0] == '+')
+		modestring.erase(0, 1);
+	if (modestring.find_first_not_of(flgs) != std::string::npos)
+		cmdmgr->sendReply(501, context);
+	if (mode == 0)
+	{
+		for (size_t i = 0; i < flgs.size(); i++)
+			if (modestring.find(flgs[i]) != std::string::npos && (pos = ret.find(flgs[i]) != std::string::npos))
+				ret.erase(pos, pos + 1);
+	}
+	else if (mode == 1)
+	{
+		for (size_t i = 0; i < flgs.size(); i++)
+			if (modestring.find(flgs[i]) != std::string::npos && ret.find(flgs[i]) == std::string::npos)
+				ret += flgs[i];
+	}
+	context.channel->setMode(ret);
+	cmdmgr->sendReply(324, context);
+}
 
 void MODE(Context &context, std::string *args)
 {
@@ -252,8 +271,8 @@ void MODE(Context &context, std::string *args)
 		}
 		if (args[1].empty() || args[2].empty())
 			cmdmgr->sendReply(324, context);
-		// else
-		// 	channelMode(command, args[1]);
+		else
+			channelMode(context, args[1]);
 	}
 	else
 	{
@@ -271,7 +290,6 @@ void MODE(Context &context, std::string *args)
 			cmdmgr->sendReply(221, context);
 		else
 			clientMode(context, args[1]);
-	
 	}
 }
 

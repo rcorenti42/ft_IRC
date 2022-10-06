@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 13:57:35 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 19:38:52 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void    Client::packetsHandler() {
 };
 
 void    Client::receiveMessage(Server* serv) {
-    char    	buff[1025];
+    char    	buff[1026];
 	std::string	msg;
     size_t  	bytes;
     size_t  	pos;
