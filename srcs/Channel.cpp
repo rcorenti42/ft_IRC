@@ -45,6 +45,13 @@ std::map<int, Client*>	Channel::getClientsMap() {
 	return this->_clients;
 }
 
+string					Channel::getClientsList() {
+	string	ret("");
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		ret += it->second->getNickname() + " ";
+	return ret;
+}
+
 bool					Channel::isOperator(string client) {
 	bool	ret = false;
 	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)

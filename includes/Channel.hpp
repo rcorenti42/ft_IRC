@@ -55,6 +55,7 @@ public:
 	Client*					getClient(string name);
     std::vector<Client*>	getClients();
 	std::map<int, Client*>	getClientsMap();
+	string					getClientsList();
 	bool					isOperator(std::string client);
 	bool					isClient(Client& client);
     void                	addClient(Client& client);

@@ -28,6 +28,8 @@ CommandManager::CommandManager() {
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
+	replies[353] = "<channel> : <namelist>";
+	replies[366] = "<channel> :End of /NAMES list";
 	replies[367] = "<channel> <banid>";
 	replies[368] = "<channel> :End of channel ban list";
 	replies[371] = "<info>";
@@ -88,6 +90,7 @@ string CommandManager::getReply(int code, Context context)
 		string_replace(command, "<channel>", context.channel->getName());
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());
+		string_replace(command, "<namelist>", context.channel->getClientsList());
 	}
 	if (context.info)
 		string_replace(command, "<info>", *context.info);
