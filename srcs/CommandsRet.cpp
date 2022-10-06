@@ -465,7 +465,7 @@ void	VERSION(Context& context, std::string* args) {
 };
 
 void	KICK(Context& context, std::string* args) {
-	CommandManager*	cmdmgr = CommandManager::getInstance();
+	CommandManager*			cmdmgr = CommandManager::getInstance();
 	if (!args || args->empty()) {
 		cmdmgr->sendReply(461, context);
 		return;
@@ -473,7 +473,7 @@ void	KICK(Context& context, std::string* args) {
 	try {
 		context.channel = &Server::getInstance()->findChannel(*args);
 	}
-	catch (Server::ChannelNotFoundException &e) {
+	catch (Server::ChannelNotFoundException& e) {
 		cmdmgr->sendReply(403, context);
 		return ;
 	}
@@ -482,7 +482,10 @@ void	KICK(Context& context, std::string* args) {
 		return;
 	}
 	if (context.channel->isOperator(context.client->getNickname())) {
-		//kick oper
+		if (context.channel->getClient(*context.args)) {
+			context.client->writePrefixMsg(*args);
+			context.channel->removeClient(*context.channel->getClient(*context.args));
+		}
 	}
 	else
 		cmdmgr->sendReply(482, context);

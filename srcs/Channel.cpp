@@ -21,9 +21,17 @@ Channel::Channel(string &name, Client *creator) : _name(name) {
 
 Channel::Channel() {}
 
-void                Channel::addClient(Client *client) {
+void                	Channel::addClient(Client *client) {
 	ClientMode elem(client, "");
 	_clientsWhat[client->getSocket()] = elem;
+}
+
+Client*					Channel::getClient(string name) {
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+		if (it->second->getNickname() == name)
+			return it->second;
+	}
+	return NULL;
 }
 
 std::vector<Client*>	Channel::getClients() {
@@ -37,7 +45,7 @@ std::map<int, Client*>	Channel::getClientsMap() {
 	return this->_clients;
 }
 
-bool					Channel::isOperator(std::string client) {
+bool					Channel::isOperator(string client) {
 	bool	ret = false;
 	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
 		if ((*it)->getNickname() == client)
