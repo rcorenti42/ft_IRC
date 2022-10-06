@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 23:19:29 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/06 23:49:08 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,8 @@ void 	clientMode(Context &context, string modestring)
 		modestring.erase(0, 1);
 	if (modestring.find_first_not_of("isw") != string::npos)
 		cmdmgr->sendReply(501, context);
-	if (mode == 0) {
+	if (mode == 0) 
+	{
 		if (modestring.find('i') != string::npos && (pos = ret.find('i')) != string::npos) {
 			ret.erase(pos, pos + 1);
 		}
@@ -228,6 +229,7 @@ void 	clientMode(Context &context, string modestring)
 void	channelMode(Context &context, std::string modestring)
 {
 	std::string ret = context.channel->getMode();
+	std::cout << "ret= " << ret << std::endl;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string flgs = "opsitnmlbv";
 	size_t pos;
@@ -244,8 +246,10 @@ void	channelMode(Context &context, std::string modestring)
 	if (mode == 0)
 	{
 		for (size_t i = 0; i < flgs.size(); i++)
+		{
 			if (modestring.find(flgs[i]) != std::string::npos && (pos = ret.find(flgs[i]) != std::string::npos))
 				ret.erase(pos, pos + 1);
+		}
 	}
 	else if (mode == 1)
 	{
