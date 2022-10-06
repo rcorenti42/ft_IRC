@@ -43,14 +43,14 @@ private:
 public:
     Channel();
     Channel(string &name, Client *creator);
-    void                	setName(string name);
-    void                	setTopic(string topic);
-    void                	setMode(string mode);
+    void                	setName(string &name);
+    void                	setTopic(string &topic);
+    void                	setMode(string &mode);
     void                	setPassword(string password);
-    string     		    	getName() const;
-    string     		    	getTopic() const;
-    string     		    	getMode() const;
-    string     		    	getPassword() const;
+    const string		    &getName() const;
+    const string		    &getTopic() const;
+    const string		    &getMode() const;
+    const string		    &getPassword() const;
     void                	addClient(Client *client);
     std::vector<Client*>	getClients();
 	std::map<int, Client*>	getClientsMap();
@@ -62,5 +62,6 @@ public:
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);
     void                	broadcastMessage(Client& client, string message);
+	bool					isEmpty() const;
 };
 

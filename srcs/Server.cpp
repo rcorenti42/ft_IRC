@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 12:14:28 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/05 13:41:49 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ Client*             Server::getClient(std::string nickName) {
 };
 std::vector<Client*>    Server::getClients() {
 	std::vector<Client*>    clients;
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	clients.reserve(_clients.size());
+	for (ClientIt it = _clients.begin(); it != _clients.end(); it++)
 		clients.push_back(it->second);
 	return clients;
 };
@@ -59,7 +60,8 @@ Channel&                Server::getChannel(std::string name) {
 };
 std::vector<Channel*>   Server::getChannels() {
 	std::vector<Channel*> channels;
-	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	channels.reserve(_channels.size());
+	for (ChanIt it = _channels.begin(); it != _channels.end(); it++)
 		channels.push_back(&(*it).second);
 	return channels;
 };
@@ -117,6 +119,12 @@ bool					Server::isNickTaken(std::string nick) {
 	return false;
 }
 
+void					Server::pruneClients() {
+	for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
+		if (it->second->getStats() == NONE)
+			erraseClient(*it->second);
+}
+
 void                    Server::run() {
 	std::vector<Client*>    clients_list = getClients();
 	int fd;
@@ -126,14 +134,11 @@ void                    Server::run() {
 		if (std::time(NULL) - _ping > 42) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
 		else _clients[fd]->receiveMessage(this);
-		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
-			if ((*it)->getStats() == NONE)
-				erraseClient(*(*it));
-		clients_list = getClients();
-		for (std::vector<Client*>::iterator it = clients_list.begin(); it != clients_list.end(); it++)
-			(*it)->sendMessage();
+		pruneClients();
+		for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
+			it->second->sendMessage();
 		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
-			if (it->second.getClients().empty())
+			if (it->second.isEmpty())
 				erraseChannel(it->second);
 		display();
 	}
