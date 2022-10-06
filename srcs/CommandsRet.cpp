@@ -402,7 +402,7 @@ void	PART(Context &context, std::string *args) {
 	int							end;
 	std::vector<std::string>	channels;
 	if (!args || args->empty()) {
-		cmdmgr->sendReply(403, context);
+		cmdmgr->sendReply(461, context);
 		return ;
 	}
 		end = args->find(',');
@@ -415,7 +415,7 @@ void	PART(Context &context, std::string *args) {
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
 			if (!Server::getInstance()->getChannel(*it).getClients().empty()) {
 				if (Server::getInstance()->getChannel(*it).getClientsMap().find(context.client->getSocket()) == Server::getInstance()->getChannel(*it).getClientsMap().end())
-					cmdmgr->sendReply(403, context);
+					cmdmgr->sendReply(442, context);
 				else {
 					Server::getInstance()->getChannel(*it).broadcastMessage(*context.client, "PART " + *it);
 					Server::getInstance()->getChannel(*it).removeClient(*context.client);
@@ -428,7 +428,7 @@ void	PART(Context &context, std::string *args) {
 void	TOPIC(Context &context, std::string *args) {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	if (!args || args->empty()) {
-		cmdmgr->sendReply(403, context);
+		cmdmgr->sendReply(461, context);
 		return ;
 	}
 	if (!context.message || context.message->empty()) {
@@ -441,7 +441,7 @@ void	TOPIC(Context &context, std::string *args) {
 		cmdmgr->sendReply(482, context);
 	else {
 		Server::getInstance()->getChannel(*args).setTopic(*context.message);
-		context.client->writePrefixMsg("TOPIC " + context.channel->getName() + " :" + *context.message);
+		context.client->writePrefixMsg(*context.args);
 	}
 };
 
@@ -462,4 +462,28 @@ void	VERSION(Context& context, std::string* args) {
 	CommandManager*	cmdmgr = CommandManager::getInstance();
 	cmdmgr->sendReply(351, context);
 	(void) args;
+};
+
+void	KICK(Context& context, std::string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	if (!args || args->empty()) {
+		cmdmgr->sendReply(461, context);
+		return;
+	}
+	try {
+		context.channel = &Server::getInstance()->findChannel(*args);
+	}
+	catch (Server::ChannelNotFoundException &e) {
+		cmdmgr->sendReply(403, context);
+		return ;
+	}
+	if (context.channel->getClientsMap().find(context.client->getSocket()) == context.channel->getClientsMap().end()) {
+		cmdmgr->sendReply(442, context);
+		return;
+	}
+	if (context.channel->isOperator(context.client->getNickname())) {
+		//kick oper
+	}
+	else
+		cmdmgr->sendReply(482, context);
 };
