@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 12:58:18 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:17:45 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,32 +397,27 @@ void	NOTICE(Context& context, std::string* args) {
 };
 
 void	PART(Context &context, std::string *args) {
-	CommandManager *cmdmgr = CommandManager::getInstance();
-	int							start = 0;
-	int							end;
+	CommandManager	*cmdmgr = CommandManager::getInstance();
+	size_t			start = 0;
+	size_t			end;
 	std::vector<std::string>	channels;
 	if (!args || args->empty()) {
 		cmdmgr->sendReply(461, context);
 		return ;
 	}
-		end = args->find(',');
-		while (end != -1) {
-			channels.push_back(args->substr(start, end - start));
-			start = end + 1;
-			end = args->find(',', start);
+	do {
+		end = args->find(',', start);
+		const string &name = args->substr(start, end);
+		Channel &chan = Server::getInstance()->getChannel(name);
+
+		if (chan.isEmpty()) cmdmgr->sendReply(403, context);
+		else if (!chan.isOn(context.client->getSocket())) cmdmgr->sendReply(442, context);
+		else {
+			chan.broadcastMessage(*context.client, "PART " + name);
+			chan.removeClient(*context.client);
 		}
-		channels.push_back(args->substr(start));
-		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
-			if (!Server::getInstance()->getChannel(*it).getClients().empty()) {
-				if (Server::getInstance()->getChannel(*it).getClientsMap().find(context.client->getSocket()) == Server::getInstance()->getChannel(*it).getClientsMap().end())
-					cmdmgr->sendReply(442, context);
-				else {
-					Server::getInstance()->getChannel(*it).broadcastMessage(*context.client, "PART " + *it);
-					Server::getInstance()->getChannel(*it).removeClient(*context.client);
-				}
-			}
-			else cmdmgr->sendReply(403, context);
-		}
+		start = end + 1;
+	} while (end != std::string::npos);
 };
 
 void	TOPIC(Context &context, std::string *args) {
@@ -436,12 +431,13 @@ void	TOPIC(Context &context, std::string *args) {
 			cmdmgr->sendReply(331, context);
 		else
 			cmdmgr->sendReply(332, context);
+		return ;
 	}
-	else if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname()))
+	if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname()))
 		cmdmgr->sendReply(482, context);
 	else {
 		Server::getInstance()->getChannel(*args).setTopic(*context.message);
-		context.client->writePrefixMsg(*context.message);
+		context.client->writePrefixMsg(*context.packet);
 	}
 };
 

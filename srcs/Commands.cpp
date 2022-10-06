@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 15:07:45 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:14:10 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ Context &Commands::getContext() {
 	context.channel = NULL;
 	context.info = NULL;
 	context.args = NULL;
+	context.packet = &_packet;
 	return context;
 }

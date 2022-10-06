@@ -70,6 +70,7 @@ void                	Channel::broadcastMessage(Client& client, string message) {
 		client.writePrefixMsg(*it->second, " " + message);
 };
 
+bool					Channel::isOn(int socket) {return _clients.find(socket) != _clients.end();}
 void           			Channel::setName(string &name) {_name = name;}
 void           			Channel::setTopic(string &topic) {_topic = topic;}
 void           			Channel::setMode(string &mode) {_mode = mode;}

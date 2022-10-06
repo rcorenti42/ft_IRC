@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:22 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 14:25:57 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:10:47 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ struct Context {
 	string	*info;
 	string	*message;
 	string	*args;
+	string	*packet;
 };
 
 class CommandManager {

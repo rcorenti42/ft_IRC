@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 15:05:32 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 13:57:35 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ void    Client::packetsHandler() {
 					continue ;
 			if (_listCommands.count((*it)->getCommand()))
 			{
-				(*it)->getArgs().push_back("wndkbw");
 				_listCommands[(*it)->getCommand()]((*it)->getContext(), &((*it)->getArgs())[0]);
 			}
 			commands.push_back(*it);

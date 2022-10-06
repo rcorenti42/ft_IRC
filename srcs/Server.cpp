@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/05 13:41:49 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 13:59:18 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void                    Server::erraseChannel(Channel channel) {
 };
 
 void					Server::display() {
+	/*
 	std::cout << "\033[2J\033[1;1H" << std::flush;
 	std::cout << "clients: " << std::endl;
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
@@ -110,6 +111,7 @@ void					Server::display() {
 	std::cout << std::endl << "channels: " << std::endl;
 	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
 		std::cout << (*it).second.getName() << std::endl;
+	*/
 };
 
 bool					Server::isNickTaken(std::string nick) {

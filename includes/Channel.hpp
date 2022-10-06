@@ -62,6 +62,7 @@ public:
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);
     void                	broadcastMessage(Client& client, string message);
+	bool					isOn(int socket);
 	bool					isEmpty() const;
 };
 
