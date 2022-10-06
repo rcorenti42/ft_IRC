@@ -479,7 +479,7 @@ void	KICK(Context& context, std::string* args) {
 	}
 	if (context.channel->isOperator(context.client->getNickname())) {
 		if (context.channel->getClient(args[1])) {
-			context.client->writePrefixMsg(*context.packet);
+			context.channel->broadcastMessage(*context.client, *context.packet);
 			context.channel->removeClient(*context.channel->getClient(args[1]));
 		}
 	}
