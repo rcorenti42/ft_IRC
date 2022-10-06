@@ -35,6 +35,7 @@ void	OPER(Context &context, string *args);
 void	VERSION(Context &context, string *args);
 void	KICK(Context &context, string *args);
 void	NAMES(Context& context, string* args);
+void	ADMIN(Context& context, string* args);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
@@ -57,6 +58,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode
 	_listCommands["VERSION"] = VERSION;
 	_listCommands["KICK"] = KICK;
 	_listCommands["NAMES"] = NAMES;
+	_listCommands["ADMIN"] = ADMIN;
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
