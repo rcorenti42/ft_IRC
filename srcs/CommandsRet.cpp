@@ -517,3 +517,12 @@ void	NAMES(Context& context, string* args) {
 	cmdmgr->sendReply(366, context);
 	(void)args;
 };
+
+void	ADMIN(Context& context, string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	cmdmgr->sendReply(256, context);
+	cmdmgr->sendReply(257, context);
+	cmdmgr->sendReply(258, context);
+	cmdmgr->sendReply(259, context);
+	(void)args;
+}

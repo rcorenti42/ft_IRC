@@ -47,6 +47,10 @@ CommandManager::CommandManager() {
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";
 	replies[502] = ":Can't change mode for other users";
+	replies[256] = "<servername> :Administrative info";
+	replies[257] = "Server irc.ir-c4.org";
+	replies[258] = "Website www.ir-c4.org";
+	replies[259] = "Mail admin@ir-c4.org";
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)
