@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "CommandsRet.hpp"
+#include "Server.hpp"
 
 std::string to_string(int n)
 {
@@ -364,6 +364,38 @@ void	PRIVMSG(Context &context, std::string *args) {
 		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
 };
 
+//copier coller de la fonction PRIVMSG sans les reply.
+void	NOTICE(Context& context, std::string* args) {
+	int							start = 0;
+	int							end;
+	std::vector<std::string>	channels;
+	std::vector<std::string>	clients;
+	if (!args || args->empty() || !context.message || context.message->empty())
+		return ;
+	end = args->find(',');
+	while (end != -1) {
+		if (args->substr(start, end - start)[0] == '#' || args->substr(start, end - start)[0] == '&')
+			channels.push_back(args->substr(start, end - start));
+		else
+			clients.push_back(args->substr(start, end - start));
+		start = end + 1;
+		end = args->find(',', start);
+	}
+	if (args->substr(start)[0] == '#' || args->substr(start)[0] == '&')
+		channels.push_back(args->substr(start));
+	else
+		clients.push_back(args->substr(start));
+	for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); it++) {
+		Channel&				chan = Server::getInstance()->getChannel(*it);
+		std::vector<Client*>	cli = chan.getClients();
+		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
+			if ((*iter)->getNickname() != context.client->getNickname())
+				context.client->writePrefixMsg(*(*iter), "PRIVMSG " + *it + " :" + *context.message);
+	}
+	for (std::vector<std::string>::iterator it = clients.begin(); it != clients.end(); it++)
+		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
+};
+
 void	PART(Context &context, std::string *args) {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	int							start = 0;
@@ -409,7 +441,7 @@ void	TOPIC(Context &context, std::string *args) {
 		cmdmgr->sendReply(482, context);
 	else {
 		Server::getInstance()->getChannel(*args).setTopic(*context.message);
-		context.client->writePrefixMsg(/*command->getPacket()*/ "zbeb zbeb");
+		context.client->writePrefixMsg("TOPIC " + context.channel->getName() + " :" + *context.message);
 	}
 };
 
@@ -423,5 +455,11 @@ void	QUIT(Context &context, std::string *args) {
 	if (context.message && !context.message->empty())
 		context.client->setQuitMessage("QUIT :" + *context.message);
 	context.client->setState(NONE);
+	(void) args;
+};
+
+void	VERSION(Context& context, std::string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	cmdmgr->sendReply(351, context);
 	(void) args;
 };

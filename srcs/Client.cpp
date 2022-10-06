@@ -27,10 +27,12 @@ void	MODE(Context &context, std::string *args);
 void	ISON(Context &context, std::string *args);
 void	JOIN(Context &context, std::string *args);
 void	PRIVMSG(Context &context, std::string *args);
+void	NOTICE(Context &context, std::string *args);
 void	PART(Context &context, std::string *args);
 void	TOPIC(Context &context, std::string *args);
 void	QUIT(Context &context, std::string *args);
 void	OPER(Context &context, std::string *args);
+void	VERSION(Context &context, std::string *args);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
@@ -45,10 +47,12 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode
 	_listCommands["JOIN"] = JOIN;
 	_listCommands["ISON"] = ISON;
 	_listCommands["PRIVMSG"] = PRIVMSG;
+	_listCommands["NOTICE"] = NOTICE;
 	_listCommands["PART"] = PART;
 	_listCommands["TOPIC"] = TOPIC;
 	_listCommands["QUIT"] = QUIT;
 	_listCommands["OPER"] = OPER;
+	_listCommands["VERSION"] = VERSION;
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };

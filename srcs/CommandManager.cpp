@@ -27,6 +27,7 @@ CommandManager::CommandManager() {
 	replies[324] = "<channel> <channel_mode>";
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
+	replies[351] = "<version>.0 <servername>:IR-C4";
 	replies[367] = "<channel> <banid>";
 	replies[368] = "<channel> :End of channel ban list";
 	replies[371] = "<info>";
