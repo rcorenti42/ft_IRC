@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 23:49:08 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 01:01:43 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,15 +205,17 @@ void 	clientMode(Context &context, string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	if (modestring.find_first_not_of("isw") != string::npos)
+	if (modestring.find_first_not_of("is") != string::npos)
 		cmdmgr->sendReply(501, context);
 	if (mode == 0) 
 	{
-		if (modestring.find('i') != string::npos && (pos = ret.find('i')) != string::npos) {
-			ret.erase(pos, pos + 1);
+		if (modestring.find('i') != string::npos && (ret.find('i')) != string::npos) {
+			pos = ret.find('i');
+			ret.erase(pos, 1);
 		}
 		if (modestring.find('s') != string::npos && (pos = ret.find('s')) != string::npos) {
-			ret.erase(pos, pos + 1);
+			pos = ret.find('s');
+			ret.erase(pos, 1);
 		}
 	}
 	else if (mode == 1) {
@@ -229,7 +231,7 @@ void 	clientMode(Context &context, string modestring)
 void	channelMode(Context &context, std::string modestring)
 {
 	std::string ret = context.channel->getMode();
-	std::cout << "ret= " << ret << std::endl;
+	// std::cout << "ret= " << ret << std::endl;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string flgs = "opsitnmlbv";
 	size_t pos;
@@ -247,8 +249,11 @@ void	channelMode(Context &context, std::string modestring)
 	{
 		for (size_t i = 0; i < flgs.size(); i++)
 		{
-			if (modestring.find(flgs[i]) != std::string::npos && (pos = ret.find(flgs[i]) != std::string::npos))
-				ret.erase(pos, pos + 1);
+			if (modestring.find(flgs[i]) != std::string::npos && (ret.find(flgs[i]) != std::string::npos))
+			{
+				pos = ret.find(flgs[i]);
+				ret.erase(pos, 1);
+			}
 		}
 	}
 	else if (mode == 1)
