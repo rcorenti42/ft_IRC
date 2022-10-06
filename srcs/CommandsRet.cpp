@@ -478,9 +478,9 @@ void	KICK(Context& context, std::string* args) {
 		return;
 	}
 	if (context.channel->isOperator(context.client->getNickname())) {
-		if (context.channel->getClient(*context.args)) {
-			context.client->writePrefixMsg(*args);
-			context.channel->removeClient(*context.channel->getClient(*context.args));
+		if (context.channel->getClient(args[1])) {
+			context.client->writePrefixMsg(*context.packet);
+			context.channel->removeClient(*context.channel->getClient(args[1]));
 		}
 	}
 	else
