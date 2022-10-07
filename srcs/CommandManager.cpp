@@ -95,7 +95,7 @@ string CommandManager::getReply(int code, Context context)
 	if (context.channel)
 	{
 		string_replace(command, "<nbVisiblesOnChannels>", context.channel->getVisiblesNbr());
-		//string_replace(command, "<chanTopic>", context.channel->getTopic());
+		string_replace(command, "<chanTopic>", context.channel->getTopic());
 		string_replace(command, "<channel>", context.channel->getName());
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());

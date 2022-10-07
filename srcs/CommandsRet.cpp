@@ -566,10 +566,10 @@ void	ADMIN(Context& context, string* args) {
 };
 
 void	LIST(Context& context, string* args) {
+	std::vector<Channel*>	chan = Server::getInstance()->getChannels();
 	CommandManager*			cmdmgr = CommandManager::getInstance();
-	std::vector<Channel*>	channels = Server::getInstance()->getChannels();
 	cmdmgr->sendReply(321, context);
-	for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.begin(); ++it) {
+	for (std::vector<Channel*>::iterator it = chan.begin(); it != chan.end(); ++it) {
 		context.channel = *it;
 		cmdmgr->sendReply(322, context);
 	}
