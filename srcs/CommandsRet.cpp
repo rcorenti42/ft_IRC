@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/07 05:52:48 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 06:56:13 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,18 @@ void  LUSERS(Context &context, string *args) {
 	(void)args;
 }
 
-void 	clientMode(Context &context, string modestring)
+void	banList(Context &context, string modestring)
+{
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	std::vector<Client *> banlist = context.channel->getBanlist();
+	for (std::vector<Client *>::iterator it = banlist.begin(); it < banlist.end(); it++)
+	{
+		cmdmgr->sendReply(472, context);
+	}
+	(void)modestring;
+}
+
+void 	clientMode(Context &context, std::string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string ret = context.client->getMode();
