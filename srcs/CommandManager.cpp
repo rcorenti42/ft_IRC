@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/06 23:07:15 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 05:39:10 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ CommandManager::CommandManager() {
 	replies[461] = "<command> :Not enough parameters";
 	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> :Channel key already set";
-	replies[472] = "<info> : Is unknown mod char to me";
+	replies[472] = "<info> :is unknown mode char to me.";
 	replies[476] = "<channel> :The given channel mask was invalid";
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";

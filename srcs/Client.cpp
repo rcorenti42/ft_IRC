@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 19:38:52 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 05:22:41 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	NAMES(Context& context, string* args);
 void	ADMIN(Context& context, string* args);
 void	LIST(Context& context, string* args);
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
 	_listCommands["PASS"] = PASS;
 	_listCommands["NICK"] = NICK;
@@ -164,12 +164,15 @@ void    Client::packetsHandler() {
 };
 
 void    Client::receiveMessage(Server* serv) {
-    char    	buff[1026];
+    char    	buff[1025];
 	string	msg;
     size_t  	bytes;
     size_t  	pos;
     bytes = recv(this->_sock, buff, 1024, 0);
-	buff[bytes] = '\0';
+	if (bytes > 1024)
+		buff[1024] = '\0';
+	else
+		buff[bytes] = '\0';
     if (bytes < 1) {
 		if (bytes == 0)
 			this->_state = NONE;

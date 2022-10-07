@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 23:19:29 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 06:56:13 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,13 +191,25 @@ void  LUSERS(Context &context, string *args) {
 	(void)args;
 }
 
-void 	clientMode(Context &context, string modestring)
+void	banList(Context &context, string modestring)
+{
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	std::vector<Client *> banlist = context.channel->getBanlist();
+	for (std::vector<Client *>::iterator it = banlist.begin(); it < banlist.end(); it++)
+	{
+		cmdmgr->sendReply(472, context);
+	}
+	(void)modestring;
+}
+
+void 	clientMode(Context &context, std::string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string ret = context.client->getMode();
 
 	int mode = 1;
 	size_t pos;
+	std::string tmp;
 
 	if (modestring[0] == '-') {
 		mode = 0;
@@ -205,14 +217,23 @@ void 	clientMode(Context &context, string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	if (modestring.find_first_not_of("isw") != string::npos)
-		cmdmgr->sendReply(501, context);
-	if (mode == 0) {
-		if (modestring.find('i') != string::npos && (pos = ret.find('i')) != string::npos) {
-			ret.erase(pos, pos + 1);
+	while (modestring.find_first_not_of("is") != string::npos)
+	{
+		pos = modestring.find_first_not_of("is");
+		std::string character(1, modestring[pos]);
+		context.info = &character;
+		modestring.erase(pos, 1);
+		cmdmgr->sendReply(472, context);
+	}
+	if (mode == 0) 
+	{
+		if (modestring.find('i') != string::npos && (ret.find('i')) != string::npos) {
+			pos = ret.find('i');
+			ret.erase(pos, 1);
 		}
 		if (modestring.find('s') != string::npos && (pos = ret.find('s')) != string::npos) {
-			ret.erase(pos, pos + 1);
+			pos = ret.find('s');
+			ret.erase(pos, 1);
 		}
 	}
 	else if (mode == 1) {
@@ -225,33 +246,51 @@ void 	clientMode(Context &context, string modestring)
 	cmdmgr->sendReply(221, context);
 }
 
-void	channelMode(Context &context, std::string modestring)
+void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
 {
 	std::string ret = context.channel->getMode();
+	bool isOp = context.channel->isOperator(context.client->getNickname());
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string flgs = "opsitnmlbv";
-	size_t pos;
 	int mode = 1;
-	
+	size_t pos;
+
 	if (modestring[0] == '-') {
 		mode = 0;
 		modestring.erase(0, 1);
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	if (modestring.find_first_not_of(flgs) != std::string::npos)
-		cmdmgr->sendReply(501, context);
+	while (modestring.find_first_not_of(flgs) != std::string::npos)
+	{
+		pos = modestring.find_first_not_of(flgs);
+		std::string character(1, modestring[pos]);
+		context.info = &character;
+		cmdmgr->sendReply(472, context);
+	}
 	if (mode == 0)
 	{
 		for (size_t i = 0; i < flgs.size(); i++)
-			if (modestring.find(flgs[i]) != std::string::npos && (pos = ret.find(flgs[i]) != std::string::npos))
-				ret.erase(pos, pos + 1);
+		{
+			if (modestring.find(flgs[i]) != std::string::npos && (ret.find(flgs[i]) != std::string::npos))
+			{
+				if (!isOp)
+					cmdmgr->sendReply(482, context);
+				else
+					ret.erase(ret.find(flgs[i]), 1);
+			}
+		}
 	}
 	else if (mode == 1)
 	{
 		for (size_t i = 0; i < flgs.size(); i++)
 			if (modestring.find(flgs[i]) != std::string::npos && ret.find(flgs[i]) == std::string::npos)
-				ret += flgs[i];
+			{
+				if (!isOp)
+					cmdmgr->sendReply(482, context);
+				else
+					ret += flgs[i];
+			}
 	}
 	context.channel->setMode(ret);
 	cmdmgr->sendReply(324, context);
@@ -270,7 +309,10 @@ void MODE(Context &context, string *args)
 			return ;
 		}
 		if (args[1].empty() || args[2].empty())
+		{
 			cmdmgr->sendReply(324, context);
+			cmdmgr->sendReply(329, context); //reply pas encore la pour le temps (RPL_CREATIONTIME)
+		}
 		else
 			channelMode(context, args[1]);
 	}
@@ -293,7 +335,7 @@ void MODE(Context &context, string *args)
 	}
 }
 
-void JOIN(Context &context, string *args)
+void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::vector<string> names;
