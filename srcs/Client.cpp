@@ -36,6 +36,7 @@ void	VERSION(Context &context, string *args);
 void	KICK(Context &context, string *args);
 void	NAMES(Context& context, string* args);
 void	ADMIN(Context& context, string* args);
+void	LIST(Context& context, string* args);
 
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode("w"), _ping(std::time(NULL)) {
 	_listCommands["INFO"] = INFO;
@@ -59,6 +60,7 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode
 	_listCommands["KICK"] = KICK;
 	_listCommands["NAMES"] = NAMES;
 	_listCommands["ADMIN"] = ADMIN;
+	_listCommands["LIST"] = LIST;
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -66,38 +68,38 @@ Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _mode
 Client::~Client() {
     close(_sock);
 };
-int     Client::getSocket() const {
+int     	Client::getSocket() const {
     return _sock;
 };
-string Client::getNickname() const {
+string 		Client::getNickname() const {
     return _nickname;
 };
-string Client::getUsername() const {
+string 		Client::getUsername() const {
     return _username;
 };
-string	Client::getRealname() const {
+string		Client::getRealname() const {
 	return _realname;
 };
-string	Client::getMode() const {
+string		Client::getMode() const {
 	return _mode;
 };
-string	Client::getAddr() const {
+string		Client::getAddr() const {
 	return _addr;
 };
 e_state		Client::getStats() const {
 	return _state;
 };
-string	Client::getQuitMessage() const {
+string		Client::getQuitMessage() const {
 	return this->_quitMessage.empty() ? "has quit" : this->_quitMessage;
 };
-void    Client::setNickname(string nickname) {
+void    	Client::setNickname(string nickname) {
     _nickname = nickname;
 };
-void    Client::setUsername(string username) {
+void    	Client::setUsername(string username) {
     _username = username;
 };
 
-void	Client::setRealName(string realname) {
+void		Client::setRealName(string realname) {
 	_realname = realname;
 };
 void		Client::setState(e_state mode) {

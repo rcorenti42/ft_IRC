@@ -51,7 +51,12 @@ string					Channel::getClientsList() {
 		ret += it->second->getNickname() + " ";
 	return ret;
 }
-
+size_t					Channel::getVisiblesNbr() {
+	size_t	ret = 0;
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		++ret;
+	return ret;
+}
 bool					Channel::isOperator(string client) {
 	bool	ret = false;
 	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
