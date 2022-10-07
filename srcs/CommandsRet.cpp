@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/07 05:20:54 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/07 05:52:48 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,22 +235,28 @@ void 	clientMode(Context &context, string modestring)
 	cmdmgr->sendReply(221, context);
 }
 
-void	channelMode(Context &context, std::string modestring)
+void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
 {
 	std::string ret = context.channel->getMode();
 	bool isOp = context.channel->isOperator(context.client->getNickname());
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string flgs = "opsitnmlbv";
 	int mode = 1;
-	
+	size_t pos;
+
 	if (modestring[0] == '-') {
 		mode = 0;
 		modestring.erase(0, 1);
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	if (modestring.find_first_not_of(flgs) != std::string::npos)
-		cmdmgr->sendReply(501, context);
+	while (modestring.find_first_not_of(flgs) != std::string::npos)
+	{
+		pos = modestring.find_first_not_of(flgs);
+		std::string character(1, modestring[pos]);
+		context.info = &character;
+		cmdmgr->sendReply(472, context);
+	}
 	if (mode == 0)
 	{
 		for (size_t i = 0; i < flgs.size(); i++)
@@ -318,7 +324,7 @@ void MODE(Context &context, string *args)
 	}
 }
 
-void JOIN(Context &context, string *args)
+void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::vector<string> names;
