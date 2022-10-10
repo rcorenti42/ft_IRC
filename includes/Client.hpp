@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:05:24 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:18:57 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 
 class Server;
 class CommandManager;
-struct Context;
 
 enum e_state {
     CONNECTED,
@@ -38,21 +37,17 @@ enum e_state {
     NONE
 };
 
-typedef void (*t_command)(Context &, std::string *);
-
 class Client {
     e_state                     				_state;
     int                         				_sock;
     std::string                 				_nickname;
     std::string                 				_username;
 	std::string									_realname;
-    std::string                 				_buff;
     std::string                 				_mode;
     std::string                 				_channel;
 	std::string									_addr;
 	std::string									_quitMessage;
     std::vector<std::string>    				_packets;
-	std::map<std::string, t_command>			_listCommands;
     time_t                      				_ping;
 	CommandManager								*_cmdmgr;
 public:

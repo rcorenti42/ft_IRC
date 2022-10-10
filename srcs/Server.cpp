@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:07:48 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:39:39 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ std::vector<Client*>    Server::getClients() {
 		clients.push_back(it->second);
 	return clients;
 };
+
 Channel&                Server::getChannel(std::string name) {
-	Channel&	channel = this->_channels[name];
+	Channel&	channel =_channels[name];
 	channel.setName(name);
     return channel;
 };
+
 std::vector<Channel*>   Server::getChannels() {
 	std::vector<Channel*> channels;
 	channels.reserve(_channels.size());
@@ -65,12 +67,7 @@ std::vector<Channel*>   Server::getChannels() {
 		channels.push_back(&(*it).second);
 	return channels;
 };
-std::string				Server::getPassword() const {
-	return (_password);
-};
-std::string				Server::getName() const {
-	return _name;
-};
+
 void                    Server::sendPing() {
 	_ping = std::time(NULL);
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
@@ -82,12 +79,12 @@ void                    Server::erraseClient(Client& client) {
 	std::vector<Client*>	buff;
 	std::string				message = "QUIT :" + client.getQuitMessage();
 	buff.push_back(&client);
-	for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++) {
+	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
 		if ((*it).second.isClient(client)) {
 			(*it).second.removeClient(client);
 			clients = it->second.getClients();
 			if (!clients.empty()) {
-				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 					if (std::find(buff.begin(), buff.end(), *it) == buff.end())
 						buff.push_back(*it);
 			}
@@ -144,8 +141,6 @@ void                    Server::run() {
 	}
 };
 
-size_t					Server::getUsrNbr() const {return _clients.size();}
-size_t					Server::getChanNbr() const {return _channels.size();}
 size_t					Server::getInvisNbr() const
 {
 	size_t count = 0;
@@ -188,3 +183,8 @@ Client					&Server::findClient(std::string name) {
 		if (it->second->getNickname() == name) return *it->second;
 	throw ClientNotFoundException();
 }
+
+size_t					Server::getUsrNbr() const {return _clients.size();}
+size_t					Server::getChanNbr() const {return _channels.size();}
+std::string				Server::getPassword() const {return _password};
+std::string				Server::getName() const {return _name;};

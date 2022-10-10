@@ -6,59 +6,14 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:09:51 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:24:32 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Client.hpp"
 
-void	PASS(Context &context, string *args);
-void	NICK(Context &context, string *args);
-void	USER(Context &context, string *args);
-void	INFO(Context &context, string *args);
-void	MOTD(Context &context, string *args);
-void	LUSERS(Context &context, string *args);
-void	PING(Context &context, string *args);
-void	PONG(Context &context, string *args);
-void	MODE(Context &context, string *args);
-void	ISON(Context &context, string *args);
-void	JOIN(Context &context, string *args);
-void	PRIVMSG(Context &context, string *args);
-void	NOTICE(Context &context, string *args);
-void	PART(Context &context, string *args);
-void	TOPIC(Context &context, string *args);
-void	QUIT(Context &context, string *args);
-void	OPER(Context &context, string *args);
-void	VERSION(Context &context, string *args);
-void	KICK(Context &context, string *args);
-void	NAMES(Context& context, string* args);
-void	ADMIN(Context& context, string* args);
-void	LIST(Context& context, string* args);
-
 Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _ping(std::time(NULL)) {
-	_listCommands["INFO"] = INFO;
-	_listCommands["PASS"] = PASS;
-	_listCommands["NICK"] = NICK;
-	_listCommands["USER"] = USER;
-	_listCommands["MOTD"] = MOTD;
-	_listCommands["LUSERS"] = LUSERS;
-	_listCommands["PING"] = PING;
-	_listCommands["PONG"] = PONG;
-	_listCommands["MODE"] = MODE;
-	_listCommands["JOIN"] = JOIN;
-	_listCommands["ISON"] = ISON;
-	_listCommands["PRIVMSG"] = PRIVMSG;
-	_listCommands["NOTICE"] = NOTICE;
-	_listCommands["PART"] = PART;
-	_listCommands["TOPIC"] = TOPIC;
-	_listCommands["QUIT"] = QUIT;
-	_listCommands["OPER"] = OPER;
-	_listCommands["VERSION"] = VERSION;
-	_listCommands["KICK"] = KICK;
-	_listCommands["NAMES"] = NAMES;
-	_listCommands["ADMIN"] = ADMIN;
-	_listCommands["LIST"] = LIST;
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -114,6 +69,7 @@ void		Client::setMode(string mode)
 void		Client::setQuitMessage(string message) {
 	this->_quitMessage = message;
 };
+
 string	Client::stateMsg() {
 	string	state = "";
 	if (_state == CONNECTED) {
@@ -171,13 +127,12 @@ void    Client::writeMessage(string message) {
 
 void    Client::sendMessage() {
     string packet;
-    if (!_packets.empty()) {
-        for (std::vector<string>::iterator it = _packets.begin(); it != _packets.end(); it++)
-            packet += *it + "\r\n";
-        this->_packets.clear();
-        if (!packet.empty())
-            send(this->_sock, packet.c_str(), packet.size(), 0);
-    }
+    if (_packets.empty()) return;
+	for (std::vector<string>::iterator it = _packets.begin(); it != _packets.end(); it++)
+		packet += *it + "\r\n";
+	this->_packets.clear();
+	if (!packet.empty())
+		send(this->_sock, packet.c_str(), packet.size(), 0);
 };
 
 void    Client::registerClient() {
@@ -185,10 +140,10 @@ void    Client::registerClient() {
 
 	context.client = this;
 	context.channel = 0;
-    writePrefixMsg(1, _cmdmgr->getReply(1, context));
-	writePrefixMsg(2, _cmdmgr->getReply(2, context));
-	writePrefixMsg(3, _cmdmgr->getReply(3, context));
-	writePrefixMsg(4, _cmdmgr->getReply(4, context));
+    _cmdmgr->sendReply(1, context);
+	_cmdmgr->sendReply(2, context);
+	_cmdmgr->sendReply(3, context);
+	_cmdmgr->sendReply(4, context);
 	LUSERS(context, 0);
 	MOTD(context, 0);
 }
