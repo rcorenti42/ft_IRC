@@ -8,7 +8,6 @@ SOURCES = 	srcs/main.cpp \
 			srcs/Server.cpp \
 			srcs/Client.cpp \
 			srcs/Channel.cpp \
-			srcs/Commands.cpp \
 			srcs/CommandsRet.cpp \
 			srcs/ConnectionManager.cpp \
 			srcs/CommandManager.cpp

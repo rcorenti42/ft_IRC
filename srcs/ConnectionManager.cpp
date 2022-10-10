@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 11:10:51 by lothieve          #+#    #+#             */
-/*   Updated: 2022/09/29 11:21:20 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:13:16 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,21 @@ int ConnectionManager::waitForEvent() {
 	ret = epoll_wait(_epoll_fd, &ev, 1, -1);
 	if (ret < 0) throw ConnectException("Epoll wait failed");
 	return ev.data.fd;
+}
+
+string		ConnectionManager::receivePacket(int socket) {
+	std::ostringstream	ss;
+	char				buf[1024];
+	ssize_t				ret;
+
+	do
+	{
+		bzero(buf, 1024);
+		ret = recv(socket, buf, 1023, 0);
+		ss << buf;
+	} while (ret == 1024);
+	if (ret == -1) throw ConnectException("Failed to receive packet");
+	return ss.str();
 }
 
 int ConnectionManager::getMainSock() const {return _sock;}

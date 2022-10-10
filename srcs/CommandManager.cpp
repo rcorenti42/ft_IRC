@@ -6,11 +6,12 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/04 14:43:32 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:01:35 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <CommandManager.hpp>
+
 CommandManager *CommandManager::_instance = 0;
 
 CommandManager::CommandManager() {
@@ -45,6 +46,27 @@ CommandManager::CommandManager() {
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";
 	replies[502] = ":Can't change mode for other users";
+
+
+	_listCommands["INFO"] = INFO;
+	_listCommands["PASS"] = PASS;
+	_listCommands["NICK"] = NICK;
+	_listCommands["USER"] = USER;
+	_listCommands["MOTD"] = MOTD;
+	_listCommands["LUSERS"] = LUSERS;
+	_listCommands["PING"] = PING;
+	_listCommands["PONG"] = PONG;
+	_listCommands["MODE"] = MODE;
+	_listCommands["JOIN"] = JOIN;
+	_listCommands["ISON"] = ISON;
+	_listCommands["PRIVMSG"] = PRIVMSG;
+	_listCommands["NOTICE"] = NOTICE;
+	_listCommands["PART"] = PART;
+	_listCommands["TOPIC"] = TOPIC;
+	_listCommands["QUIT"] = QUIT;
+	_listCommands["OPER"] = OPER;
+	_listCommands["VERSION"] = VERSION;
+	_listCommands["KICK"] = KICK;
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)
@@ -62,6 +84,67 @@ static void	string_replace(string &str, const string &substr, size_t repl)
 	size_t pos = str.find(substr);
 	if (pos == string::npos) return;
 	str.replace(pos, substr.length(), ss.str());
+}
+
+void	CommandManager::parsePacket(const string &packet, Command *result, std::vector<string> &arg_vec) {
+	size_t pos = 0;
+	string cpy;
+
+	cpy = packet;
+	pos = cpy.find(":", pos + 1);
+	if (pos != string::npos)
+	{
+		result->message = cpy.substr(pos + 1);
+		cpy.erase(pos);
+	}
+	pos = -1;
+	do {
+		cpy.erase(0, pos + 1);
+		pos = cpy.find(" ");
+		if (pos != 1)
+			arg_vec.push_back(cpy.substr(0, pos));
+	} while (pos != string::npos);
+	arg_vec.push_back("");
+	result->id = arg_vec[0];
+	result->args =  &(arg_vec[1]);
+}
+
+static bool	isAllowed(Client &client, string &command)
+{
+	if (command == "PASS") return true;
+	if (client.getStats() == CHECKPASS) return false;
+	if (command == "NICK" || command == "USER") return true;
+	if (client.getStats() == REGISTERED) return false;
+	return true;
+}
+
+void    CommandManager::registerClient(Client &client, Context &context) {
+	client.setState(CONNECTED);
+    client.writePrefixMsg(1, getReply(1, context));
+	client.writePrefixMsg(2, getReply(2, context));
+	client.writePrefixMsg(3, getReply(3, context));
+	client.writePrefixMsg(4, getReply(4, context));
+	LUSERS(context, 0);
+	MOTD(context, 0);
+}
+
+void	CommandManager::execute(string &packet, Client &client) {
+	Command command;
+	std::vector<string> vec;
+	Context context;
+
+	parsePacket(packet, &command, vec);
+	if (!isAllowed(client, command.id)) return;
+	context.client = &client;
+	context.message = &command.message;
+	context.packet = &packet;
+	context.channel = NULL;
+	context.info = NULL;
+	context.args = NULL;
+	if (_listCommands.find(command.id) == _listCommands.end()) return;
+	_listCommands[command.id](context, command.args);
+	if (client.getStats() == REGISTERED && !client.getNickname().empty())
+		registerClient(client, context);
 }
 
 string CommandManager::getReply(int code, Context context)
@@ -105,3 +188,5 @@ void CommandManager::sendReply(int code, Context context) {
 	context.client->writePrefixMsg(code, getReply(code, context));
 }
 
+CommandManager::CommandException::CommandException(const string &what) : _what(what) {}
+const char *CommandManager::CommandException::what() const throw() {return _what.c_str();}

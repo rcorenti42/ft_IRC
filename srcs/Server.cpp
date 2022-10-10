@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 13:59:18 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 14:38:38 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void                    Server::run() {
 		fd = _connectionManager->waitForEvent();
 		if (std::time(NULL) - _ping > 42) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
-		else _clients[fd]->receiveMessage(this);
+		else _clients[fd]->receiveMessage();
 		pruneClients();
 		for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
 			it->second->sendMessage();

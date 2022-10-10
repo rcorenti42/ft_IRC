@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/04 13:41:43 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:05:24 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
 #include "CommandManager.hpp"
+#include "Server.hpp"
 
-class Commands;
 class Server;
 class CommandManager;
 struct Context;
@@ -51,7 +52,6 @@ class Client {
 	std::string									_addr;
 	std::string									_quitMessage;
     std::vector<std::string>    				_packets;
-	std::vector<Commands*>						_commands;
 	std::map<std::string, t_command>			_listCommands;
     time_t                      				_ping;
 	CommandManager								*_cmdmgr;
@@ -74,7 +74,7 @@ public:
 	void		setPing(time_t);
 	std::string	stateMsg();
     void    	packetsHandler();
-    void    	receiveMessage(Server* serv);
+    void    	receiveMessage();
 	void    	writePrefixMsg(int code, Client &client, std::string message);
 	void    	writePrefixMsg(int code, std::string message);
 	void		writePrefixMsg(Client& client, std::string message);

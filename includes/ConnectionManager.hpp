@@ -6,7 +6,7 @@
 /*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 11:10:53 by lothieve          #+#    #+#             */
-/*   Updated: 2022/09/29 11:21:20 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/06 17:12:27 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sstream>
+#include <strings.h>
 
 using std::string;
 
@@ -48,9 +50,10 @@ public:
 
 	static ConnectionManager *getInstance();
 	~ConnectionManager();
-	void setPort(int port);
-	void addClient(int clientFd);
-	int waitForEvent();
-	int getMainSock() const;
-	void init(int port);
+	void		setPort(int port);
+	void		addClient(int clientFd);
+	int			waitForEvent();
+	int			getMainSock() const;
+	void		init(int port);
+	string		receivePacket(int socket);
 };

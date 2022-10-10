@@ -6,14 +6,12 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 13:57:35 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:06:08 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Client.hpp"
-#include "Server.hpp"
-#include "Commands.hpp"
 
 void	PASS(Context &context, std::string *args);
 void	NICK(Context &context, std::string *args);
@@ -123,62 +121,21 @@ std::string	Client::stateMsg() {
 	return state + " ";
 };
 
-void    Client::packetsHandler() {
-	std::vector<Commands*>	commands;
-	e_state					state = _state;
-	if (_state != NONE) {
-		for (std::vector<Commands*>::iterator it = _commands.begin(); it != _commands.end(); it++) {
-			if (_state == CHECKPASS) {
-				if ((*it)->getCommand() != "PASS")
-					continue ;
-			}
-			else if (_state == REGISTERED)
-				if ((*it)->getCommand() != "NICK" && (*it)->getCommand() != "USER")
-					continue ;
-			if (_listCommands.count((*it)->getCommand()))
-			{
-				_listCommands[(*it)->getCommand()]((*it)->getContext(), &((*it)->getArgs())[0]);
-			}
-			commands.push_back(*it);
-		}
-		for (std::vector<Commands*>::iterator it = commands.begin(); it != commands.end(); it++) {
-			if (std::find(_commands.begin(), _commands.end(), *it) != _commands.end()) {
-				_commands.erase(std::find(_commands.begin(), _commands.end(), *it));
-				delete *it;
-			}
-		}
-		if (_state == REGISTERED && !_nickname.empty())
-			_state = CONNECTED;
-		if (_state != state) {
-			if (_state == CONNECTED)
-				registerClient();
-			packetsHandler();
-		}
-    }
-};
+void    Client::receiveMessage() {
+	std::string	command;
+	std::string packet;
+    size_t  	pos = 0;
 
-void    Client::receiveMessage(Server* serv) {
-    char    	buff[1025];
-	std::string	msg;
-    size_t  	bytes;
-    size_t  	pos;
-    bytes = recv(this->_sock, buff, 1024, 0);
-	buff[bytes] = '\0';
-    if (bytes < 1) {
-		if (bytes == 0)
-			this->_state = NONE;
-		return ;
-	}
-    this->_buff += buff;
-	std::cout << buff << std::endl;
-	while ((pos = this->_buff.find("\r\n")) != std::string::npos) {
-    	msg = this->_buff.substr(0, pos);
-		this->_buff.erase(0, pos + 2);
-		if (msg.empty())
-			continue;
-		this->_commands.push_back(new Commands(this, serv, msg));
+	try {packet = ConnectionManager::getInstance()->receivePacket(_sock);}
+	catch (ConnectionManager::ConnectException &e) {return ;}
+	std::cout << packet << "================================\n";
+	while ((pos = packet.find("\r\n")) != std::string::npos) {
+    	command = packet.substr(0, pos);
+		packet.erase(0, pos + 2);
+		if (command.empty()) continue;
+		try {CommandManager::getInstance()->execute(command, *this);}
+		catch (CommandManager::CommandException e) {}
     }
-    packetsHandler();
 };
 
 void	Client::writePrefixMsg(std::string message) {
