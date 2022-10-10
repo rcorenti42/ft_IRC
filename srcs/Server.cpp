@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:39:39 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 13:01:33 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,31 +141,28 @@ void                    Server::run() {
 	}
 };
 
-size_t					Server::getInvisNbr() const
-{
+size_t					Server::getInvisNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
 		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') != std::string::npos) ++count;
 	return count;
 }
-size_t					Server::getVisibleNbr() const
-{
+
+size_t					Server::getVisibleNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
 		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') == std::string::npos) ++count;
 	return count;
 }
 
-size_t					Server::getOPNbr() const
-{
+size_t					Server::getOPNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
 		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('o') != std::string::npos) ++count;
 	return count;
 }
 
-size_t					Server::getUnknbr() const
-{
+size_t					Server::getUnknbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
 		if ((*it).second->getStats() != CONNECTED) ++count;
@@ -186,5 +183,5 @@ Client					&Server::findClient(std::string name) {
 
 size_t					Server::getUsrNbr() const {return _clients.size();}
 size_t					Server::getChanNbr() const {return _channels.size();}
-std::string				Server::getPassword() const {return _password};
+std::string				Server::getPassword() const {return _password;}
 std::string				Server::getName() const {return _name;};

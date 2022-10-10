@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/07 06:56:13 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/10 13:01:07 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,7 +355,6 @@ void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 		end = args->find(',', start);
 	}
 	names.push_back(args->substr(start));
-	std::cout << *args << std::endl;
 	if (!args[1].empty())
 	{
 		++args;
