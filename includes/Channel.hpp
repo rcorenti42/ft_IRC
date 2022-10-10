@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/19 23:47:55               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   Channels.hpp                                                             */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/10/07 06:48:17 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #pragma once
 
@@ -38,6 +38,7 @@ private:
     std::map<int, ClientMode>	_clientsWhat;
     std::vector<Client*>		_invit;
 	std::vector<Client*>		_operators;
+	std::vector<Client*>		_banlist;
     typedef std::map<int, ClientMode>::iterator CliIt;
     typedef std::map<int, ClientMode>::const_iterator CliCstIt;
 public:
@@ -54,10 +55,15 @@ public:
     void                	addClient(Client *client);
 	Client*					getClient(string name);
     std::vector<Client*>	getClients();
+	std::vector<Client *>	getBanlist();
 	std::map<int, Client*>	getClientsMap();
+	string					getClientsList();
+	size_t					getVisiblesNbr();
 	bool					isOperator(std::string client);
+	bool					isBanned(std::string client);
 	bool					isClient(Client& client);
     void                	addClient(Client& client);
+	void					addBanned(Client &client);
 	void					addOperator(Client& client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);

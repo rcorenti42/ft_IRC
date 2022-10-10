@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lothieve <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/10 11:01:35 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:08:44 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,23 @@ CommandManager::CommandManager() {
 	replies[253] =	"<nbunknown> :unknown connections";
 	replies[254] = "<nbchannels> :channels formed";
 	replies[255] = ":I have <nbclients> clients and 1 servers";
+	replies[256] = "<servername> :Administrative info";
+	replies[257] = "Server irc.ir-c4.org";
+	replies[258] = "Website www.ir-c4.org";
+	replies[259] = "Mail admin@ir-c4.org";
+	replies[321] = "Channel :Users Name";
+	replies[322] = "<channel> <nbVisiblesOnChannels> :<chanTopic>";
+	replies[323] = ":End of /LIST";
 	replies[324] = "<channel> <channel_mode>";
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
+	replies[353] = "<channel> : <namelist>";
+	replies[366] = "<channel> :End of /NAMES list";
 	replies[367] = "<channel> <banid>";
 	replies[368] = "<channel> :End of channel ban list";
 	replies[371] = "<info>";
-	replies[374] = "End of /info list";
+	replies[374] = "End of /INFO list";
 	replies[401] = "<nickname> :No such nick";
 	replies[403] = "<info> : No such channel";
 	replies[409] = ":No origin specified";
@@ -41,12 +50,11 @@ CommandManager::CommandManager() {
 	replies[461] = "<command> :Not enough parameters";
 	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> :Channel key already set";
-	replies[472] = "<info> : Is unknown mod char to me";
+	replies[472] = "<info> :is unknown mode char to me.";
 	replies[476] = "<channel> :The given channel mask was invalid";
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";
 	replies[502] = ":Can't change mode for other users";
-
 
 	_listCommands["INFO"] = INFO;
 	_listCommands["PASS"] = PASS;
@@ -168,9 +176,12 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<nbclients>", serv->getUsrNbr());
 	if (context.channel)
 	{
+		string_replace(command, "<nbVisiblesOnChannels>", context.channel->getVisiblesNbr());
+		string_replace(command, "<chanTopic>", context.channel->getTopic());
 		string_replace(command, "<channel>", context.channel->getName());
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());
+		string_replace(command, "<namelist>", context.channel->getClientsList());
 	}
 	if (context.info)
 		string_replace(command, "<info>", *context.info);

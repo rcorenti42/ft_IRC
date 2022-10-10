@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                    ,---.      .`````-.     */
-/*                                                   /,--.|     /   ,-.  \    */
-/*    ,_   _, _, ,_   _,,  , ___,___,               //_  ||    (___/  |   |   */
-/*    |_) /  / \,|_) /_,|\ |' | ' |                /_( )_||          .'  /    */
-/*   '| \'\_'\_/'| \'\_ |'\|  |  _|_,             /(_ o _)|      _.-'_.-'     */
-/*    '  `  `'   '  `  `'  `  ' '                / /(_,_)||_   _/_  .'        */
-/*                                              /  `-----' || ( ' )(__..--.   */
-/*   Created: 2022/09/21 03:24:32               `-------|||-'(_{;}_)      |   */
-/*                                                      '-'   (_,_)-------'   */
-/*   Channel.cpp                                                              */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2022/10/07 06:55:35 by sobouatt         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #include "Channel.hpp"
 #include "Client.hpp"
@@ -41,16 +41,45 @@ std::vector<Client*>	Channel::getClients() {
 	return clients;
 }
 
+std::vector<Client *> Channel::getBanlist()
+{
+	std::vector<Client*>	banned;
+	for (std::vector<Client*>::iterator it = this->_banlist.begin(); it != this->_banlist.end(); it++)
+		banned.push_back(*it);
+	return banned;
+}
+
 std::map<int, Client*>	Channel::getClientsMap() {
 	return this->_clients;
 }
 
+string					Channel::getClientsList() {
+	string	ret("");
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		ret += it->second->getNickname() + " ";
+	return ret;
+}
+size_t					Channel::getVisiblesNbr() {
+	size_t	ret = 0;
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+		++ret;
+	return ret;
+}
 bool					Channel::isOperator(string client) {
 	bool	ret = false;
 	for (std::vector<Client*>::iterator it = this->_operators.begin(); it != this->_operators.end(); it++)
 		if ((*it)->getNickname() == client)
 			ret = true;
 	return ret;
+}
+
+bool					Channel::isBanned(string client)
+{
+	bool ret = false;
+	for (std::vector<Client*>::iterator it = this->_banlist.begin(); it != this->_banlist.end(); it++)
+		if ((*it)->getNickname() == client)
+			ret = true;
+	return (ret);
 }
 
 bool					Channel::isEmpty() const {return _clients.empty();}
@@ -64,6 +93,7 @@ void					Channel::addClient(Client& client) {
 }
 
 void					Channel::addOperator(Client& client) {_operators.push_back(&client);}
+void					Channel::addBanned(Client &client) {_banlist.push_back(&client);}
 void                	Channel::removeClient(Client& client) {_clients.erase(client.getSocket());}
 void                	Channel::addInvit(Client& client) {_invit.push_back(&client);}
 void                	Channel::removeInvit(Client& client) {

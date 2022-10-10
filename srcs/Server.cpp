@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 14:38:38 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/10 11:07:48 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,13 @@ void                    Server::erraseChannel(Channel channel) {
 };
 
 void					Server::display() {
-	/*
-	std::cout << "\033[2J\033[1;1H" << std::flush;
-	std::cout << "clients: " << std::endl;
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		std::cout << (*it).second->getNickname() << std::endl;
-	std::cout << std::endl << "channels: " << std::endl;
-	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
-		std::cout << (*it).second.getName() << std::endl;
-	*/
+	// std::cout << "\033[2J\033[1;1H" << std::flush;
+	// std::cout << "clients: " << std::endl;
+	// for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	// 	std::cout << (*it).second->getNickname() << std::endl;
+	// std::cout << std::endl << "channels: " << std::endl;
+	// for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	// 	std::cout << (*it).second.getName() << std::endl;
 };
 
 bool					Server::isNickTaken(std::string nick) {
