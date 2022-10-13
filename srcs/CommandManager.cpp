@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/13 19:44:30 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:49:43 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ CommandManager::CommandManager() {
 	replies[322] = "<channel> <nbVisiblesOnChannels> :<chanTopic>";
 	replies[323] = ":End of /LIST";
 	replies[324] = "<channel> <channel_mode>";
-	replies[329]
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
