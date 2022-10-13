@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/13 16:50:39 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:44:30 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ CommandManager::CommandManager() {
 	replies[322] = "<channel> <nbVisiblesOnChannels> :<chanTopic>";
 	replies[323] = ":End of /LIST";
 	replies[324] = "<channel> <channel_mode>";
+	replies[329]
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
@@ -50,7 +51,7 @@ CommandManager::CommandManager() {
 	replies[461] = "<command> :Not enough parameters";
 	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> :Channel key already set";
-	replies[472] = "<info> :is unknown mode char to me.";
+	replies[472] = "<info> :is unkwown char to me.";
 	replies[476] = "<channel> :The given channel mask was invalid";
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";
@@ -116,10 +117,6 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 	arg_vec.push_back("");
 	result->id = arg_vec[0];
 	result->args =  &(arg_vec[1]);
-	for (std::vector<string>::iterator it = arg_vec.begin(); it < arg_vec.end() ; ++it)
-	{
-		std::cout << "arg= " << *it << std::endl;
-	}
 }
 
 static bool	isAllowed(Client &client, string &command)
