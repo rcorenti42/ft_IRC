@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 13:01:07 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/13 18:36:47 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ void	banList(Context &context, string modestring)
 
 void 	clientMode(Context &context, std::string modestring)
 {
+	std::cout << "CLIENTMODE CALLED" << std::endl;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::string ret = context.client->getMode();
 
@@ -248,6 +249,8 @@ void 	clientMode(Context &context, std::string modestring)
 
 void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
 {
+	std::cout << "CHANNELMODE CALLED" << std::endl;
+	std::cout << "modestring = " << modestring << std::endl;
 	std::string ret = context.channel->getMode();
 	bool isOp = context.channel->isOperator(context.client->getNickname());
 	CommandManager *cmdmgr = CommandManager::getInstance();
@@ -266,6 +269,7 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 		pos = modestring.find_first_not_of(flgs);
 		std::string character(1, modestring[pos]);
 		context.info = &character;
+		modestring.erase(pos, 1);
 		cmdmgr->sendReply(472, context);
 	}
 	if (mode == 0)
@@ -298,17 +302,21 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 
 void MODE(Context &context, string *args)
 {
+	std::cout << "MODE COMMAND CALLED" << std::endl;
+	std::cout << "args[0]" << args[0] << std::endl;
+	std::cout << "args[1]" << args[1] << std::endl;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	context.info = args;
 	if ((*args)[0] == '#' || (*args)[0] == '&')
 	{
+		std::cout << "Salut" << std::endl;
 		try {context.channel = &Server::getInstance()->findChannel(*args);}
 		catch (Server::ChannelNotFoundException &e)
 		{
 			cmdmgr->sendReply(403, context);
 			return ;
 		}
-		if (args[1].empty() || args[2].empty())
+		if (args[1].empty())
 		{
 			cmdmgr->sendReply(324, context);
 			cmdmgr->sendReply(329, context); //reply pas encore la pour le temps (RPL_CREATIONTIME)
@@ -328,7 +336,7 @@ void MODE(Context &context, string *args)
 				cmdmgr->sendReply(401, context);
 			}
 		}
-		else if (args[1].empty() || args[2].empty())
+		else if (args[1].empty())
 			cmdmgr->sendReply(221, context);
 		else
 			clientMode(context, args[1]);

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/10 11:08:44 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/13 16:50:39 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 		result->message = cpy.substr(pos + 1);
 		cpy.erase(pos);
 	}
+	// std::cout << "packet = " << packet << std::endl;
 	pos = -1;
 	do {
 		cpy.erase(0, pos + 1);
@@ -115,6 +116,10 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 	arg_vec.push_back("");
 	result->id = arg_vec[0];
 	result->args =  &(arg_vec[1]);
+	for (std::vector<string>::iterator it = arg_vec.begin(); it < arg_vec.end() ; ++it)
+	{
+		std::cout << "arg= " << *it << std::endl;
+	}
 }
 
 static bool	isAllowed(Client &client, string &command)
