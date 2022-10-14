@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 13:01:07 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/13 19:27:41 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	USER(Context &context, string *args)
 	}
 };
 
-void	ISON(Context &context, string *args) {
+void	ISON(Context &context, std::string *args) {
+	std::cout << "ISON CALLED" << std::endl;
 	size_t pos;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
@@ -230,20 +231,29 @@ void 	clientMode(Context &context, std::string modestring)
 		if (modestring.find('i') != string::npos && (ret.find('i')) != string::npos) {
 			pos = ret.find('i');
 			ret.erase(pos, 1);
+			mode = 2;
 		}
 		if (modestring.find('s') != string::npos && (pos = ret.find('s')) != string::npos) {
 			pos = ret.find('s');
 			ret.erase(pos, 1);
+			mode = 2;
 		}
 	}
 	else if (mode == 1) {
 		if (modestring.find('i') != string::npos && (pos = ret.find('i')) == string::npos)
+		{
+			mode = 2;	
 			ret += 'i';
+		}
 		if (modestring.find('s') != string::npos && (pos = ret.find('s')) == string::npos)
-			ret += 's';			
+		{
+			mode = 2;
+			ret += 's';
+		}		
 	}
 	context.client->setMode(ret);
-	cmdmgr->sendReply(221, context);
+	if (mode == 2)
+		cmdmgr->sendReply(221, context);
 }
 
 void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
@@ -266,6 +276,7 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 		pos = modestring.find_first_not_of(flgs);
 		std::string character(1, modestring[pos]);
 		context.info = &character;
+		modestring.erase(pos, 1);
 		cmdmgr->sendReply(472, context);
 	}
 	if (mode == 0)
@@ -277,7 +288,10 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 				if (!isOp)
 					cmdmgr->sendReply(482, context);
 				else
+				{
+					mode = 2;
 					ret.erase(ret.find(flgs[i]), 1);
+				}
 			}
 		}
 	}
@@ -289,11 +303,15 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 				if (!isOp)
 					cmdmgr->sendReply(482, context);
 				else
+				{
 					ret += flgs[i];
+					mode = 2;
+				}
 			}
 	}
 	context.channel->setMode(ret);
-	cmdmgr->sendReply(324, context);
+	if (mode == 2)
+		cmdmgr->sendReply(324, context);
 }
 
 void MODE(Context &context, string *args)
@@ -308,7 +326,7 @@ void MODE(Context &context, string *args)
 			cmdmgr->sendReply(403, context);
 			return ;
 		}
-		if (args[1].empty() || args[2].empty())
+		if (args[1].empty())
 		{
 			cmdmgr->sendReply(324, context);
 			cmdmgr->sendReply(329, context); //reply pas encore la pour le temps (RPL_CREATIONTIME)
@@ -328,7 +346,7 @@ void MODE(Context &context, string *args)
 				cmdmgr->sendReply(401, context);
 			}
 		}
-		else if (args[1].empty() || args[2].empty())
+		else if (args[1].empty())
 			cmdmgr->sendReply(221, context);
 		else
 			clientMode(context, args[1]);
