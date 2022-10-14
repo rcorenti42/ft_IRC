@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/13 19:49:43 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/14 14:13:17 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ static void	string_replace(string &str, const string &substr, size_t repl)
 	str.replace(pos, substr.length(), ss.str());
 }
 
+string 	&strcap(string &str) {
+	for (string::iterator it = str.begin(); it != str.end(); ++it)
+		*it = std::toupper(*it);
+	return str;
+}
+
 void	CommandManager::parsePacket(const string &packet, Command *result, std::vector<string> &arg_vec) {
 	size_t pos = 0;
 	string cpy;
@@ -105,7 +111,6 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 		result->message = cpy.substr(pos + 1);
 		cpy.erase(pos);
 	}
-	// std::cout << "packet = " << packet << std::endl;
 	pos = -1;
 	do {
 		cpy.erase(0, pos + 1);
@@ -114,7 +119,7 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 			arg_vec.push_back(cpy.substr(0, pos));
 	} while (pos != string::npos);
 	arg_vec.push_back("");
-	result->id = arg_vec[0];
+	result->id = strcap(arg_vec[0]);
 	result->args =  &(arg_vec[1]);
 }
 
