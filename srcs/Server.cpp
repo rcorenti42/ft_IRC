@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 13:56:22 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:42:22 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,13 @@ void                Server::setPassword(char* password) {_password.assign(passwo
 void                Server::init(int port, char *pw) {
 	_connectionManager->init(port);
 	setPassword(pw);
+	_serverTime = std::time(NULL);
 };
+
+std::string			Server::getStartTime()
+{
+	return (std::ctime(&_serverTime));
+}
 
 Client*             Server::getClient(std::string nickName) {
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)

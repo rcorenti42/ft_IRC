@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/05 13:36:03 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:39:31 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class Server {
     time_t							_ping;
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
+	time_t							_serverTime;
     void                	acceptClient();
 	Server();
 public:
@@ -63,6 +64,7 @@ public:
     std::vector<Channel*>   getChannels();
 	std::string				getPassword() const;
 	std::string				getName() const;
+	std::string				getStartTime();
     void                    sendPing();
     void                    erraseClient(Client& client);
     void                    erraseChannel(Channel channel);

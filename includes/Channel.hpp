@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/07 06:48:17 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:59:13 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ private:
     string						_topic;
     string                 		_mode;
     string                 		_password;
+	// time_t						_creationTime;
 	std::map<int, Client*>		_clients;
     std::map<int, ClientMode>	_clientsWhat;
     std::vector<Client*>		_invit;

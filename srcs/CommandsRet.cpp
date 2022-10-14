@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 14:13:02 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:53:39 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void	USER(Context &context, string *args)
 };
 
 void	ISON(Context &context, std::string *args) {
-	std::cout << "ISON CALLED" << std::endl;
 	size_t pos;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
-	if (!args || args->empty())
+	(void)args;
+	if (context.message->empty())
 		cmdmgr->sendReply(461, context);
 	string str = *context.message;
 	string rep = "Users online:";
@@ -136,42 +136,45 @@ void	PONG(Context &context, string *args)
 }
 
 void	MOTD(Context &context, string *args) {
+	// CommandManager *cmdmgr = CommandManager::getInstance();
 	string	message = " - IR-C4 Message of the Day -\r\n";
-	message += "- 2042-5-4 00:42\r\n";
-	message += "- Welcome on IR-C4 Server !\r\n-\r\n-\r\n";
-	message += "-       ,---,,-.----.\r\n";
-	message += "-    ,`--.' |\\    /  \\\r\n";
-	message += "-    |   :  :;   :    \\\r\n";
-	message += "-    :   |  '|   | .\\ :\r\n";
-	message += "-    |   :  |.   : |: |\r\n";
-	message += "-    '   '  ;|   |  \\ :\r\n";
-	message += "-    |   |  ||   : .  /\r\n";
-	message += "-    '   :  ;;   | |  \\\r\n";
-	message += "-    |   |  '|   | ;\\  \\\r\n";
-	message += "-    '   :  |:   ' | \\.'\r\n";
-	message += "-    ;   |.' :   : :-'\r\n";
-	message += "-    '---'   |   |.'\r\n";
-	message += "-            `---'\r\n";
-	message += "-        ,---,.   ,---,.\r\n";
-	message += "-      ,'  .' | ,'  .' |\r\n";
-	message += "-    ,---.'   ,---.'   ,\r\n";
-	message += "-    |   |    |   |    |\r\n";
-	message += "-    :   :  .':   :  .'\r\n";
-	message += "-    :   |.'  :   |.'\r\n";
-	message += "-    `---'    `---'     ,--,\r\n";
-	message += "-      ,----..        ,--.'|\r\n";
-	message += "-     /   /   \\    ,--,  | :\r\n";
-	message += "-    |   :     :,---.'|  : '\r\n";
-	message += "-    .   |  ;. /;   : |  | ;\r\n";
-	message += "-    .   ; /--` |   | : _' |\r\n";
-	message += "-    ;   | ;    :   : |.'  |\r\n";
-	message += "-    |   : |    |   ' '  ; :\r\n";
-	message += "-    .   | '___ \\   \\  .'. |\r\n";
-	message += "-    '   ; : .'| `---`:  | '\r\n";
-	message += "-    '   | '/  :      '  ; |\r\n";
-	message += "-    |   :    /       |  : ;\r\n";
-	message += "-     \\   \\ .'        '  ,/\r\n";
-	message += "-      `---`          '--'\r\n-\r\n-\r\n";
+	message += "- Server running since ";
+	message += Server::getInstance()->getStartTime();
+	// message += "- 2042-5-4 00:42\r\n";
+	message += "- Welcome to IR-C4 Server !\r\n-\r\n-\r\n";
+	// message += "-       ,---,,-.----.\r\n";
+	// message += "-    ,`--.' |\\    /  \\\r\n";
+	// message += "-    |   :  :;   :    \\\r\n";
+	// message += "-    :   |  '|   | .\\ :\r\n";
+	// message += "-    |   :  |.   : |: |\r\n";
+	// message += "-    '   '  ;|   |  \\ :\r\n";
+	// message += "-    |   |  ||   : .  /\r\n";
+	// message += "-    '   :  ;;   | |  \\\r\n";
+	// message += "-    |   |  '|   | ;\\  \\\r\n";
+	// message += "-    '   :  |:   ' | \\.'\r\n";
+	// message += "-    ;   |.' :   : :-'\r\n";
+	// message += "-    '---'   |   |.'\r\n";
+	// message += "-            `---'\r\n";
+	// message += "-        ,---,.   ,---,.\r\n";
+	// message += "-      ,'  .' | ,'  .' |\r\n";
+	// message += "-    ,---.'   ,---.'   ,\r\n";
+	// message += "-    |   |    |   |    |\r\n";
+	// message += "-    :   :  .':   :  .'\r\n";
+	// message += "-    :   |.'  :   |.'\r\n";
+	// message += "-    `---'    `---'     ,--,\r\n";
+	// message += "-      ,----..        ,--.'|\r\n";
+	// message += "-     /   /   \\    ,--,  | :\r\n";
+	// message += "-    |   :     :,---.'|  : '\r\n";
+	// message += "-    .   |  ;. /;   : |  | ;\r\n";
+	// message += "-    .   ; /--` |   | : _' |\r\n";
+	// message += "-    ;   | ;    :   : |.'  |\r\n";
+	// message += "-    |   : |    |   ' '  ; :\r\n";
+	// message += "-    .   | '___ \\   \\  .'. |\r\n";
+	// message += "-    '   ; : .'| `---`:  | '\r\n";
+	// message += "-    '   | '/  :      '  ; |\r\n";
+	// message += "-    |   :    /       |  : ;\r\n";
+	// message += "-     \\   \\ .'        '  ,/\r\n";
+	// message += "-      `---`          '--'\r\n-\r\n-\r\n";
 	message += "- En vous connectant, vous acceptez implicitement les regles de 42Network.\r\n-\r\n";
 	message += "- In Trartiflette We Trust\r\n-\r\n";
 	message += "- UTK SoundSystem Is Here\r\n-\r\n";

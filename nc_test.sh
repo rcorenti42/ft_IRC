@@ -4,7 +4,7 @@
 
 NICK=irccat42
 SERVER=localhost
-PORT=4343
+PORT=4243
 CHAN="#irccat"
 
 {

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/06 13:39:05 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/14 19:14:41 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ int main(int argc, char** argv) {
 	}
     server->init(port, argv[2]);
 	try {server->run();}
-	catch (ConnectionManager::ConnectException e){std::cerr << e.what() << std::endl;}
+	catch (ConnectionManager::ConnectException e) {std::cerr << e.what() << std::endl;}
     return 0;
 }
