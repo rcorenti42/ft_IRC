@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/16 12:30:35 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/16 14:59:58 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ private:
     typedef std::map<int, ClientMode>::iterator CliIt;
     typedef std::map<int, ClientMode>::const_iterator CliCstIt;
 public:
-    Channel();
     Channel(string &name, Client *creator);
+	Channel();
     void                	setName(string &name);
     void                	setTopic(string &topic);
     void                	setMode(string &mode);
