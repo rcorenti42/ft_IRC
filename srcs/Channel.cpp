@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/07 06:55:35 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 12:31:03 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 
-Channel::Channel(string &name, Client *creator) : _name(name), _topic("") {
+Channel::Channel(string &name, Client *creator) : _name(name), _topic(""), _creationTime(std::time(NULL)) {
 	ClientMode elem(creator, "");
 	_clientsWhat[creator->getSocket()] = elem;
 }
@@ -117,3 +117,4 @@ const string         			&Channel::getName() const {return _name;}
 const string         			&Channel::getTopic() const {return _topic;}
 const string         			&Channel::getMode() const {return _mode;}
 const string         			&Channel::getPassword() const {return _password;}
+time_t							Server::getCreationTime() const {return _creationTime;}

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 11:10:51 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/14 18:00:48 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 12:24:45 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,4 @@ int ConnectionManager::getMainSock() const {return _sock;}
 ConnectionManager::ConnectionManager() {}
 ConnectionManager::~ConnectionManager() {close(_epoll_fd);}
 ConnectionManager::ConnectException::	ConnectException(const string &what) : _what(what) {}
-const char *ConnectionManager::ConnectException::what() const throw() {return _what.c_str();}
+const char *ConnectionManager::ConnectException::what() const throw() {(void)_what; return "Connection failed";}

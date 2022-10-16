@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 19:53:39 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 12:33:18 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ void	PONG(Context &context, string *args)
 }
 
 void	MOTD(Context &context, string *args) {
-	// CommandManager *cmdmgr = CommandManager::getInstance();
 	string	message = " - IR-C4 Message of the Day -\r\n";
 	message += "- Server running since ";
 	message += Server::getInstance()->getStartTime();

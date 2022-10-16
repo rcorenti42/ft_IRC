@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 19:14:41 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 12:13:01 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ int main(int argc, char** argv) {
 		std::cerr << "Invalid port" << std::endl;
 		exit(1);
 	}
-    server->init(port, argv[2]);
-	try {server->run();}
-	catch (ConnectionManager::ConnectException e) {std::cerr << e.what() << std::endl;}
+	try {
+    	server->init(port, argv[2]);
+		server->run();
+	}
+	catch (ConnectionManager::ConnectException &e) {std::cerr << e.what() << std::endl;}
     return 0;
 }

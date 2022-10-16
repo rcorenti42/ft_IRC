@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 19:59:13 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 12:30:35 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ private:
     string						_topic;
     string                 		_mode;
     string                 		_password;
-	// time_t						_creationTime;
+	const time_t				_creationTime;
 	std::map<int, Client*>		_clients;
     std::map<int, ClientMode>	_clientsWhat;
     std::vector<Client*>		_invit;
@@ -54,6 +54,7 @@ public:
     const string		    &getMode() const;
     const string		    &getPassword() const;
     void                	addClient(Client *client);
+	time_t					getCreationTime() const;
 	Client*					getClient(string name);
     std::vector<Client*>	getClients();
 	std::vector<Client *>	getBanlist();
