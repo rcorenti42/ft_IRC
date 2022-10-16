@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 19:42:22 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/16 15:55:23 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void                    Server::erraseClient(Client& client) {
 	delete &client;
 };
 void                    Server::erraseChannel(Channel channel) {
-	this->_channels.erase(channel.getName());
+	_channels.erase(channel.getName());
 };
 
 void					Server::display() {
@@ -133,6 +133,7 @@ void                    Server::run() {
 	int fd;
 
 	for(;;) {
+		Channel *toErase = NULL;
 		fd = _connectionManager->waitForEvent();
 		if (std::time(NULL) - _ping > 42) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
@@ -140,10 +141,10 @@ void                    Server::run() {
 		pruneClients();
 		for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
 			it->second->sendMessage();
-		for (std::map<std::string, Channel>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
-			if (it->second.isEmpty())
-				erraseChannel(it->second);
-		// display();
+		if (_channels.empty()) continue;
+		for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+			if (it->second.isEmpty()) toErase = &it->second;
+		if (toErase) erraseChannel(*toErase);
 	}
 };
 

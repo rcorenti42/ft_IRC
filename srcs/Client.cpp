@@ -6,14 +6,14 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:24:32 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/16 15:33:48 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Client.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _quitMessage("has quit"), _ping(std::time(NULL)) {
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -43,7 +43,7 @@ e_state		Client::getStats() const {
 	return _state;
 };
 string		Client::getQuitMessage() const {
-	return this->_quitMessage.empty() ? "has quit" : this->_quitMessage;
+	return _quitMessage;
 };
 void    	Client::setNickname(string nickname) {
     _nickname = nickname;
