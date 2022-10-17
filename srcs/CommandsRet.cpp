@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/17 20:26:05 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/17 21:56:02 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	PASS(Context &context, string *args)
 	if (context.client->getStats() == REGISTERED)
 		cmdmgr->sendReply(462, context);
 	else if (*args == Server::getInstance()->getPassword())
+	{
 		context.client->setState(REGISTERED);
+		std::cout << "logged\n";
+	}
 	else 
 		cmdmgr->sendReply(464, context);
 };

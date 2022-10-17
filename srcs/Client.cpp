@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/16 15:33:48 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:15:36 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,17 @@ void    Client::receiveMessage() {
 
 	try {packet = ConnectionManager::getInstance()->receivePacket(_sock);}
 	catch (ConnectionManager::ConnectException &e) {return ;}
+	std::cout << packet;
 	while ((pos = packet.find("\r\n")) != std::string::npos) {
     	command = packet.substr(0, pos);
 		packet.erase(0, pos + 2);
+		if (command.empty()) continue;
+		try {CommandManager::getInstance()->execute(command, *this);}
+		catch (CommandManager::CommandException e) {}
+    }
+	while ((pos = packet.find("\n")) != std::string::npos) {
+    	command = packet.substr(0, pos);
+		packet.erase(0, pos + 1);
 		if (command.empty()) continue;
 		try {CommandManager::getInstance()->execute(command, *this);}
 		catch (CommandManager::CommandException e) {}
@@ -124,6 +132,8 @@ void	Client::writePrefixMsg(int code, Client &client, string message) {
 void    Client::writeMessage(string message) {
 	_packets.push_back(message);
 };
+
+bool		Client::isDisconnected() const {char buf; return recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);}
 
 void    Client::sendMessage() {
     string packet;

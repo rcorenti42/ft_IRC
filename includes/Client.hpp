@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/10 11:18:57 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:12:10 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,5 @@ public:
     void    	sendMessage();
     void    	registerClient();
 	void		setState(e_state mode);
+	bool		isDisconnected() const;
 };
