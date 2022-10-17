@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/17 22:15:36 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:19:11 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void    Client::writeMessage(string message) {
 	_packets.push_back(message);
 };
 
-bool		Client::isDisconnected() const {char buf; return recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);}
+bool		Client::isDisconnected() const {char buf; return !recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);}
 
 void    Client::sendMessage() {
     string packet;
