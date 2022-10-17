@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/16 12:33:18 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/17 20:26:05 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,11 +391,11 @@ void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 	for (std::vector<string>::iterator it = names.begin(); it != names.end(); it++)
 	{
 		if ((*it)[0] != '#' && (*it)[0] != '&')
-			context.client->writePrefixMsg(*context.client, cmdmgr->getReply(476, context));
+			cmdmgr->sendReply(476, context);
 		else {
 			Channel& channel = Server::getInstance()->getChannel(*it);
 			context.channel = &channel;
-			if (channel.getClients().empty())
+			if (channel.isEmpty())
 				channel.addOperator(*context.client);
 			channel.addClient(*context.client);
 			if (!channel.getTopic().empty())
@@ -439,7 +439,7 @@ void	PRIVMSG(Context &context, string *args) {
 		std::vector<Client*>	cli = chan.getClients();
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
 			if ((*iter)->getNickname() != context.client->getNickname())
-				context.client->writePrefixMsg(*(*iter), "PRIVMSG " + *it + " :" + *context.message);
+				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
 		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
