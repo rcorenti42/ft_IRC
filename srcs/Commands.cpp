@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/17 21:56:02 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/18 16:11:23 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,11 +212,8 @@ void	banList(Context &context, string modestring)
 void 	clientMode(Context &context, std::string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
-	std::string ret = context.client->getMode();
-
 	int mode = 1;
 	size_t pos;
-	std::string tmp;
 
 	if (modestring[0] == '-') {
 		mode = 0;
@@ -224,42 +221,17 @@ void 	clientMode(Context &context, std::string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while (modestring.find_first_not_of("is") != string::npos)
+	while ((pos = modestring.find_first_not_of("is")) != string::npos)
 	{
-		pos = modestring.find_first_not_of("is");
-		std::string character(1, modestring[pos]);
+		string character(1, modestring[pos]);
 		context.info = &character;
 		modestring.erase(pos, 1);
 		cmdmgr->sendReply(472, context);
 	}
-	if (mode == 0) 
-	{
-		if (modestring.find('i') != string::npos && (ret.find('i')) != string::npos) {
-			pos = ret.find('i');
-			ret.erase(pos, 1);
-			mode = 2;
-		}
-		if (modestring.find('s') != string::npos && (pos = ret.find('s')) != string::npos) {
-			pos = ret.find('s');
-			ret.erase(pos, 1);
-			mode = 2;
-		}
-	}
-	else if (mode == 1) {
-		if (modestring.find('i') != string::npos && (pos = ret.find('i')) == string::npos)
-		{
-			mode = 2;	
-			ret += 'i';
-		}
-		if (modestring.find('s') != string::npos && (pos = ret.find('s')) == string::npos)
-		{
-			mode = 2;
-			ret += 's';
-		}		
-	}
-	context.client->setMode(ret);
-	if (mode == 2)
-		cmdmgr->sendReply(221, context);
+	if (modestring.empty()) return;
+	if (mode == 0) context.client->removeMode(modestring);
+	else if (mode == 1) context.client->addMode(modestring);
+	cmdmgr->sendReply(221, context);
 }
 
 void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
@@ -277,9 +249,8 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while (modestring.find_first_not_of(flgs) != std::string::npos)
+	while ((pos = modestring.find_first_not_of(flgs)) != std::string::npos)
 	{
-		pos = modestring.find_first_not_of(flgs);
 		std::string character(1, modestring[pos]);
 		context.info = &character;
 		modestring.erase(pos, 1);
@@ -333,10 +304,7 @@ void MODE(Context &context, string *args)
 			return ;
 		}
 		if (args[1].empty())
-		{
 			cmdmgr->sendReply(324, context);
-			cmdmgr->sendReply(329, context); //reply pas encore la pour le temps (RPL_CREATIONTIME)
-		}
 		else
 			channelMode(context, args[1]);
 	}
@@ -425,19 +393,16 @@ void	PRIVMSG(Context &context, string *args) {
 		cmdmgr->sendReply(412, context);
 		return ;
 	}
-	end = args->find(',');
-	while (end != -1) {
-		if (args->substr(start, end - start)[0] == '#' || args->substr(start, end - start)[0] == '&')
-			channels.push_back(args->substr(start, end - start));
-		else
-			clients.push_back(args->substr(start, end - start));
-		start = end + 1;
+	do {
 		end = args->find(',', start);
-	}
-	if (args->substr(start)[0] == '#' || args->substr(start)[0] == '&')
-		channels.push_back(args->substr(start));
-	else
-		clients.push_back(args->substr(start));
+		string arg = args->substr(start, end - start);
+		if (arg[0] == '#' || arg[0] == '&')
+			channels.push_back(arg);
+		else
+			clients.push_back(arg);
+		start = end + 1;
+
+	} while (end != -1);
 	for (std::vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
 		Channel&				chan = Server::getInstance()->getChannel(*it);
 		std::vector<Client*>	cli = chan.getClients();

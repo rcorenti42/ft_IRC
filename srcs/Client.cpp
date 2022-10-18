@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/17 22:19:11 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/18 15:33:52 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,20 @@ void    Client::writeMessage(string message) {
 };
 
 bool		Client::isDisconnected() const {char buf; return !recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);}
+
+void		Client::addMode(const string &mode) {
+	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)
+		if (_mode.find(*it) == string::npos) _mode += *it;
+}
+
+void		Client::removeMode(const string &mode) {
+	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)
+	{
+		size_t pos = mode.find(*it);
+		if (pos == string::npos) continue;
+		_mode.erase(pos, 1);
+	}
+}
 
 void    Client::sendMessage() {
     string packet;
