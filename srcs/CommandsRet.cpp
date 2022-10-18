@@ -132,10 +132,11 @@ void	PONG(Context &context, string *args)
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
 	string str;
-	if (args->empty())
+	if (!context.message)
 		cmdmgr->sendReply(409, context);
 	else
 		context.client->setPing(std::time(NULL));
+	(void)args;
 }
 
 void	MOTD(Context &context, string *args) {
