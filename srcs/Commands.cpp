@@ -37,7 +37,7 @@ void	NICK(Context &context, string *args)
 	context.args = args;
 	if (!args || args->empty())
 		cmdmgr->sendReply(431, context);
-	else if (Server::getInstance()->isNickTaken(*args)) 
+	else if (Server::getInstance()->isNickTaken(*args))
 		cmdmgr->sendReply(433, context);
 	else {
 		context.client->writePrefixMsg("NICK :" + *args);

@@ -46,7 +46,7 @@ CommandManager::CommandManager() {
 	replies[403] = "<info> : No such channel";
 	replies[409] = ":No origin specified";
 	replies[431] = ":No nickname given";
-	replies[433] = "<nickname> :Nickname is already in use";
+	replies[433] = "* <args> :Nickname is already in use";
 	replies[442] = "<channel> :You're not on that channel";
 	replies[461] = "<command> :Not enough parameters";
 	replies[462] = ":You may not reregister";
@@ -169,6 +169,7 @@ string CommandManager::getReply(int code, Context context)
 	string command = replies[code];
 	string_replace(command, "<network>", "IR-C4");
 	string_replace(command, "<nickname>", context.client->getNickname());
+	string_replace(command, "<args>", *context.args);
 	string_replace(command, "<servername>", "irc.ir-c4.org");
 	string_replace(command, "<version>", "420");
 	string_replace(command, "<datetime>", serv->getInstance()->getStartTime());

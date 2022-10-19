@@ -74,4 +74,3 @@ public:
 	bool					isOn(int socket);
 	bool					isEmpty() const;
 };
-
