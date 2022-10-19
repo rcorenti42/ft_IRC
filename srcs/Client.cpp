@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/19 23:32:51 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/19 23:35:30 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,16 +151,6 @@ void		Client::removeMode(const string &modestring)
 		pos = _mode.find_first_of(modestring);
 	}
 }
-
-// void		Client::removeMode(const string &mode)
-// {
-// 	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)
-// 	{
-// 		size_t pos = mode.find(*it);
-// 		if (pos == string::npos) continue;
-// 		_mode.erase(pos, 1);
-// 	}
-// }
 
 void    Client::sendMessage() {
     string packet;
