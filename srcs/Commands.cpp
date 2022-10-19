@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CommandsRet.cpp                                    :+:      :+:    :+:   */
+/*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/18 16:11:23 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/19 23:46:26 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,9 +222,12 @@ void 	clientMode(Context &context, std::string modestring)
 		modestring.erase(pos, 1);
 		cmdmgr->sendReply(472, context);
 	}
-	if (modestring.empty()) return;
-	if (mode == 0) context.client->removeMode(modestring);
-	else if (mode == 1) context.client->addMode(modestring);
+	if (modestring.empty())
+		return;
+	if (mode == 0)
+		context.client->removeMode(modestring);
+	else if (mode == 1)
+		context.client->addMode(modestring);
 	cmdmgr->sendReply(221, context);
 }
 
