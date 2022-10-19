@@ -31,10 +31,10 @@ class Server;
 class CommandManager;
 
 enum e_state {
-    CONNECTED,
-    CHECKPASS,
-    REGISTERED,
-    NONE
+    CONNECTED, //no password set
+    CHECKPASS, //password set but no nickname set 
+    REGISTERED, //password and nickname set
+    NONE //disconnected
 };
 
 class Client {

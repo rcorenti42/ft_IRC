@@ -23,13 +23,10 @@ void	PASS(Context &context, string *args)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
-	if (context.client->getStats() == REGISTERED)
+	if (context.client->getStats() == CHECKPASS || context.client->getStats() == REGISTERED)
 		cmdmgr->sendReply(462, context);
 	else if (*args == Server::getInstance()->getPassword())
-	{
-		context.client->setState(REGISTERED);
-		std::cout << "logged\n";
-	}
+		context.client->setState(CHECKPASS);
 	else 
 		cmdmgr->sendReply(464, context);
 };
@@ -141,9 +138,6 @@ void	PONG(Context &context, string *args)
 
 void	MOTD(Context &context, string *args) {
 	string	message = " - IR-C4 Message of the Day -\r\n";
-	message += "- Server running since ";
-	message += Server::getInstance()->getStartTime();
-	// message += "- 2042-5-4 00:42\r\n";
 	message += "- Welcome to IR-C4 Server !\r\n-\r\n-\r\n";
 	// message += "-       ,---,,-.----.\r\n";
 	// message += "-    ,`--.' |\\    /  \\\r\n";

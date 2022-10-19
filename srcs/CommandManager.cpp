@@ -46,8 +46,10 @@ CommandManager::CommandManager() {
 	replies[403] = "<info> : No such channel";
 	replies[409] = ":No origin specified";
 	replies[431] = ":No nickname given";
+	replies[433] = "<nickname> :Nickname is already in use";
 	replies[442] = "<channel> :You're not on that channel";
 	replies[461] = "<command> :Not enough parameters";
+	replies[462] = ":You may not reregister";
 	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> :Channel key already set";
 	replies[472] = "<info> :is unkwown char to me.";
@@ -126,14 +128,14 @@ void	CommandManager::parsePacket(const string &packet, Command *result, std::vec
 static bool	isAllowed(Client &client, string &command)
 {
 	if (command == "PASS") return true;
-	if (client.getStats() == CHECKPASS) return false;
+	if (client.getStats() == CONNECTED) return false;
 	if (command == "NICK" || command == "USER") return true;
-	if (client.getStats() == REGISTERED) return false;
+	if (client.getStats() == CHECKPASS) return false;
 	return true;
 }
 
 void    CommandManager::registerClient(Client &client, Context &context) {
-	client.setState(CONNECTED);
+	client.setState(REGISTERED);
     client.writePrefixMsg(1, getReply(1, context));
 	client.writePrefixMsg(2, getReply(2, context));
 	client.writePrefixMsg(3, getReply(3, context));
@@ -157,7 +159,7 @@ void	CommandManager::execute(string &packet, Client &client) {
 	context.args = NULL;
 	if (_listCommands.find(command.id) == _listCommands.end()) return;
 	_listCommands[command.id](context, command.args);
-	if (client.getStats() == REGISTERED && !client.getNickname().empty())
+	if (client.getStats() == CHECKPASS && !client.getNickname().empty())
 		registerClient(client, context);
 }
 
@@ -169,7 +171,7 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<nickname>", context.client->getNickname());
 	string_replace(command, "<servername>", "irc.ir-c4.org");
 	string_replace(command, "<version>", "420");
-	string_replace(command, "<datetime>", "4 may at 2042, 00:42:42");
+	string_replace(command, "<datetime>", serv->getInstance()->getStartTime());
 	string_replace(command, "<umodes>", "is");
 	string_replace(command, "<cmodes>", "opsitnmlbvk");
 	string_replace(command, "<user_mode>", context.client->getMode());

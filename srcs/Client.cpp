@@ -13,7 +13,7 @@
 
 #include "Client.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(CHECKPASS), _sock(sock), _quitMessage("has quit"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _quitMessage("has quit"), _ping(std::time(NULL)) {
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -72,7 +72,7 @@ void		Client::setQuitMessage(string message) {
 
 string	Client::stateMsg() {
 	string	state = "";
-	if (_state == CONNECTED) {
+	if (_state == REGISTERED) {
 		state = _nickname;
 		if (!_addr.empty()) {
 			if (!_username.empty())

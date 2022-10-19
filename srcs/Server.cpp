@@ -75,10 +75,12 @@ std::vector<Channel*>   Server::getChannels() {
 };
 
 void                    Server::sendPing() {
+	std::stringstream	ss;
+	ss << rand();
 	_ping = std::time(NULL);
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		if ((*it).second->getStats() == CONNECTED)
-			(*it).second->writeMessage("PING 42");
+		if ((*it).second->getStats() == REGISTERED)
+			(*it).second->writeMessage("PING " + ss.str());
 };
 void                    Server::erraseClient(Client& client) {
 	std::vector<Client*>	clients;
