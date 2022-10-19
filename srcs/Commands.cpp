@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/19 23:27:31 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/19 23:46:26 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 				else
 				{
 					mode = 2;
-					ret.erase(ret.find(flgs[i]));
+					ret.erase(ret.find(flgs[i]), 1);
 				}
 			}
 		}
