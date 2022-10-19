@@ -35,6 +35,7 @@ CommandManager::CommandManager() {
 	replies[324] = "<channel> <channel_mode>";
 	replies[331] = "<channel> :No topic is set";
 	replies[332] = "<channel> :<topic>";
+	replies[341] = "<channel> <nickname>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
 	replies[353] = "<channel> : <namelist>";
 	replies[366] = "<channel> :End of /NAMES list";
@@ -48,6 +49,7 @@ CommandManager::CommandManager() {
 	replies[431] = ":No nickname given";
 	replies[433] = "* <args> :Nickname is already in use";
 	replies[442] = "<channel> :You're not on that channel";
+	replies[443] = "<nickname> <channel> :is already on channel";
 	replies[461] = "<command> :Not enough parameters";
 	replies[462] = ":You may not reregister";
 	replies[464] = ":Password incorrect";

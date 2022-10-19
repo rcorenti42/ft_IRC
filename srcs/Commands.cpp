@@ -434,10 +434,10 @@ void	NOTICE(Context& context, string* args) {
 		std::vector<Client*>	cli = chan.getClients();
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
 			if ((*iter)->getNickname() != context.client->getNickname())
-				context.client->writePrefixMsg(*(*iter), "PRIVMSG " + *it + " :" + *context.message);
+				context.client->writePrefixMsg(*(*iter), "NOTICE " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
+		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "NOTICE " + *it + " :" + *context.message);
 };
 
 void	PART(Context &context, string *args) {
@@ -557,4 +557,35 @@ void	LIST(Context& context, string* args) {
 	}
 	cmdmgr->sendReply(323, context);
 	(void)args;
+};
+
+void	INVITE(Context& context, string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	*context.message = "Inviting " + *args + " in channel " + args[1] + " ...";
+	if (!args || args->empty()) {
+		cmdmgr->sendReply(461, context);
+		return;
+	}
+	try {
+		Server::getInstance()->findClient(*args);
+	}
+	catch (Server::ClientNotFoundException& e) {
+		cmdmgr->sendReply(401, context);
+		return;
+	}
+	if (context.channel->getClientsMap().find(context.client->getSocket()) == context.channel->getClientsMap().end()) {
+		cmdmgr->sendReply(442, context);
+		return;
+	}
+	if (!context.channel->getClient(*args)) {
+		cmdmgr->sendReply(443, context);
+		return;
+	}
+	if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname())) {
+		cmdmgr->sendReply(482, context);
+		return;
+	}
+	cmdmgr->sendReply(341, context);
+	NOTICE(context, args + 1);
+	context.client->writePrefixMsg(Server::getInstance()->findClient(*args), *context.packet);
 };

@@ -52,6 +52,7 @@ void	QUIT(Context &context, string *args);
 void	OPER(Context &context, string *args);
 void	VERSION(Context &context, string *args);
 void	KICK(Context &context, string *args);
+void	INVITE(Context& context, string* args);
 
 
 class CommandManager {
