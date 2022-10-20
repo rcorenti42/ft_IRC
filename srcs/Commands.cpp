@@ -391,7 +391,7 @@ void JOIN(Context &context, string *args)
 			context.channel = &channel;
 			if (channel.isEmpty())
 				channel.addOperator(*context.client);
-			else if (channel.getMode().find('i') == string::npos) {
+			else if (channel.getMode().find('i') != string::npos) {
 				if (channel.isInvited(context.client->getNickname()))
 					channel.removeInvit(*context.client);
 				else
