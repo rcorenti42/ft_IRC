@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/20 05:04:55 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/20 23:28:41 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,23 +222,36 @@ void 	clientMode(Context &context, std::string modestring)
 
 void	argMode(Context &context, std::string *args, std::string modestring, int mode)
 {
-	(void)context;
+	// CommandManager *cmdmgr = CommandManager::getInstance();
 	size_t i = 2;
 	size_t pos = modestring.find_first_of("ov");
+	Client *client;
+	std::cout << "context.client" << context.client->getNickname() << std::endl;
 	while (pos != std::string::npos)
 	{
+		try
+		{
+			client = &Server::getInstance()->findClient(args[i]);
+		}
+		catch(Server::ClientNotFoundException &e)
+		{ return;}
 		if (mode == 0)
 		{
 			if (modestring[pos] == 'o')
-				std::cout << "We need to remove operator " << args[i] << std::endl;
+			{
+				context.channel->removeOperator(*client);
+				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " -o :" + client->getNickname());
+			}
 			else if (modestring[pos] == 'v')
 				std::cout << "We need to remove verbose " << args[i] << std::endl;
 		}
 		else if (mode == 1)
 		{
 			if (modestring[pos] == 'o')
-				std::cout << "We need to add operator " << args[i] << std::endl;
-
+			{
+				context.channel->addOperator(*client);
+				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +o :" + client->getNickname());
+			}
 			else if (modestring[pos] == 'v')
 				std::cout << "We need to add verbose " << args[i] << std::endl;
 		}
