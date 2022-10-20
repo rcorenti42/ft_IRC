@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/16 15:01:19 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/20 22:21:34 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,15 @@ void					Channel::addClient(Client& client) {
 }
 
 void					Channel::addOperator(Client& client) {_operators.push_back(&client);}
+
+void					Channel::removeOperator(Client &client)
+{
+	std::vector<Client*>::iterator it = std::find(_operators.begin(), _operators.end(), &client);
+    if (it != _operators.end()) {
+        _operators.erase(it);
+	}
+}
+
 void                	Channel::removeClient(Client& client) {_clients.erase(client.getSocket());}
 void                	Channel::addInvit(Client& client) {_invit.push_back(&client);}
 void                	Channel::removeInvit(Client& client) {

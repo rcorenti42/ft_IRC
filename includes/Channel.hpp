@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/16 14:59:58 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/20 22:15:20 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ public:
 	bool					isInvited(string client);
     void                	addClient(Client& client);
 	void					addOperator(Client& client);
+	void					removeOperator(Client &client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);
