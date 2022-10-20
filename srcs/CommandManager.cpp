@@ -82,6 +82,7 @@ CommandManager::CommandManager() {
 	_listCommands["VERSION"] = VERSION;
 	_listCommands["KICK"] = KICK;
 	_listCommands["INVITE"] = INVITE;
+	_listCommands["WALLOPS"] = WALLOPS;
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)
