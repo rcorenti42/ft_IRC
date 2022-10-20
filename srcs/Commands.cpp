@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/19 23:46:26 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/20 05:04:55 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,12 +231,41 @@ void 	clientMode(Context &context, std::string modestring)
 	cmdmgr->sendReply(221, context);
 }
 
-void	channelMode(Context &context, std::string modestring) //ecrire un message MODE a tout les clients dans le channel
+void	argMode(Context &context, std::string *args, std::string modestring, int mode)
+{
+	(void)context;
+	size_t i = 2;
+	size_t pos = modestring.find_first_of("ov");
+	while (pos != std::string::npos)
+	{
+		if (mode == 0)
+		{
+			if (modestring[pos] == 'o')
+				std::cout << "We need to remove operator " << args[i] << std::endl;
+			else if (modestring[pos] == 'v')
+				std::cout << "We need to remove verbose " << args[i] << std::endl;
+		}
+		else if (mode == 1)
+		{
+			if (modestring[pos] == 'o')
+				std::cout << "We need to add operator " << args[i] << std::endl;
+
+			else if (modestring[pos] == 'v')
+				std::cout << "We need to add verbose " << args[i] << std::endl;
+		}
+		modestring.erase(pos, 1);
+		pos = modestring.find_first_of("ov");
+		i++;
+	}
+		
+}
+
+void	channelMode(Context &context, std::string modestring, std::string *args) //ecrire un message MODE a tout les clients dans le channel
 {
 	std::string ret = context.channel->getMode();
 	bool isOp = context.channel->isOperator(context.client->getNickname());
 	CommandManager *cmdmgr = CommandManager::getInstance();
-	std::string flgs = "opsitnmlbv";
+	std::string flgs = "inpstmov";
 	int mode = 1;
 	size_t pos;
 
@@ -255,6 +284,7 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 	}
 	if (mode == 0)
 	{
+		flgs = "inpstm";
 		for (size_t i = 0; i < flgs.size(); i++)
 		{
 			if (modestring.find(flgs[i]) != std::string::npos && (ret.find(flgs[i]) != std::string::npos))
@@ -271,7 +301,9 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 	}
 	else if (mode == 1)
 	{
+		flgs = "inpstm";
 		for (size_t i = 0; i < flgs.size(); i++)
+		{
 			if (modestring.find(flgs[i]) != std::string::npos && ret.find(flgs[i]) == std::string::npos)
 			{
 				if (!isOp)
@@ -282,7 +314,9 @@ void	channelMode(Context &context, std::string modestring) //ecrire un message M
 					mode = 2;
 				}
 			}
+		}
 	}
+	argMode(context, args, modestring, mode);
 	context.channel->setMode(ret);
 	if (mode == 2)
 		cmdmgr->sendReply(324, context);
@@ -303,7 +337,7 @@ void MODE(Context &context, string *args)
 		if (args[1].empty())
 			cmdmgr->sendReply(324, context);
 		else
-			channelMode(context, args[1]);
+			channelMode(context, args[1], args);
 	}
 	else
 	{
