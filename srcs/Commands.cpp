@@ -564,6 +564,13 @@ void	LIST(Context& context, string* args) {
 
 void	INVITE(Context& context, string* args) {
 	CommandManager*	cmdmgr = CommandManager::getInstance();
+	context.args = args;
+	try {
+		context.channel = &Server::getInstance()->findChannel(args[1]);
+	} catch (Server::ChannelNotFoundException& e) {
+		cmdmgr->sendReply(442, context);
+		return;
+	}
 	*context.message = "Inviting " + *args + " in channel " + args[1] + " ...";
 	if (!args || args->empty()) {
 		cmdmgr->sendReply(461, context);
@@ -571,8 +578,7 @@ void	INVITE(Context& context, string* args) {
 	}
 	try {
 		Server::getInstance()->findClient(*args);
-	}
-	catch (Server::ClientNotFoundException& e) {
+	} catch (Server::ClientNotFoundException& e) {
 		cmdmgr->sendReply(401, context);
 		return;
 	}
