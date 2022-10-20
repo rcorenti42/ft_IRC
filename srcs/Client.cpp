@@ -13,7 +13,7 @@
 
 #include "Client.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _quitMessage("has quit"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _operServ(false), _quitMessage("has quit"), _ping(std::time(NULL)) {
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -21,6 +21,9 @@ Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _quit
 Client::~Client() {
     close(_sock);
 };
+bool		Client::getOperServ() const {
+	return this->_operServ;
+}
 int     	Client::getSocket() const {
     return _sock;
 };
@@ -44,6 +47,9 @@ e_state		Client::getStats() const {
 };
 string		Client::getQuitMessage() const {
 	return _quitMessage;
+};
+void		Client::setOperServ(bool oper) {
+	this->_operServ = oper;
 };
 void    	Client::setNickname(string nickname) {
     _nickname = nickname;
