@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:22 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/14 16:48:15 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:38:11 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ struct Context {
 	string	*packet;
 };
 
+void	LIST(Context &context, string *args);
 void	PASS(Context &context, string *args);
 void	NICK(Context &context, string *args);
 void	USER(Context &context, string *args);

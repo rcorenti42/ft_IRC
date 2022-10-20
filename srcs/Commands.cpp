@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/20 23:52:27 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:43:06 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -611,7 +611,8 @@ void	ADMIN(Context& context, string* args) {
 	(void)args;
 };
 
-void	LIST(Context& context, string* args) {
+void	LIST(Context& context, string* args)
+{
 	std::vector<Channel*>	chan = Server::getInstance()->getChannels();
 	CommandManager*			cmdmgr = CommandManager::getInstance();
 	cmdmgr->sendReply(321, context);
