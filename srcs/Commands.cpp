@@ -618,11 +618,12 @@ void	INVITE(Context& context, string* args) {
 		cmdmgr->sendReply(443, context);
 		return;
 	}
-	if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname())) {
+	if (!Server::getInstance()->getChannel(args[1]).isOperator(context.client->getNickname())) {
 		cmdmgr->sendReply(482, context);
 		return;
 	}
 	cmdmgr->sendReply(341, context);
 	NOTICE(context, args + 1);
 	context.client->writePrefixMsg(Server::getInstance()->findClient(*args), *context.packet);
+	Server::getInstance()->findChannel(args[1]).addInvit(*Server::getInstance()->getClient(*args));
 };
