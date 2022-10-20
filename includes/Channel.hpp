@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/20 22:15:20 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/20 23:43:57 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ private:
 	std::map<int, Client*>		_clients;
     std::map<int, ClientMode>	_clientsWhat;
     std::vector<Client*>		_invit;
+	std::vector<Client *>		_verbose;
 	std::vector<Client*>		_operators;
     typedef std::map<int, ClientMode>::iterator CliIt;
     typedef std::map<int, ClientMode>::const_iterator CliCstIt;
@@ -65,6 +66,8 @@ public:
     void                	addClient(Client& client);
 	void					addOperator(Client& client);
 	void					removeOperator(Client &client);
+	void					addVerbose(Client &client);
+	void					removeVerbose(Client &client);
     void                	removeClient(Client& client);
     void                	addInvit(Client& client);
     void                	removeInvit(Client& client);

@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/20 22:21:34 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/20 23:58:50 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,20 @@ void					Channel::addOperator(Client& client) {_operators.push_back(&client);}
 void					Channel::removeOperator(Client &client)
 {
 	std::vector<Client*>::iterator it = std::find(_operators.begin(), _operators.end(), &client);
-    if (it != _operators.end()) {
+    if (it != _operators.end())
         _operators.erase(it);
-	}
+}
+
+void					Channel::removeVerbose(Client &client)
+{
+	std::vector<Client*>::iterator it = std::find(_verbose.begin(), _verbose.end(), &client);
+    if (it != _verbose.end())
+        _verbose.erase(it);
 }
 
 void                	Channel::removeClient(Client& client) {_clients.erase(client.getSocket());}
 void                	Channel::addInvit(Client& client) {_invit.push_back(&client);}
+void					Channel::addVerbose(Client &client) {_verbose.push_back(&client);}
 void                	Channel::removeInvit(Client& client) {
     std::vector<Client*>::iterator it = std::find(_invit.begin(), _invit.end(), &client);
     if (it != _invit.end()) {
