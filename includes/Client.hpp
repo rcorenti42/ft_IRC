@@ -40,6 +40,7 @@ enum e_state {
 class Client {
     e_state                     				_state;
     int                         				_sock;
+	bool										_operServ;
     std::string                 				_nickname;
     std::string                 				_username;
 	std::string									_realname;
@@ -61,12 +62,14 @@ public:
 	std::string	getAddr() const;
 	std::string	getQuitMessage() const;
 	e_state		getStats() const;
+	bool		getOperServ() const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
 	void		setRealName(std::string realname);
 	void		setQuitMessage(std::string message);
 	void		setMode(std::string mode);
 	void		setPing(time_t);
+	void		setOperServ(bool oper);
 	std::string	stateMsg();
     void    	packetsHandler();
     void    	receiveMessage();

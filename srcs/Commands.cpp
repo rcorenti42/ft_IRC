@@ -537,9 +537,22 @@ void	TOPIC(Context &context, string *args) {
 };
 
 void	OPER(Context &context, string *args) {
-		CommandManager *cmdmgr = CommandManager::getInstance();
-		cmdmgr->sendReply(491, context);
-		(void) args;
+	std::map<string, string>	operators;
+	operators["rcorenti"] = "stickos";
+	operators["sobouatt"] = "1234";
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	if (!args || args->empty() || args[1].empty()) {
+		cmdmgr->sendReply(461, context);
+		return ;
+	}
+	for (std::map<string, string>::iterator it = operators.begin(); it != operators.end(); ++it)
+		if ((*it).first == *args && (*it).second == args[1]) {
+			cmdmgr->sendReply(381, context);
+			context.client->setOperServ(true);
+			return ;
+		}
+	cmdmgr->sendReply(464, context);
+	(void) args;
 };
 
 void	QUIT(Context &context, string *args) {
@@ -646,4 +659,18 @@ void	INVITE(Context& context, string* args) {
 	NOTICE(context, args + 1);
 	context.client->writePrefixMsg(Server::getInstance()->findClient(*args), *context.packet);
 	Server::getInstance()->findChannel(args[1]).addInvit(*Server::getInstance()->getClient(*args));
+};
+
+void	WALLOPS(Context& context, string* args) {
+	//CommandManager*			cmdmgr = CommandManager::getInstance();
+	//std::vector<Client*>	clientsList = Server::getInstance()->getClients();
+	//if (!context.message || context.message->empty()) {
+	//	cmdmgr->sendReply(461, context);
+	//	return ;
+	//}
+	//for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
+	//	if ((*it)->getNickname() != context.client->getNickname() &&  (*it)->getOperServ())
+	//		(*it)->writePrefixMsg(*context.client, "WALLOPS :" + *context.message);
+	(void)args;
+	(void)context;
 };

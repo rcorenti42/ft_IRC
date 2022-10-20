@@ -43,6 +43,7 @@ CommandManager::CommandManager() {
 	replies[368] = "<channel> :End of channel ban list";
 	replies[371] = "<info>";
 	replies[374] = "End of /INFO list";
+	replies[381] = ":You are now an IRC operator";
 	replies[401] = "<nickname> :No such nick";
 	replies[403] = "<info> : No such channel";
 	replies[409] = ":No origin specified";
