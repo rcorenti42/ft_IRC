@@ -663,15 +663,14 @@ void	INVITE(Context& context, string* args) {
 };
 
 void	WALLOPS(Context& context, string* args) {
-	//CommandManager*			cmdmgr = CommandManager::getInstance();
-	//std::vector<Client*>	clientsList = Server::getInstance()->getClients();
-	//if (!context.message || context.message->empty()) {
-	//	cmdmgr->sendReply(461, context);
-	//	return ;
-	//}
-	//for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
-	//	if ((*it)->getNickname() != context.client->getNickname() &&  (*it)->getOperServ())
-	//		(*it)->writePrefixMsg(*context.client, "WALLOPS :" + *context.message);
+	CommandManager*			cmdmgr = CommandManager::getInstance();
+	std::vector<Client*>	clientsList = Server::getInstance()->getClients();
+	if (!context.message || context.message->empty()) {
+		cmdmgr->sendReply(461, context);
+		return ;
+	}
+	for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
+		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ())
+			context.client->writePrefixMsg(*(*it), "WALLOPS :" + *context.message);
 	(void)args;
-	(void)context;
 };

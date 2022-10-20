@@ -54,6 +54,7 @@ void	OPER(Context &context, string *args);
 void	VERSION(Context &context, string *args);
 void	KICK(Context &context, string *args);
 void	INVITE(Context& context, string* args);
+void	WALLOPS(Context& context, string* args);
 
 class CommandManager {
 private:
