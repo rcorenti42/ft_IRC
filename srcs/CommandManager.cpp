@@ -55,6 +55,7 @@ CommandManager::CommandManager() {
 	replies[464] = ":Password incorrect";
 	replies[467] = "<channel> :Channel key already set";
 	replies[472] = "<info> :is unkwown char to me.";
+	replies[473] = "<channel> :Cannot join channel (+i)";
 	replies[476] = "<channel> :The given channel mask was invalid";
 	replies[482] = "<channel> :You're not a channel operator";
 	replies[501] = ":Unknown MODE flag";
@@ -194,7 +195,8 @@ string CommandManager::getReply(int code, Context context)
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());
 		string_replace(command, "<namelist>", context.channel->getClientsList());
-	}
+	} else
+		string_replace(command, "<channel>", context.args[1]);
 	if (context.info)
 		string_replace(command, "<info>", *context.info);
 	if (context.args)

@@ -54,7 +54,6 @@ void	VERSION(Context &context, string *args);
 void	KICK(Context &context, string *args);
 void	INVITE(Context& context, string* args);
 
-
 class CommandManager {
 private:
 	typedef void (*t_command)(Context &, string *);

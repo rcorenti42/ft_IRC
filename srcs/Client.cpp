@@ -89,21 +89,21 @@ void    Client::receiveMessage() {
     size_t  	pos = 0;
 
 	try {packet = ConnectionManager::getInstance()->receivePacket(_sock);}
-	catch (ConnectionManager::ConnectException &e) {return ;}
+	catch (ConnectionManager::ConnectException& e) {return ;}
 	std::cout << packet;
 	while ((pos = packet.find("\r\n")) != std::string::npos) {
     	command = packet.substr(0, pos);
 		packet.erase(0, pos + 2);
 		if (command.empty()) continue;
 		try {CommandManager::getInstance()->execute(command, *this);}
-		catch (CommandManager::CommandException e) {}
+		catch (CommandManager::CommandException& e) {}
     }
 	while ((pos = packet.find("\n")) != std::string::npos) {
     	command = packet.substr(0, pos);
 		packet.erase(0, pos + 1);
 		if (command.empty()) continue;
 		try {CommandManager::getInstance()->execute(command, *this);}
-		catch (CommandManager::CommandException e) {}
+		catch (CommandManager::CommandException& e) {}
     }
 };
 

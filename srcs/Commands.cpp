@@ -192,17 +192,6 @@ void  LUSERS(Context &context, string *args) {
 	(void)args;
 }
 
-void	banList(Context &context, string modestring)
-{
-	CommandManager *cmdmgr = CommandManager::getInstance();
-	std::vector<Client *> banlist = context.channel->getBanlist();
-	for (std::vector<Client *>::iterator it = banlist.begin(); it < banlist.end(); it++)
-	{
-		cmdmgr->sendReply(472, context);
-	}
-	(void)modestring;
-}
-
 void 	clientMode(Context &context, std::string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
@@ -358,13 +347,14 @@ void MODE(Context &context, string *args)
 	}
 }
 
-void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
+void JOIN(Context &context, string *args)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	std::vector<string> names;
 	std::vector<string> keys;
-	int start = 0;
-	int end;
+	int 				start = 0;
+	int 				end;
+	bool				isInvit;
 	if (!args || args->empty())
 	{
 		cmdmgr->sendReply(461, context);
@@ -393,6 +383,7 @@ void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 	}
 	for (std::vector<string>::iterator it = names.begin(); it != names.end(); it++)
 	{
+		isInvit = true;
 		if ((*it)[0] != '#' && (*it)[0] != '&')
 			cmdmgr->sendReply(476, context);
 		else {
@@ -400,12 +391,22 @@ void JOIN(Context &context, string *args) //checker si l'user fait parti des ban
 			context.channel = &channel;
 			if (channel.isEmpty())
 				channel.addOperator(*context.client);
-			channel.addClient(*context.client);
-			if (!channel.getTopic().empty())
-				cmdmgr->sendReply(332, context);
-			channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
-			cmdmgr->sendReply(353, context);
-			cmdmgr->sendReply(366, context);
+			else if (channel.getMode().find('i') == string::npos) {
+				if (channel.isInvited(context.client->getNickname()))
+					channel.removeInvit(*context.client);
+				else
+					isInvit = false;
+			}
+			if (isInvit) {
+				channel.addClient(*context.client);
+				if (!channel.getTopic().empty())
+					cmdmgr->sendReply(332, context);
+				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
+				cmdmgr->sendReply(353, context);
+				cmdmgr->sendReply(366, context);
+			}
+			else
+				cmdmgr->sendReply(473, context);
 		}
 	}
 };
@@ -620,7 +621,7 @@ void	INVITE(Context& context, string* args) {
 		cmdmgr->sendReply(442, context);
 		return;
 	}
-	if (!context.channel->getClient(*args)) {
+	if (Server::getInstance()->getChannel(args[1]).isClient(*Server::getInstance()->getClient(*args))) {
 		cmdmgr->sendReply(443, context);
 		return;
 	}

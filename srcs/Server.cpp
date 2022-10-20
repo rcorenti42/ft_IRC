@@ -97,6 +97,8 @@ void                    Server::erraseClient(Client& client) {
 						buff.push_back(*it);
 			}
 		}
+		if ((*it).second.isInvited(client.getNickname()))
+			(*it).second.removeInvit(client);
 	}
 	for (std::vector<Client*>::iterator it = buff.begin(); it != buff.end(); it++)
 		client.writePrefixMsg(*(*it), message);

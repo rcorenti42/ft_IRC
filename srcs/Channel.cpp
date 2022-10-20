@@ -41,14 +41,6 @@ std::vector<Client*>	Channel::getClients() {
 	return clients;
 }
 
-std::vector<Client *> Channel::getBanlist()
-{
-	std::vector<Client*>	banned;
-	for (std::vector<Client*>::iterator it = this->_banlist.begin(); it != this->_banlist.end(); it++)
-		banned.push_back(*it);
-	return banned;
-}
-
 std::map<int, Client*>	Channel::getClientsMap() {
 	return this->_clients;
 }
@@ -73,19 +65,17 @@ bool					Channel::isOperator(string client) {
 	return ret;
 }
 
-bool					Channel::isBanned(string client)
-{
-	bool ret = false;
-	for (std::vector<Client*>::iterator it = this->_banlist.begin(); it != this->_banlist.end(); it++)
-		if ((*it)->getNickname() == client)
-			ret = true;
-	return (ret);
-}
-
 bool					Channel::isEmpty() const {return _clients.empty();}
 
 bool					Channel::isClient(Client& client) {
 	return this->_clients.find(client.getSocket()) != this->_clients.end();
+}
+
+bool					Channel::isInvited(string client) {
+	for (std::vector<Client*>::iterator it = this->_invit.begin(); it != this->_invit.end(); it++)
+		if ((*it)->getNickname() == client)
+			return true;
+	return false;
 }
 
 void					Channel::addClient(Client& client) {
@@ -93,7 +83,6 @@ void					Channel::addClient(Client& client) {
 }
 
 void					Channel::addOperator(Client& client) {_operators.push_back(&client);}
-void					Channel::addBanned(Client &client) {_banlist.push_back(&client);}
 void                	Channel::removeClient(Client& client) {_clients.erase(client.getSocket());}
 void                	Channel::addInvit(Client& client) {_invit.push_back(&client);}
 void                	Channel::removeInvit(Client& client) {
