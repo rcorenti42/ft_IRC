@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/14 14:13:17 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:15:23 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ CommandManager::CommandManager() {
 	replies[332] = "<channel> :<topic>";
 	replies[341] = "<channel> <nickname>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
-	replies[353] = "<channel> : <namelist>";
+	replies[353] = "= <channel> :<namelist>";
 	replies[366] = "<channel> :End of /NAMES list";
 	replies[367] = "<channel> <banid>";
 	replies[368] = "<channel> :End of channel ban list";
