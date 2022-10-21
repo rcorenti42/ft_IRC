@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 10:59:28 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 11:51:27 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,27 +522,38 @@ void	TOPIC(Context &context, string *args) {
 		cmdmgr->sendReply(461, context);
 		return ;
 	}
- 	try {context.channel = &Server::getInstance()->getChannel(*args);}
-	catch (Server::ChannelNotFoundException &e) {
-		//no such channel
-		return;
+ 	try {context.channel = &Server::getInstance()->findChannel(*args);}
+	catch (Server::ChannelNotFoundException &e)
+	{
+		context.info = args;
+		cmdmgr->sendReply(403, context);
+		return ;
+	}
+	if (context.channel->isClient(*context.client) == 0)
+	{
+		cmdmgr->sendReply(442, context);
+		return ;
 	}
 	if (!context.message || context.message->empty())
 	{
 		if (context.channel->getTopic().empty())
-		{
-			context.info = args;
 			cmdmgr->sendReply(331, context);
-		}
 		else	
 			cmdmgr->sendReply(332, context);
 		return ;
 	}
-	if (!context.channel->isOperator(context.client->getNickname()))
-		cmdmgr->sendReply(482, context);
-	else {
+	if (context.channel->getMode().find('t') != std::string::npos)
+	{
+		if (!context.channel->isOperator(context.client->getNickname()))
+		{
+			cmdmgr->sendReply(482, context);
+			return ;	
+		}
+	}
+	else
+	{
 		context.channel->setTopic(*context.message);
-		context.client->writePrefixMsg(*context.packet);
+		context.channel->broadcastMessage(*context.client, "TOPIC " + context.channel->getName() + " :" + *context.message);
 	}
 };
 
