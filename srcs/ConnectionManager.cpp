@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 11:10:51 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/16 12:24:45 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 11:10:24 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void ConnectionManager::addClient(int ClientFd) {
 	EpollEvent ev;
 
 	ev.events = EPOLLIN;
+	ev.data.ptr = 0;
 	ev.data.fd = ClientFd;
 	if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, ClientFd, &ev) == -1) throw ConnectException("Client add failed");
 }
