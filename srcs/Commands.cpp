@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 11:51:27 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 23:22:57 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void	argMode(Context &context, std::string *args, std::string modestring, int mo
 			else if (modestring[pos] == 'v')
 			{
 //>>>>>>> refs/remotes/origin/main
-				context.channel->removeVerbose(*client);
+				context.channel->addVerbose(*client);
 				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +v :" + client->getNickname());
 			}
 		}
@@ -612,9 +612,34 @@ void	KICK(Context& context, string* args) {
 		cmdmgr->sendReply(482, context);
 };
 
-void	NAMES(Context& context, string* args) {
-	(void)context;
+void	NAMES(Context& context, string* args)
+{
 	(void)args;
+	CommandManager *cmdmgr = CommandManager::getInstance();
+	if (args->empty() || !args)
+	{
+		
+		std::vector<Client *> clients = Server::getInstance()->getClients();
+		for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
+		{
+				
+		}
+	}
+	else
+	{
+		try {context.channel = &Server::getInstance()->findChannel(*args);}
+		catch (Server::ChannelNotFoundException& e) {
+			cmdmgr->sendReply(442, context);
+			return;
+		}
+		// std::vector<Client *> clients = context.channel->getClients();
+		// for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
+		// {
+			// if ((*it)->getMode().find('s') == std::string::npos)
+			cmdmgr->sendReply(353, context);
+			// }
+	}
+	
 };
 
 void	ADMIN(Context& context, string* args) {
