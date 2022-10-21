@@ -15,7 +15,7 @@
 #include <algorithm>
 
 Server	*Server::_instance = 0;
-Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)) {};
+Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)), _die(false) {};
 
 Server				*Server::getInstance() {
 	if (!_instance) _instance =  new Server();
@@ -135,6 +135,10 @@ void					Server::pruneClients() {
 		}
 }
 
+void					Server::killServ() {
+	this->_die = true;
+}
+
 void                    Server::run() {
 	std::vector<Client*>    clients_list = getClients();
 	int fd;
@@ -152,6 +156,8 @@ void                    Server::run() {
 		for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
 			if (it->second.isEmpty()) toErase = &it->second;
 		if (toErase) erraseChannel(*toErase);
+		if (this->_die)
+			return;
 	}
 };
 

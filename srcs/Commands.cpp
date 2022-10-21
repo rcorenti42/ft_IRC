@@ -682,3 +682,9 @@ void	WALLOPS(Context& context, string* args) {
 			context.client->writePrefixMsg(*(*it), "WALLOPS :" + *context.message);
 	(void)args;
 };
+
+void	DIE(Context& context, string* args) {
+	if (context.client->getOperServ())
+		Server::getInstance()->killServ();
+	(void)args;
+}

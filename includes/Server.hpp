@@ -39,6 +39,7 @@ class Server {
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
 	time_t							_serverTime;
+	bool							_die;
     void                	acceptClient();
 	Server();
 public:
@@ -71,6 +72,7 @@ public:
 	void					display();
     void                    run();
 	void					pruneClients();
+	void					killServ();
 	bool					isNickTaken(std::string nick);
 	size_t					getUsrNbr() const;
 	size_t					getInvisNbr() const;
