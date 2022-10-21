@@ -185,7 +185,7 @@ string CommandManager::getReply(int code, Context context)
 	string_replace(command, "<version>", "420");
 	string_replace(command, "<datetime>", serv->getInstance()->getStartTime());
 	string_replace(command, "<umodes>", "is");
-	string_replace(command, "<cmodes>", "opsitnmlbvk");
+	string_replace(command, "<cmodes>", "Ooinpstmv");
 	string_replace(command, "<user_mode>", context.client->getMode());
 	string_replace(command, "<nbnoinvisibles>", serv->getVisibleNbr());
 	string_replace(command, "<nbinvisibles>", serv->getInvisNbr());
