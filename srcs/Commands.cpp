@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 10:25:20 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:43:06 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -540,7 +540,6 @@ void	OPER(Context &context, string *args) {
 	std::map<string, string>	operators;
 	operators["rcorenti"] = "stickos";
 	operators["sobouatt"] = "1234";
-	operators["lothieve"] = "kamazdelinfini"
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	if (!args || args->empty() || args[1].empty()) {
 		cmdmgr->sendReply(461, context);
