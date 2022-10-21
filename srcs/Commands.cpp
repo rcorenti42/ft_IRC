@@ -698,12 +698,8 @@ void	KILL(Context& context, string* args) {
 		cmdmgr->sendReply(461, context);
 		return ;
 	}
-	if (args[0][0] == '#') {
-		cmdmgr->sendReply(483, context);
-		return ;
-	}
 	if (!Server::getInstance()->getClient(*args)) {
-		cmdmgr->sendReply(406, context);
+		cmdmgr->sendReply(401, context);
 		return ;
 	}
 	if (context.client->getOperServ())
