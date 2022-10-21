@@ -616,16 +616,20 @@ void	LIST(Context& context, string* args)
 	std::vector<Channel*>	chan = Server::getInstance()->getChannels();
 	CommandManager*			cmdmgr = CommandManager::getInstance();
 	cmdmgr->sendReply(321, context);
-	if (!args->empty()) {
+	if (args->empty()) {
 		for (std::vector<Channel*>::iterator it = chan.begin(); it != chan.end(); ++it) {
 			context.channel = *it;
 			cmdmgr->sendReply(322, context);
 		}
 	} else {
-		TOPIC(context, args);
+		context.channel = &Server::getInstance()->getChannel(*args);
+		if (Server::getInstance()->getChannel(*args).getTopic().empty())
+			cmdmgr->sendReply(331, context);
+		else
+			cmdmgr->sendReply(332, context);
+		return ;
 	}
 	cmdmgr->sendReply(323, context);
-	(void)args;
 };
 
 void	INVITE(Context& context, string* args) {
