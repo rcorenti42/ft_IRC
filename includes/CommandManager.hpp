@@ -58,6 +58,7 @@ void	WALLOPS(Context& context, string* args);
 void	DIE(Context& context, string* args);
 void	KILL(Context& context, string* args);
 void	ADMIN(Context& context, string* args);
+void	NAMES(Context& context, string* args);
 
 class CommandManager {
 private:

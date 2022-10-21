@@ -13,7 +13,7 @@
 
 #include "Client.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _operServ(false), _quitMessage("has quit"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _operServ(false), _mode("w"), _quitMessage("has quit"), _ping(std::time(NULL)) {
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };

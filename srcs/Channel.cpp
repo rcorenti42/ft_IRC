@@ -14,7 +14,7 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 
-Channel::Channel(string &name, Client *creator) : _name(name), _topic(""), _creationTime(std::time(NULL)) {
+Channel::Channel(string &name, Client *creator) : _name(name), _topic(""), _mode("nt"), _creationTime(std::time(NULL)) {
 	ClientMode elem(creator, "");
 	_clientsWhat[creator->getSocket()] = elem;
 }

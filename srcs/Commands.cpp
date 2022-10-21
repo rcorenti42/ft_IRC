@@ -596,9 +596,7 @@ void	KICK(Context& context, string* args) {
 };
 
 void	NAMES(Context& context, string* args) {
-	CommandManager*	cmdmgr = CommandManager::getInstance();
-	cmdmgr->sendReply(353, context);
-	cmdmgr->sendReply(366, context);
+	(void)context;
 	(void)args;
 };
 
