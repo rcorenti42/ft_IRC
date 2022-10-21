@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/21 01:15:23 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:37:57 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ CommandManager::CommandManager() {
 	replies[501] = ":Unknown MODE flag";
 	replies[502] = ":Can't change mode for other users";
 
+	_listCommands["LIST"] = LIST;
 	_listCommands["INFO"] = INFO;
 	_listCommands["PASS"] = PASS;
 	_listCommands["NICK"] = NICK;
