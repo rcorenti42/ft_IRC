@@ -164,28 +164,28 @@ void                    Server::run() {
 size_t					Server::getInvisNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
-		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') != std::string::npos) ++count;
+		if ((*it).second->getStats() == REGISTERED && (*it).second->getMode().find('i') != std::string::npos) ++count;
 	return count;
 }
 
 size_t					Server::getVisibleNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
-		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('i') == std::string::npos) ++count;
+		if ((*it).second->getStats() == REGISTERED && (*it).second->getMode().find('i') == std::string::npos) ++count;
 	return count;
 }
 
 size_t					Server::getOPNbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
-		if ((*it).second->getStats() == CONNECTED && (*it).second->getMode().find('o') != std::string::npos) ++count;
+		if ((*it).second->getStats() == REGISTERED && (*it).second->getMode().find('o') != std::string::npos) ++count;
 	return count;
 }
 
 size_t					Server::getUnknbr() const {
 	size_t count = 0;
 	for (ConstClientIt it = _clients.begin(); it != _clients.end(); ++it)
-		if ((*it).second->getStats() != CONNECTED) ++count;
+		if ((*it).second->getStats() != REGISTERED) ++count;
 	return count;
 }
 
