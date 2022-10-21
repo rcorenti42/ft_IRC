@@ -63,6 +63,8 @@ public:
 	bool					isOperator(std::string client);
 	bool					isClient(Client& client);
 	bool					isInvited(string client);
+	bool					isVerbose(string client);
+	bool					isModerate() const;
     void                	addClient(Client& client);
 	void					addOperator(Client& client);
 	void					removeOperator(Client &client);

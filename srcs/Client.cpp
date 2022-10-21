@@ -139,7 +139,9 @@ void    Client::writeMessage(string message) {
 	_packets.push_back(message);
 };
 
-bool		Client::isDisconnected() const {char buf; return !recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);}
+bool		Client::isDisconnected() const {char buf; return !recv(_sock, &buf, 1, MSG_PEEK | MSG_DONTWAIT);};
+
+bool		Client::isVerbose(Channel* channel) {return channel->isVerbose(this->_nickname);};
 
 void		Client::addMode(const string &mode) {
 	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)

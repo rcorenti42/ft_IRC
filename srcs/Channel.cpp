@@ -78,6 +78,17 @@ bool					Channel::isInvited(string client) {
 	return false;
 }
 
+bool					Channel::isVerbose(string client) {
+	for (std::vector<Client*>::iterator it = this->_verbose.begin(); it != this->_verbose.end(); it++)
+		if ((*it)->getNickname() == client)
+			return true;
+	return false;
+}
+
+bool					Channel::isModerate() const {
+	return this->_mode.find('m') != string::npos ? true : false;
+}
+
 void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }

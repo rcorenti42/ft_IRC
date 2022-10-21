@@ -453,7 +453,7 @@ void	PRIVMSG(Context &context, string *args) {
 		Channel&				chan = Server::getInstance()->getChannel(*it);
 		std::vector<Client*>	cli = chan.getClients();
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
-			if ((*iter)->getNickname() != context.client->getNickname())
+			if ((*iter)->getNickname() != context.client->getNickname() && (!chan.isModerate() || context.client->isVerbose(&chan) || chan.isOperator(context.client->getNickname())))
 				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
@@ -542,16 +542,11 @@ void	TOPIC(Context &context, string *args) {
 			cmdmgr->sendReply(332, context);
 		return ;
 	}
-	if (context.channel->getMode().find('t') != std::string::npos)
-	{
-		if (!context.channel->isOperator(context.client->getNickname()))
-		{
+	if (context.channel->getMode().find('t') != std::string::npos && !context.channel->isOperator(context.client->getNickname())) {
 			cmdmgr->sendReply(482, context);
 			return ;	
-		}
 	}
-	else
-	{
+	else {
 		context.channel->setTopic(*context.message);
 		context.channel->broadcastMessage(*context.client, "TOPIC " + context.channel->getName() + " :" + *context.message);
 	}
@@ -639,7 +634,8 @@ void	LIST(Context& context, string* args)
 	if (args->empty()) {
 		for (std::vector<Channel*>::iterator it = chan.begin(); it != chan.end(); ++it) {
 			context.channel = *it;
-			cmdmgr->sendReply(322, context);
+			if ((*it)->getMode().find('s') == string::npos && (*it)->getMode().find('p') == string::npos)
+				cmdmgr->sendReply(322, context);
 		}
 	} else {
 		context.channel = &Server::getInstance()->getChannel(*args);

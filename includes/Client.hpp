@@ -82,6 +82,7 @@ public:
     void    	registerClient();
 	void		setState(e_state mode);
 	bool		isDisconnected() const;
+	bool		isVerbose(Channel* channel);
 	void		addMode(const string &mode);
 	void		removeMode(const string &mode);
 };
