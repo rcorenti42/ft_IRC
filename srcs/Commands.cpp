@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 10:54:40 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 10:59:28 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void 	clientMode(Context &context, std::string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while ((pos = modestring.find_first_not_of("is")) != string::npos)
+	while ((pos = modestring.find_first_not_of("iw")) != string::npos)
 	{
 		string character(1, modestring[pos]);
 		context.info = &character;
@@ -251,6 +251,7 @@ void	argMode(Context &context, std::string *args, std::string modestring, int mo
 			}
 			else if (modestring[pos] == 'v')
 			{
+//>>>>>>> refs/remotes/origin/main
 				context.channel->removeVerbose(*client);
 				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +v :" + client->getNickname());
 			}
@@ -456,7 +457,7 @@ void	PRIVMSG(Context &context, string *args) {
 				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
+		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
 };
 
 //copier coller de la fonction PRIVMSG sans les reply.
@@ -521,17 +522,26 @@ void	TOPIC(Context &context, string *args) {
 		cmdmgr->sendReply(461, context);
 		return ;
 	}
-	if (!context.message || context.message->empty()) {
-		if (Server::getInstance()->getChannel(*args).getTopic().empty())
+ 	try {context.channel = &Server::getInstance()->getChannel(*args);}
+	catch (Server::ChannelNotFoundException &e) {
+		//no such channel
+		return;
+	}
+	if (!context.message || context.message->empty())
+	{
+		if (context.channel->getTopic().empty())
+		{
+			context.info = args;
 			cmdmgr->sendReply(331, context);
-		else
+		}
+		else	
 			cmdmgr->sendReply(332, context);
 		return ;
 	}
-	if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname()))
+	if (!context.channel->isOperator(context.client->getNickname()))
 		cmdmgr->sendReply(482, context);
 	else {
-		Server::getInstance()->getChannel(*args).setTopic(*context.message);
+		context.channel->setTopic(*context.message);
 		context.client->writePrefixMsg(*context.packet);
 	}
 };
@@ -679,7 +689,7 @@ void	WALLOPS(Context& context, string* args) {
 		return ;
 	}
 	for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
-		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ())
+		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ() && (*it)->getMode().find('w') != string::npos)
 			context.client->writePrefixMsg(*(*it), "WALLOPS :" + *context.message);
 	(void)args;
 };
