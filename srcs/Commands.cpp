@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 22:49:44 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 23:22:57 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void	argMode(Context &context, std::string *args, std::string modestring, int mo
 			else if (modestring[pos] == 'v')
 			{
 //>>>>>>> refs/remotes/origin/main
-				context.channel->removeVerbose(*client);
+				context.channel->addVerbose(*client);
 				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +v :" + client->getNickname());
 			}
 		}
