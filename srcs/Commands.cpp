@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 01:43:06 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 10:48:55 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,7 +456,7 @@ void	PRIVMSG(Context &context, string *args) {
 				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + *it + " :" + *context.message);
+		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
 };
 
 //copier coller de la fonction PRIVMSG sans les reply.
@@ -521,17 +521,26 @@ void	TOPIC(Context &context, string *args) {
 		cmdmgr->sendReply(461, context);
 		return ;
 	}
-	if (!context.message || context.message->empty()) {
-		if (Server::getInstance()->getChannel(*args).getTopic().empty())
+ 	try {context.channel = &Server::getInstance()->getChannel(*args);}
+	catch (Server::ChannelNotFoundException &e) {
+		//no such channel
+		return;
+	}
+	if (!context.message || context.message->empty())
+	{
+		if (context.channel->getTopic().empty())
+		{
+			context.info = args;
 			cmdmgr->sendReply(331, context);
-		else
+		}
+		else	
 			cmdmgr->sendReply(332, context);
 		return ;
 	}
-	if (!Server::getInstance()->getChannel(*args).isOperator(context.client->getNickname()))
+	if (!context.channel->isOperator(context.client->getNickname()))
 		cmdmgr->sendReply(482, context);
 	else {
-		Server::getInstance()->getChannel(*args).setTopic(*context.message);
+		context.channel->setTopic(*context.message);
 		context.client->writePrefixMsg(*context.packet);
 	}
 };
