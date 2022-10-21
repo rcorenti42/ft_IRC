@@ -204,7 +204,7 @@ void 	clientMode(Context &context, std::string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while ((pos = modestring.find_first_not_of("is")) != string::npos)
+	while ((pos = modestring.find_first_not_of("iw")) != string::npos)
 	{
 		string character(1, modestring[pos]);
 		context.info = &character;
@@ -678,7 +678,7 @@ void	WALLOPS(Context& context, string* args) {
 		return ;
 	}
 	for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
-		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ())
+		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ() && (*it)->getMode().find('w') != string::npos)
 			context.client->writePrefixMsg(*(*it), "WALLOPS :" + *context.message);
 	(void)args;
 };
