@@ -87,6 +87,7 @@ CommandManager::CommandManager() {
 	_listCommands["WALLOPS"] = WALLOPS;
 	_listCommands["DIE"] = DIE;
 	_listCommands["KILL"] = KILL;
+	_listCommands["ADMIN"] = ADMIN;
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)
