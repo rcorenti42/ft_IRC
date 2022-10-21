@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/20 23:58:50 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 23:03:23 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ std::map<int, Client*>	Channel::getClientsMap() {
 string					Channel::getClientsList() {
 	string	ret("");
 	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
-		ret += it->second->getNickname() + " ";
+	{
+		if (isOperator(it->second->getNickname()))
+			ret += '@' + it->second->getNickname() + " ";
+		else
+			ret += it->second->getNickname() + " ";
+	}
 	return ret;
 }
 size_t					Channel::getVisiblesNbr() {
