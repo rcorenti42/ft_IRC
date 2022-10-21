@@ -56,6 +56,7 @@ void	KICK(Context &context, string *args);
 void	INVITE(Context& context, string* args);
 void	WALLOPS(Context& context, string* args);
 void	DIE(Context& context, string* args);
+void	KILL(Context& context, string* args);
 
 class CommandManager {
 private:

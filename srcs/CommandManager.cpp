@@ -58,7 +58,9 @@ CommandManager::CommandManager() {
 	replies[472] = "<info> :is unkwown char to me.";
 	replies[473] = "<channel> :Cannot join channel (+i)";
 	replies[476] = "<channel> :The given channel mask was invalid";
+	replies[481] = ":Permission Denied - You're not an IRC operator";
 	replies[482] = "<channel> :You're not a channel operator";
+	replies[483] = ":You cant kill a server!";
 	replies[501] = ":Unknown MODE flag";
 	replies[502] = ":Can't change mode for other users";
 
@@ -85,6 +87,7 @@ CommandManager::CommandManager() {
 	_listCommands["INVITE"] = INVITE;
 	_listCommands["WALLOPS"] = WALLOPS;
 	_listCommands["DIE"] = DIE;
+	_listCommands["KILL"] = KILL;
 }
 
 static void	string_replace(string &str, const string &substr, const string &repl)

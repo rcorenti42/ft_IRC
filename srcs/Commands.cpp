@@ -684,7 +684,30 @@ void	WALLOPS(Context& context, string* args) {
 };
 
 void	DIE(Context& context, string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
 	if (context.client->getOperServ())
 		Server::getInstance()->killServ();
+	else
+		cmdmgr->sendReply(481, context);
 	(void)args;
-}
+};
+
+void	KILL(Context& context, string* args) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	if (!context.message || context.message->empty() || !args || args->empty()) {
+		cmdmgr->sendReply(461, context);
+		return ;
+	}
+	if (args[0][0] == '#') {
+		cmdmgr->sendReply(483, context);
+		return ;
+	}
+	if (!Server::getInstance()->getClient(*args)) {
+		cmdmgr->sendReply(406, context);
+		return ;
+	}
+	if (context.client->getOperServ())
+		Server::getInstance()->getClient(*args)->setState(NONE);
+	else
+		cmdmgr->sendReply(481, context);
+};
