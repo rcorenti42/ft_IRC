@@ -615,9 +615,13 @@ void	LIST(Context& context, string* args) {
 	std::vector<Channel*>	chan = Server::getInstance()->getChannels();
 	CommandManager*			cmdmgr = CommandManager::getInstance();
 	cmdmgr->sendReply(321, context);
-	for (std::vector<Channel*>::iterator it = chan.begin(); it != chan.end(); ++it) {
-		context.channel = *it;
-		cmdmgr->sendReply(322, context);
+	if (!args->empty()) {
+		for (std::vector<Channel*>::iterator it = chan.begin(); it != chan.end(); ++it) {
+			context.channel = *it;
+			cmdmgr->sendReply(322, context);
+		}
+	} else {
+		TOPIC(context, args);
 	}
 	cmdmgr->sendReply(323, context);
 	(void)args;
