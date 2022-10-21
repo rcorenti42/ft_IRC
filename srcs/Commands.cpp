@@ -6,11 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/10/21 10:48:55 by sobouatt         ###   ########.fr       */
-=======
-/*   Updated: 2022/10/21 10:25:20 by lothieve         ###   ########.fr       */
->>>>>>> refs/remotes/origin/main
+/*   Updated: 2022/10/21 10:58:02 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +204,7 @@ void 	clientMode(Context &context, std::string modestring)
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while ((pos = modestring.find_first_not_of("is")) != string::npos)
+	while ((pos = modestring.find_first_not_of("iw")) != string::npos)
 	{
 		string character(1, modestring[pos]);
 		context.info = &character;
@@ -255,6 +251,7 @@ void	argMode(Context &context, std::string *args, std::string modestring, int mo
 			}
 			else if (modestring[pos] == 'v')
 			{
+//>>>>>>> refs/remotes/origin/main
 				context.channel->removeVerbose(*client);
 				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +v :" + client->getNickname());
 			}
@@ -553,7 +550,6 @@ void	OPER(Context &context, string *args) {
 	std::map<string, string>	operators;
 	operators["rcorenti"] = "stickos";
 	operators["sobouatt"] = "1234";
-	operators["lothieve"] = "kamazdelinfini"
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	if (!args || args->empty() || args[1].empty()) {
 		cmdmgr->sendReply(461, context);
@@ -692,7 +688,7 @@ void	WALLOPS(Context& context, string* args) {
 		return ;
 	}
 	for (std::vector<Client*>::iterator it = clientsList.begin(); it != clientsList.end(); it++)
-		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ())
+		if ((*it)->getNickname() != context.client->getNickname() && (*it)->getOperServ() && (*it)->getMode().find('w') != string::npos)
 			context.client->writePrefixMsg(*(*it), "WALLOPS :" + *context.message);
 	(void)args;
 };
