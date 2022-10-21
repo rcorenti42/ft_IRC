@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:48:05 by lothieve          #+#    #+#             */
-/*   Updated: 2022/10/21 01:37:57 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/21 10:43:01 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ CommandManager::CommandManager() {
 	replies[322] = "<channel> <nbVisiblesOnChannels> :<chanTopic>";
 	replies[323] = ":End of /LIST";
 	replies[324] = "<channel> <channel_mode>";
-	replies[331] = "<channel> :No topic is set";
+	replies[331] = "<info> :No topic is set";
 	replies[332] = "<channel> :<topic>";
 	replies[341] = "<channel> <nickname>";
 	replies[351] = "<version>.0 <servername>:IR-C4";
@@ -203,8 +203,7 @@ string CommandManager::getReply(int code, Context context)
 		string_replace(command, "<channel_mode>", context.channel->getMode());
 		string_replace(command, "<topic>", context.channel->getTopic());
 		string_replace(command, "<namelist>", context.channel->getClientsList());
-	} else
-		string_replace(command, "<channel>", context.args[1]);
+	}
 	if (context.info)
 		string_replace(command, "<info>", *context.info);
 	if (context.args)
