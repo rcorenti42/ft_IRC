@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/17 22:23:46 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/21 10:20:14 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,11 @@ bool					Server::isNickTaken(std::string nick) {
 }
 
 void					Server::pruneClients() {
+	
 	for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
-		if (it->second->getStats() == NONE || it->second->isDisconnected())
-		{
+		if (it->second->getStats() == NONE || it->second->isDisconnected()) {
 			erraseClient(*it->second);
-			std::cout << "disconnected\n";
+			return ;
 		}
 }
 
