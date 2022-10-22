@@ -46,6 +46,7 @@ CommandManager::CommandManager() {
 	replies[381] = ":You are now an IRC operator";
 	replies[401] = "<nickname> :No such nick";
 	replies[403] = "<info> : No such channel";
+	replies[404] = "<channel> :Cannot send to channel";
 	replies[409] = ":No origin specified";
 	replies[431] = ":No nickname given";
 	replies[433] = "* <args> :Nickname is already in use";

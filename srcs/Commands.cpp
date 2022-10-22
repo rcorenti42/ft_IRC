@@ -452,12 +452,15 @@ void	PRIVMSG(Context &context, string *args) {
 	for (std::vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
 		Channel&				chan = Server::getInstance()->getChannel(*it);
 		std::vector<Client*>	cli = chan.getClients();
+		context.channel = &chan;
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
 			if ((*iter)->getNickname() != context.client->getNickname() && (!chan.isModerate() || context.client->isVerbose(&chan) || chan.isOperator(context.client->getNickname())))
 				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
+			else if (!context.client->isVerbose(&chan) && chan.isModerate() && (*iter)->getNickname() != context.client->getNickname())
+				cmdmgr->sendReply(404, context);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
+		context.client->writePrefixMsg(Server::getInstance()->findClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
 };
 
 //copier coller de la fonction PRIVMSG sans les reply.
@@ -468,28 +471,26 @@ void	NOTICE(Context& context, string* args) {
 	std::vector<string>	clients;
 	if (!args || args->empty() || !context.message || context.message->empty())
 		return ;
-	end = args->find(',');
-	while (end != -1) {
-		if (args->substr(start, end - start)[0] == '#' || args->substr(start, end - start)[0] == '&')
-			channels.push_back(args->substr(start, end - start));
-		else
-			clients.push_back(args->substr(start, end - start));
-		start = end + 1;
+	do {
 		end = args->find(',', start);
-	}
-	if (args->substr(start)[0] == '#' || args->substr(start)[0] == '&')
-		channels.push_back(args->substr(start));
-	else
-		clients.push_back(args->substr(start));
+		string arg = args->substr(start, end - start);
+		if (arg[0] == '#' || arg[0] == '&')
+			channels.push_back(arg);
+		else
+			clients.push_back(arg);
+		start = end + 1;
+
+	} while (end != -1);
 	for (std::vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
 		Channel&				chan = Server::getInstance()->getChannel(*it);
 		std::vector<Client*>	cli = chan.getClients();
+		context.channel = &chan;
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
-			if ((*iter)->getNickname() != context.client->getNickname())
-				context.client->writePrefixMsg(*(*iter), "NOTICE " + *it + " :" + *context.message);
+			if ((*iter)->getNickname() != context.client->getNickname() && (!chan.isModerate() || context.client->isVerbose(&chan) || chan.isOperator(context.client->getNickname())))
+				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(*Server::getInstance()->getClient(*it), "NOTICE " + *it + " :" + *context.message);
+		context.client->writePrefixMsg(Server::getInstance()->findClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
 };
 
 void	PART(Context &context, string *args) {
