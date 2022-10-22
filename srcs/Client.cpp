@@ -143,6 +143,10 @@ bool		Client::isDisconnected() const {char buf; return !recv(_sock, &buf, 1, MSG
 
 bool		Client::isVerbose(Channel* channel) {return channel->isVerbose(this->_nickname);};
 
+bool		Client::isInvisible() const {
+	return this->_mode.find('i') != string::npos;
+};
+
 void		Client::addMode(const string &mode) {
 	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)
 		if (_mode.find(*it) == string::npos) _mode += *it;

@@ -83,6 +83,7 @@ public:
 	void		setState(e_state mode);
 	bool		isDisconnected() const;
 	bool		isVerbose(Channel* channel);
+	bool		isInvisible() const;
 	void		addMode(const string &mode);
 	void		removeMode(const string &mode);
 };

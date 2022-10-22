@@ -59,6 +59,7 @@ public:
     std::vector<Client*>	getClients();
 	std::map<int, Client*>	getClientsMap();
 	string					getClientsList();
+	string					getClientsListOut();
 	size_t					getVisiblesNbr();
 	bool					isOperator(std::string client);
 	bool					isClient(Client& client);

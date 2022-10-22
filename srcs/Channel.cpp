@@ -56,6 +56,21 @@ string					Channel::getClientsList() {
 	}
 	return ret;
 }
+
+string					Channel::getClientsListOut() {
+	string	ret("");
+	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
+	{
+		if (!(*it).second->isInvisible()) {
+			if (isOperator(it->second->getNickname()))
+				ret += '@' + it->second->getNickname() + " ";
+			else
+				ret += it->second->getNickname() + " ";
+		}
+	}
+	return ret;
+}
+
 size_t					Channel::getVisiblesNbr() {
 	size_t	ret = 0;
 	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)

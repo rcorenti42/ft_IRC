@@ -480,7 +480,6 @@ void JOIN(Context &context, string *args)
 				if (!channel.getTopic().empty())
 					cmdmgr->sendReply(332, context);
 				channel.broadcastMessage(*context.client, "JOIN :" + channel.getName());
-				cmdmgr->sendReply(353, context);
 				cmdmgr->sendReply(366, context);
 			}
 			else
@@ -677,34 +676,34 @@ void	KICK(Context& context, string* args) {
 		cmdmgr->sendReply(482, context);
 };
 
-void	NAMES(Context& context, string* args)
-{
-	(void)args;
-	CommandManager *cmdmgr = CommandManager::getInstance();
-	if (args->empty() || !args)
-	{
-		
-		std::vector<Client *> clients = Server::getInstance()->getClients();
-		for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
-		{
-				
+void	NAMES(Context& context, string* args) {
+	CommandManager*			cmdmgr = CommandManager::getInstance();
+	std::vector<Channel*>	channels = Server::getInstance()->getChannels();
+	if (args->empty() || !args) {
+		for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
+			if ((*it)->isOn(context.client->getSocket())) {
+				*context.args = (*it)->getClientsList();
+				cmdmgr->sendReply(353, context);
+			}
+			else if (!(*it)->isPrivate() && !(*it)->isSecret()) {
+				*context.args = (*it)->getClientsListOut();
+				cmdmgr->sendReply(353, context);
+			}
 		}
 	}
-	else
-	{
+	else {
 		try {context.channel = &Server::getInstance()->findChannel(*args);}
-		catch (Server::ChannelNotFoundException& e) {
-			cmdmgr->sendReply(442, context);
-			return;
-		}
-		// std::vector<Client *> clients = context.channel->getClients();
-		// for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
-		// {
-			// if ((*it)->getMode().find('s') == string::npos)
-			cmdmgr->sendReply(353, context);
-			// }
+		catch (Server::ChannelNotFoundException& e) {return;}
+			if ((context.channel)->isOn(context.client->getSocket())) {
+				*context.args = (context.channel)->getClientsList();
+				cmdmgr->sendReply(353, context);
+			}
+			else if (!(context.channel)->isPrivate() && !(context.channel)->isSecret()) {
+				*context.args = (context.channel)->getClientsListOut();
+				cmdmgr->sendReply(353, context);
+			}
 	}
-	
+	cmdmgr->sendReply(366, context);
 };
 
 void	ADMIN(Context& context, string* args) {
