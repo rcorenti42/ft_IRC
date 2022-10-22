@@ -23,12 +23,12 @@ $(NAME) : $(OBJECTS)
 %.o: %.cpp
 	$(CC) $(CCFLAG) -I includes -c $< -o $@
 
-clean :
-	rm -rf $(OBJECTS)
+clean : all
+	rm -f $(OBJECTS)
 	@echo "\033[0;91m* $(NAME) object files were deleted *\033[0m"
 
 fclean : clean
-	rm -rf $(NAME)
+	rm -f $(NAME)
 	@echo "\033[0;91m* $(NAME) was deleted* \033[0m"
 
 re : fclean all
