@@ -94,6 +94,14 @@ bool					Channel::isModerate() const {
 	return this->_mode.find('m') != string::npos ? true : false;
 }
 
+bool					Channel::isSecret() const {
+	return this->_mode.find('s') != string::npos ? true : false;
+}
+
+bool					Channel::isPrivate() const {
+	return this->_mode.find('p') != string::npos ? true : false;
+}
+
 void					Channel::addClient(Client& client) {
 	this->_clients[client.getSocket()] = &client;
 }

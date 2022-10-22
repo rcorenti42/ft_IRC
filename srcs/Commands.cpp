@@ -61,7 +61,7 @@ void	USER(Context &context, string *args)
 	}
 };
 
-void	ISON(Context &context, std::string *args) {
+void	ISON(Context &context, string *args) {
 	size_t pos;
 	CommandManager *cmdmgr = CommandManager::getInstance();
 
@@ -192,7 +192,7 @@ void  LUSERS(Context &context, string *args) {
 	(void)args;
 }
 
-void 	clientMode(Context &context, std::string modestring)
+void 	clientMode(Context &context, string modestring)
 {
 	CommandManager *cmdmgr = CommandManager::getInstance();
 	int mode = 1;
@@ -220,12 +220,12 @@ void 	clientMode(Context &context, std::string modestring)
 	cmdmgr->sendReply(221, context);
 }
 
-void	argMode(Context &context, std::string *args, std::string modestring, int mode)
+void	argMode(Context &context, string *args, string modestring, int mode)
 {
 	size_t i = 2;
 	size_t pos = modestring.find_first_of("ov");
 	Client *client;
-	while (pos != std::string::npos)
+	while (pos != string::npos)
 	{
 		try { client = &Server::getInstance()->findClient(args[i]);}
 		catch(Server::ClientNotFoundException &e) { return;}
@@ -263,12 +263,72 @@ void	argMode(Context &context, std::string *args, std::string modestring, int mo
 		
 }
 
-void	channelMode(Context &context, std::string modestring, std::string *args) //ecrire un message MODE a tout les clients dans le channel
+int		psModes(Context& context, string modestring, int mode, string& ret) {
+	CommandManager*	cmdmgr = CommandManager::getInstance();
+	size_t			pos = modestring.find_last_of("ps");
+	if (mode) {
+		if (modestring[pos] == 'p') {
+			if (context.channel->isSecret()) {
+				if (!context.channel->isOperator(context.client->getNickname()))
+					cmdmgr->sendReply(482, context);
+				else {
+					ret += 'p';
+					ret.erase(ret.find('s'), 1);
+					mode = 2;
+				}
+			}
+			else if (!context.channel->isPrivate()) {
+				if (!context.channel->isOperator(context.client->getNickname()))
+					cmdmgr->sendReply(482, context);
+				else {
+					ret += 'p';
+					mode = 2;
+				}
+			}
+		} else {
+			if (context.channel->isPrivate()) {
+				if (!context.channel->isOperator(context.client->getNickname()))
+					cmdmgr->sendReply(482, context);
+				else {
+					ret += 's';
+					ret.erase(ret.find('p'), 1);
+					mode = 2;
+				}
+			} else if (!context.channel->isSecret()) {
+				if (!context.channel->isOperator(context.client->getNickname()))
+					cmdmgr->sendReply(482, context);
+				else {
+					ret += 's';
+					mode = 2;
+				}
+			}
+		}
+	} else {
+		if (modestring[pos] == 'p') {
+			if (!context.channel->isOperator(context.client->getNickname()))
+				cmdmgr->sendReply(482, context);
+			else {
+				mode = 2;
+				ret.erase(ret.find('p'), 1);
+			}
+		} else {
+			if (!context.channel->isOperator(context.client->getNickname()))
+				cmdmgr->sendReply(482, context);
+			else {
+				mode = 2;
+				ret.erase(ret.find('s'), 1);
+			}
+		}
+	}
+	return mode;
+};
+
+void	channelMode(Context &context, string modestring, string *args) //ecrire un message MODE a tout les clients dans le channel
 {
-	std::string ret = context.channel->getMode();
+	string ret = context.channel->getMode();
 	bool isOp = context.channel->isOperator(context.client->getNickname());
 	CommandManager *cmdmgr = CommandManager::getInstance();
-	std::string flgs = "inpstmov";
+	string flgs = "inpstmov";
 	int mode = 1;
 	size_t pos;
 
@@ -278,19 +338,19 @@ void	channelMode(Context &context, std::string modestring, std::string *args) //
 	}
 	else if (modestring[0] == '+')
 		modestring.erase(0, 1);
-	while ((pos = modestring.find_first_not_of(flgs)) != std::string::npos)
+	while ((pos = modestring.find_first_not_of(flgs)) != string::npos)
 	{
-		std::string character(1, modestring[pos]);
+		string character(1, modestring[pos]);
 		context.info = &character;
 		modestring.erase(pos, 1);
 		cmdmgr->sendReply(472, context);
 	}
 	if (mode == 0)
 	{
-		flgs = "inpstm";
+		flgs = "intm";
 		for (size_t i = 0; i < flgs.size(); i++)
 		{
-			if (modestring.find(flgs[i]) != std::string::npos && (ret.find(flgs[i]) != std::string::npos))
+			if (modestring.find(flgs[i]) != string::npos && (ret.find(flgs[i]) != string::npos))
 			{
 				if (!isOp)
 					cmdmgr->sendReply(482, context);
@@ -304,10 +364,10 @@ void	channelMode(Context &context, std::string modestring, std::string *args) //
 	}
 	else if (mode == 1)
 	{
-		flgs = "inpstm";
+		flgs = "intm";
 		for (size_t i = 0; i < flgs.size(); i++)
 		{
-			if (modestring.find(flgs[i]) != std::string::npos && ret.find(flgs[i]) == std::string::npos)
+			if (modestring.find(flgs[i]) != string::npos && ret.find(flgs[i]) == string::npos)
 			{
 				if (!isOp)
 					cmdmgr->sendReply(482, context);
@@ -319,6 +379,7 @@ void	channelMode(Context &context, std::string modestring, std::string *args) //
 			}
 		}
 	}
+	mode = psModes(context, modestring, mode, ret);
 	argMode(context, args, modestring, mode);
 	context.channel->setMode(ret);
 	if (mode == 2)
@@ -482,7 +543,7 @@ void	NOTICE(Context& context, string* args) {
 
 	} while (end != -1);
 	for (std::vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
-		Channel&				chan = Server::getInstance()->getChannel(*it);
+		Channel&				chan = Server::getInstance()->getChannel(*it);                                                                                                    
 		std::vector<Client*>	cli = chan.getClients();
 		context.channel = &chan;
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
@@ -543,7 +604,7 @@ void	TOPIC(Context &context, string *args) {
 			cmdmgr->sendReply(332, context);
 		return ;
 	}
-	if (context.channel->getMode().find('t') != std::string::npos && !context.channel->isOperator(context.client->getNickname())) {
+	if (context.channel->getMode().find('t') != string::npos && !context.channel->isOperator(context.client->getNickname())) {
 			cmdmgr->sendReply(482, context);
 			return ;	
 	}
@@ -636,7 +697,7 @@ void	NAMES(Context& context, string* args)
 		// std::vector<Client *> clients = context.channel->getClients();
 		// for (std::vector<Client *>::iterator it = clients.begin(); it < clients.end(); it++)
 		// {
-			// if ((*it)->getMode().find('s') == std::string::npos)
+			// if ((*it)->getMode().find('s') == string::npos)
 			cmdmgr->sendReply(353, context);
 			// }
 	}
