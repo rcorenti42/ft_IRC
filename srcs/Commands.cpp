@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/22 13:28:25 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 13:51:22 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -688,11 +688,11 @@ void	NAMES(Context& context, string* args) {
 	if (args->empty() || !args) {
 		for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			if ((*it)->isOn(context.client->getSocket())) {
-				*context.args = (*it)->getClientsList();
+				context.args = new string((*it)->getClientsList());
 				cmdmgr->sendReply(353, context);
 			}
 			else if (!(*it)->isPrivate() && !(*it)->isSecret()) {
-				*context.args = (*it)->getClientsListOut();
+				context.args = new string((*it)->getClientsListOut());
 				cmdmgr->sendReply(353, context);
 			}
 		}
@@ -701,15 +701,16 @@ void	NAMES(Context& context, string* args) {
 		try {context.channel = &Server::getInstance()->findChannel(*args);}
 		catch (Server::ChannelNotFoundException& e) {return;}
 			if ((context.channel)->isOn(context.client->getSocket())) {
-				*context.args = (context.channel)->getClientsList();
+				context.args = new string(context.channel->getClientsList());
 				cmdmgr->sendReply(353, context);
 			}
 			else if (!(context.channel)->isPrivate() && !(context.channel)->isSecret()) {
-				*context.args = (context.channel)->getClientsListOut();
+				context.args = new string(context.channel->getClientsListOut());
 				cmdmgr->sendReply(353, context);
 			}
 	}
 	cmdmgr->sendReply(366, context);
+	delete context.args;
 };
 
 void	ADMIN(Context& context, string* args) {

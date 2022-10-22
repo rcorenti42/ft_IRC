@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 23:03:23 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/22 13:51:45 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ string					Channel::getClientsList() {
 }
 
 string					Channel::getClientsListOut() {
-	string	ret("");
+	string ret("");
 	for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{
 		if (!(*it).second->isInvisible()) {
