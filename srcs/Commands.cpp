@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/22 13:59:23 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 14:24:58 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -797,7 +797,7 @@ void	WALLOPS(Context& context, string* args) {
 void	DIE(Context& context, string* args) {
 	CommandManager*	cmdmgr = CommandManager::getInstance();
 	if (context.client->getOperServ())
-		Server::getInstance()->killServ();
+		Server::getInstance()->doom();
 	else
 		cmdmgr->sendReply(481, context);
 	(void)args;

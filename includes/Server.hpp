@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/14 19:39:31 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/22 14:23:05 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Server {
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
 	time_t							_serverTime;
-	bool							_die;
+	bool							_doomed;
     void                	acceptClient();
 	Server();
 public:
@@ -56,6 +56,7 @@ public:
 		const char *what() const throw() {return NULL;}
 	};
 
+	~Server();
 	static Server			*getInstance();
     void           	init(int port, char *password);
     void                	setPassword(char* password);
@@ -71,8 +72,8 @@ public:
     void                    erraseChannel(Channel channel);
 	void					display();
     void                    run();
+	void					doom();
 	void					pruneClients();
-	void					killServ();
 	bool					isNickTaken(std::string nick);
 	size_t					getUsrNbr() const;
 	size_t					getInvisNbr() const;
