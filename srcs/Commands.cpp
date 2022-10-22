@@ -430,6 +430,7 @@ void JOIN(Context &context, string *args)
 	int 				start = 0;
 	int 				end;
 	bool				isInvit;
+	string				baseModes = "tn";
 	if (!args || args->empty())
 	{
 		cmdmgr->sendReply(461, context);
@@ -464,8 +465,10 @@ void JOIN(Context &context, string *args)
 		else {
 			Channel& channel = Server::getInstance()->getChannel(*it);
 			context.channel = &channel;
-			if (channel.isEmpty())
+			if (channel.isEmpty()) {
+				channel.setMode(baseModes);
 				channel.addOperator(*context.client);
+			}
 			else if (channel.getMode().find('i') != string::npos) {
 				if (channel.isInvited(context.client->getNickname()))
 					channel.removeInvit(*context.client);
