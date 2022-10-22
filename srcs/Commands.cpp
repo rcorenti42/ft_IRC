@@ -285,7 +285,7 @@ int		psModes(Context& context, string modestring, int mode, string& ret) {
 					mode = 2;
 				}
 			}
-		} else {
+		} else if (modestring[pos] == 's') {
 			if (context.channel->isPrivate()) {
 				if (!context.channel->isOperator(context.client->getNickname()))
 					cmdmgr->sendReply(482, context);
@@ -307,14 +307,14 @@ int		psModes(Context& context, string modestring, int mode, string& ret) {
 		if (modestring[pos] == 'p') {
 			if (!context.channel->isOperator(context.client->getNickname()))
 				cmdmgr->sendReply(482, context);
-			else {
+			else if (context.channel->isPrivate()) {
 				mode = 2;
 				ret.erase(ret.find('p'), 1);
 			}
-		} else {
+		} else if (modestring[pos] == 's') {
 			if (!context.channel->isOperator(context.client->getNickname()))
 				cmdmgr->sendReply(482, context);
-			else {
+			else if (context.channel->isSecret()) {
 				mode = 2;
 				ret.erase(ret.find('s'), 1);
 			}
