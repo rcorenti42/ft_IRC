@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 23:22:57 by sobouatt         ###   ########.fr       */
+/*   Updated: 2022/10/22 13:28:25 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,17 +513,23 @@ void	PRIVMSG(Context &context, string *args) {
 
 	} while (end != -1);
 	for (std::vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
-		Channel&				chan = Server::getInstance()->getChannel(*it);
+		try {
+		Channel&				chan = Server::getInstance()->findChannel(*it);
 		std::vector<Client*>	cli = chan.getClients();
 		context.channel = &chan;
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
 			if ((*iter)->getNickname() != context.client->getNickname() && (!chan.isModerate() || context.client->isVerbose(&chan) || chan.isOperator(context.client->getNickname())))
-				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
+				context.client->writePrefixMsg(**iter, "PRIVMSG " + *it + " :" + *context.message);
 			else if (!context.client->isVerbose(&chan) && chan.isModerate() && (*iter)->getNickname() != context.client->getNickname())
 				cmdmgr->sendReply(404, context);
+		} catch (Server::ChannelNotFoundException &e) {cmdmgr->sendReply(403, context);}
 	}
 	for (std::vector<string>::iterator it = clients.begin(); it != clients.end(); it++)
-		context.client->writePrefixMsg(Server::getInstance()->findClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
+	{
+		try {
+			context.client->writePrefixMsg(Server::getInstance()->findClient(*it), "PRIVMSG " + context.client->getUsername() + " :" + *context.message);
+		} catch (Server::ClientNotFoundException &e) {cmdmgr->sendReply(403, context);}
+	}
 };
 
 //copier coller de la fonction PRIVMSG sans les reply.
