@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 10:20:14 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 14:29:26 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,22 @@
 #include <algorithm>
 
 Server	*Server::_instance = 0;
-Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)), _pong(false), _die(false) {};
+Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)), _pong(false), _doomed(false) {};
 
+Server::~Server() {
+	delete CommandManager::getInstance();
+	delete ConnectionManager::getInstance();
+	for (ClientIt it = _clients.begin(); it != _clients.end(); ++it) {
+		erraseClient(*it->second);
+		return ;
+	}
+}
 Server				*Server::getInstance() {
 	if (!_instance) _instance =  new Server();
 	return _instance;
 }
+
+void				Server::doom() {_doomed = true;}
 
 void                Server::acceptClient() {
 	int         clientFd;
@@ -143,15 +153,12 @@ void					Server::pruneClients() {
 		}
 }
 
-void					Server::killServ() {
-	this->_die = true;
-}
 
 void                    Server::run() {
 	std::vector<Client*>    clients_list = getClients();
 	int fd;
 
-	for(;;) {
+	while (!_doomed) {
 		Channel *toErase = NULL;
 		fd = _connectionManager->waitForEvent();
 		if (std::time(NULL) - _ping > 10) sendPing();
@@ -160,12 +167,11 @@ void                    Server::run() {
 		for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
 			it->second->sendMessage();
 		pruneClients();
+		if (_doomed) return;
 		if (_channels.empty()) continue;
 		for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
 			if (it->second.isEmpty()) toErase = &it->second;
 		if (toErase) erraseChannel(*toErase);
-		if (this->_die)
-			return;
 	}
 };
 
