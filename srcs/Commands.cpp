@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/22 13:51:22 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 13:59:23 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	USER(Context &context, string *args)
 		cmdmgr->sendReply(462, context);
 	else {
 		context.client->setUsername(*args);
-		if (!context.message || context.message->empty())
+		if (context.message && !context.message->empty())
 			context.client->setRealName(*context.message);
 	}
 };
@@ -650,8 +650,7 @@ void	QUIT(Context &context, string *args) {
 };
 
 void	VERSION(Context& context, string* args) {
-	CommandManager*	cmdmgr = CommandManager::getInstance();
-	cmdmgr->sendReply(351, context);
+	CommandManager::getInstance()->sendReply(351, context);
 	(void) args;
 };
 
