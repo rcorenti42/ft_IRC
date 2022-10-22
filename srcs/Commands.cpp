@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/22 13:16:51 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 13:28:25 by lothieve         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,7 +519,7 @@ void	PRIVMSG(Context &context, string *args) {
 		context.channel = &chan;
 		for (std::vector<Client*>::iterator iter = cli.begin(); iter != cli.end(); iter++)
 			if ((*iter)->getNickname() != context.client->getNickname() && (!chan.isModerate() || context.client->isVerbose(&chan) || chan.isOperator(context.client->getNickname())))
-				(*iter)->writePrefixMsg("PRIVMSG " + *it + " :" + *context.message);
+				context.client->writePrefixMsg(**iter, "PRIVMSG " + *it + " :" + *context.message);
 			else if (!context.client->isVerbose(&chan) && chan.isModerate() && (*iter)->getNickname() != context.client->getNickname())
 				cmdmgr->sendReply(404, context);
 		} catch (Server::ChannelNotFoundException &e) {cmdmgr->sendReply(403, context);}
