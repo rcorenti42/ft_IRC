@@ -6,7 +6,7 @@
 /*   By: sobouatt <sobouatt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2022/10/21 10:20:14 by lothieve         ###   ########.fr       */
+/*   Updated: 2022/10/22 14:07:09 by sobouatt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,13 @@ void					Server::pruneClients() {
 }
 
 void					Server::killServ() {
+	Channel *toErase = NULL;
+	pruneClients();
 	this->_die = true;
+	for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
+			if (it->second.isEmpty()) toErase = &it->second;
+		if (toErase) erraseChannel(*toErase);
+	exit(0);
 }
 
 void                    Server::run() {
