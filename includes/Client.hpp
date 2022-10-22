@@ -50,6 +50,8 @@ class Client {
 	std::string									_quitMessage;
     std::vector<std::string>    				_packets;
     time_t                      				_ping;
+	bool										_pong;
+	string										_signal;
 	CommandManager								*_cmdmgr;
 public:
     Client(int, sockaddr_in);
@@ -63,13 +65,16 @@ public:
 	std::string	getQuitMessage() const;
 	e_state		getStats() const;
 	bool		getOperServ() const;
+	string		getSignal()const;
     void    	setNickname(std::string nickname);
     void    	setUsername(std::string username);
 	void		setRealName(std::string realname);
 	void		setQuitMessage(std::string message);
 	void		setMode(std::string mode);
 	void		setPing(time_t);
+	void		setPong(bool pong);
 	void		setOperServ(bool oper);
+	void		setSignal(string signal);
 	std::string	stateMsg();
     void    	packetsHandler();
     void    	receiveMessage();
@@ -84,6 +89,7 @@ public:
 	bool		isDisconnected() const;
 	bool		isVerbose(Channel* channel);
 	bool		isInvisible() const;
+	bool		isWaitPong() const;
 	void		addMode(const string &mode);
 	void		removeMode(const string &mode);
 };

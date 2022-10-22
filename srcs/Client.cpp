@@ -13,7 +13,7 @@
 
 #include "Client.hpp"
 
-Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _operServ(false), _mode("w"), _quitMessage("has quit"), _ping(std::time(NULL)) {
+Client::Client(int sock, sockaddr_in addr):_state(CONNECTED), _sock(sock), _operServ(false), _mode("w"), _quitMessage("has quit"), _ping(std::time(NULL)), _pong(false) {
 	_addr = inet_ntoa(addr.sin_addr);
 	_cmdmgr = CommandManager::getInstance();
 };
@@ -48,6 +48,9 @@ e_state		Client::getStats() const {
 string		Client::getQuitMessage() const {
 	return _quitMessage;
 };
+string		Client::getSignal() const {
+	return this->_signal;
+};
 void		Client::setOperServ(bool oper) {
 	this->_operServ = oper;
 };
@@ -75,8 +78,13 @@ void		Client::setMode(string mode)
 void		Client::setQuitMessage(string message) {
 	this->_quitMessage = message;
 };
-
-string	Client::stateMsg() {
+void		Client::setPong(bool pong) {
+	this->_pong = pong;
+};
+void		Client::setSignal(string signal) {
+	this->_signal = signal;
+};
+string		Client::stateMsg() {
 	string	state = "";
 	if (_state == REGISTERED) {
 		state = _nickname;
@@ -146,6 +154,8 @@ bool		Client::isVerbose(Channel* channel) {return channel->isVerbose(this->_nick
 bool		Client::isInvisible() const {
 	return this->_mode.find('i') != string::npos;
 };
+
+bool		Client::isWaitPong() const {return this->_pong;};
 
 void		Client::addMode(const string &mode) {
 	for(string::const_iterator it = mode.begin(); it != mode.end(); ++it)

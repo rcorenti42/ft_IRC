@@ -15,7 +15,7 @@
 #include <algorithm>
 
 Server	*Server::_instance = 0;
-Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)), _die(false) {};
+Server::Server(): _name(""), _connectionManager(ConnectionManager::getInstance()), _ping(std::time(NULL)), _pong(false), _die(false) {};
 
 Server				*Server::getInstance() {
 	if (!_instance) _instance =  new Server();
@@ -79,8 +79,14 @@ void                    Server::sendPing() {
 	ss << rand();
 	_ping = std::time(NULL);
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		if ((*it).second->getStats() == REGISTERED)
-			(*it).second->writeMessage("PING " + ss.str());
+		if ((*it).second->getStats() == REGISTERED) {
+			if ((*it).second->isWaitPong())
+				continue;//(*it).second->setState(NONE);
+			else {
+				(*it).second->setPong(true);
+				(*it).second->writeMessage("PING " + ss.str());
+			}
+		}
 };
 void                    Server::erraseClient(Client& client) {
 	std::vector<Client*>	clients;
@@ -148,12 +154,12 @@ void                    Server::run() {
 	for(;;) {
 		Channel *toErase = NULL;
 		fd = _connectionManager->waitForEvent();
-		if (std::time(NULL) - _ping > 42) sendPing();
+		if (std::time(NULL) - _ping > 10) sendPing();
 		if (fd == _connectionManager->getMainSock()) acceptClient();
 		else _clients[fd]->receiveMessage();
-		pruneClients();
 		for (ClientIt it = _clients.begin(); it != _clients.end(); ++it)
 			it->second->sendMessage();
+		pruneClients();
 		if (_channels.empty()) continue;
 		for (std::map<std::string, Channel>::iterator it = _channels.begin(); it != _channels.end(); it++)
 			if (it->second.isEmpty()) toErase = &it->second;

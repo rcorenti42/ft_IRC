@@ -131,9 +131,8 @@ void	PONG(Context &context, string *args)
 	string str;
 	if (!context.message)
 		cmdmgr->sendReply(409, context);
-	else
+	else if (*args == context.client->getSignal())
 		context.client->setPing(std::time(NULL));
-	(void)args;
 }
 
 void	MOTD(Context &context, string *args) {
@@ -251,7 +250,6 @@ void	argMode(Context &context, string *args, string modestring, int mode)
 			}
 			else if (modestring[pos] == 'v')
 			{
-//>>>>>>> refs/remotes/origin/main
 				context.channel->addVerbose(*client);
 				context.channel->broadcastMessage(*context.client, "MODE " + context.channel->getName() + " +v :" + client->getNickname());
 			}

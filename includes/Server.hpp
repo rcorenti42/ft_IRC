@@ -36,6 +36,7 @@ class Server {
 	std::string						_name;
 	ConnectionManager				*_connectionManager;
     time_t							_ping;
+	bool							_pong;
     std::map<int, Client*>          _clients;
     std::map<std::string, Channel>  _channels;
 	time_t							_serverTime;
